@@ -126,6 +126,41 @@ def fill_spiral(c, r, ratio, scene):
             if inside_spiral(c, r, ratio, (pti, ptj)):
                 scene[i][j][0] = color
 
+def random_lines():
+    r = 0.1
+    c = (0.5, 0.5)
+    return (c, r)
+
+def inside_lines(c, r, ratio, pt, fn, x):
+    ci, cj = c
+    pti, ptj = pt
+    di, dj = ci - pti, (cj - ptj)/ratio
+    theta = fn((di if x == 0 else dj)/((di**2 + dj**2)**.5))
+    radius = (di**2 + dj**2)**.5 + theta
+    return int(radius/r) % 2 == 0
+
+def fill_lines(c, r, ratio, scene):
+    I = len(scene)
+    J = len(scene[0])
+    if random() < 0.5:
+        fn = [acos, asin][randint(0, 1)]
+        x = randint(0, 1)
+        color = random_color()
+        for i in range(I):
+            for j in range(J):
+                _, pti, ptj = scene[i][j]
+                if inside_lines(c, r, ratio, (pti, ptj), fn, x):
+                    scene[i][j][0] = color
+    else:
+        x = randint(0, 1)
+        color = random_color()
+        for i in range(I):
+            for j in range(J):
+                _, pti, ptj = scene[i][j]
+                if inside_lines(c, r, ratio, (pti, ptj), [acos, asin][randint(0, 1)], x):
+                    scene[i][j][0] = color
+
+
 def color_adjust(rgb):
     return (max(0, min(100, c)) for c in rgb)
 
