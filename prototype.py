@@ -82,6 +82,27 @@ def fill_circle(c, r, ratio, scene):
             _, pti, ptj = scene[i][j]
             if inside_circle((pti, ptj), c, r, ratio):
                 scene[i][j][0] = color
+
+def random_stripe(midpt, horiz=False):
+    if horiz:
+        return ((midpt, 0.5), randint(-10, 10) + 90)
+    else:
+        return ((0.5, midpt), randint(-8, 8))
+
+def right_of_stripe(midpt, tilt, pt):
+    line = add(midpt, sincos(tilt))
+    return sign(midpt, line, pt) < 0
+
+def fill_stripe(midpt, tilt, scene):
+    I = len(scene)
+    J = len(scene[0])
+    color = random_color()
+    for i in range(I):
+        for j in range(J):
+            _, pti, ptj = scene[i][j]
+            if right_of_stripe(midpt, tilt, (pti, ptj)):
+                scene[i][j][0] = color
+
 def color_adjust(rgb):
     return (max(0, min(100, c)) for c in rgb)
 
@@ -180,6 +201,7 @@ def main():
     max_i = calc_i(I, J)
     max_j = calc_j(I, J)
     scene = [[[theme1, calc_i(i, j)/max_i, calc_j(i, j)/max_j] for j in range(J)] for i in range(I)]
+
     style = randint(0, 2)
     if style == 0:
         # Triangles
@@ -190,6 +212,23 @@ def main():
         # Circles
     elif style == 2:
         # Stripes
+        if random() < 0.5:
+            # 1 direction
+            N = 20
+            h = random() < 0.5
+            for n in range(N):
+                fill_stripe(*random_stripe(1-n/N if h else n/N, horiz=h), scene)
+        elif random() < 0.5:
+            # Bidirectional
+            N = 10
+            for n in range(N):
+                fill_stripe(*random_stripe(1-n/N, horiz=True), scene)
+                fill_stripe(*random_stripe(n/N, horiz=False), scene)
+        else:
+            # Slanted
+            N = 20
+            for n in range(N):
+                fill_stripe((n/N, n/N), randint(-50, -40), scene)
     else:
         print("Unimplemented")
         sys.exit(3)
