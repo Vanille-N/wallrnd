@@ -14,6 +14,10 @@ sin60 = sin(60)
 
 def sincos(theta):
     return (cos(theta), sin(theta))
+
+def timetag(m, s):
+    return int(m/60*10000 + s/60*100)
+
 def meanpoint(add, base, weight):
     return tuple(a*weight + b*(1-weight) for (a, b) in zip(add, base))
 
@@ -199,6 +203,52 @@ def fmt_hex(size, center, color):
     bottom_right = (center[0] + half, center[1] + opposite)
 
     return "<polygon fill=\"rgb({:.0f}%,{:.0f}%,{:.0f}%)\" fill-opacity=\"100\" points=\"{:.2f},{:.2f} {:.2f},{:.2f} {:.2f},{:.2f} {:.2f},{:.2f} {:.2f},{:.2f} {:.2f},{:.2f}\" stroke=\"rgb(0%,0%,0%)\" stroke-opacity=\"100\" stroke-width=\"1\" />".format(*color, *top_left, *top_right, *right, *bottom_right, *bottom_left, *left)
+
+}
+
+def draw_digit(scene, chr, i0, j0):
+    i, j = i0, j0
+    for c in chr:
+        if c == '#':
+            s = 100
+            scene[i][j][0] = (s, s, s)
+            j += 1
+        elif c == '\n':
+            i += 1
+            j = j0
+        else:
+            j += 1
+
+def add_timestamp(scene, time):
+    I = len(scene)
+    J = len(scene[0])
+    Iref = I // 2 - HGT // 2 - 8
+    Jref = J // 2 - 10
+    for c in time:
+        fmt, wth = DIG[c]
+        draw_digit(scene, fmt, Iref, Jref)
+        Jref += wth + 1
+
+def make_date(date):
+    w, m, d = list(map(int, date.strftime("%w %m %d").split(" ")))
+    return "{}. {}. {}".format(
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][w],
+        ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][m],
+        d
+        )
+
+
+def add_date(scene, date):
+    I = len(scene)
+    J = len(scene[0])
+    Iref = I // 2 + HGT // 2 + 4
+    Jref = J // 2 - 24
+    for c in date:
+        fmt, wth = DIG[c]
+        draw_digit(scene, fmt, Iref, Jref)
+        Jref += wth + 1
+
+
 size = 14
 I = 43
 J = 94
@@ -249,6 +299,8 @@ def draw_img(name, scene, theme):
     #dwg.save()
 
 def main():
+    now = timetag(int(datetime.now().strftime("%H")), int(datetime.now().strftime("%M")))
+
     metatheme = choose_metatheme(now)
     print("metatheme:", metatheme)
 
@@ -312,6 +364,9 @@ def main():
     for i in range(I):
         for j in range(J):
             scene[i][j][0] = color_adjust(meanpoint(color_variate(scene[i][j][0], 20), theme2, 0.3))
+
+    add_timestamp(scene, datetime.now().strftime("%H:%M"))
+    add_date(scene, make_date(datetime.today()))
     print("Done rendering, now saving image")
     draw_img('img.svg', scene, theme2)
 
