@@ -103,6 +103,29 @@ def fill_stripe(midpt, tilt, scene):
             if right_of_stripe(midpt, tilt, (pti, ptj)):
                 scene[i][j][0] = color
 
+def random_spiral():
+    r = random() * 0.1 + 0.05
+    c = (randint(3, 7)/10, randint(3, 7)/10)
+    return (c, r)
+
+def inside_spiral(c, r, ratio, pt):
+    ci, cj = c
+    pti, ptj = pt
+    di, dj = ci - pti, (cj - ptj)/ratio
+    theta = phase(dj + di*1j)
+    radius = (di**2 + dj**2)**.5 + theta / pi * r
+    return int(radius/r) % 2 == 0
+
+def fill_spiral(c, r, ratio, scene):
+    I = len(scene)
+    J = len(scene[0])
+    color = random_color()
+    for i in range(I):
+        for j in range(J):
+            _, pti, ptj = scene[i][j]
+            if inside_spiral(c, r, ratio, (pti, ptj)):
+                scene[i][j][0] = color
+
 def color_adjust(rgb):
     return (max(0, min(100, c)) for c in rgb)
 
@@ -210,6 +233,22 @@ def main():
             fill_triangle(*random_triangle((1-n/N)/2), scene)
     elif style == 1:
         # Circles
+        if random() < 0.33:
+            # Everywhere
+            N = 10
+            for n in range(N):
+                fill_circle(*random_circle(((1-n/N)/4 + 0.1)), max_i/max_j, scene)
+        elif random() < 0.5:
+            # Centered
+            N = 10
+            ci = randint(3, 7)/10
+            cj = randint(3, 7)/10
+            for n in range(N + N//2):
+                fill_circle((ci, cj), 1-n/N, max_i/max_j, scene)
+        else:
+            N = 3
+            for n in range(N):
+                fill_spiral(*random_spiral(), max_i/max_j, scene)
     elif style == 2:
         # Stripes
         if random() < 0.5:
