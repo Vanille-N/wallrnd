@@ -1,0 +1,13 @@
+[package]
+name = "wallrnd"
+version = "0.0.0"
+authors = ["Vanille-N <neven.villani@gmail.com>"]
+edition = "2018"
+license = "MIT"
+description = "A generator of random abstract wallpapers"
+readme = "README.md"
+repository = "https://github.com/Vanille-N/wallrnd"
+keywords = []
+categories = []
+
+[dependencies]
