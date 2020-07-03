@@ -94,6 +94,31 @@ def fmt_hex(size, center, color):
 size = 14
 I = 43
 J = 94
+
+def choose_metatheme(now):
+    if now < timetag(5, 0): return (0, 0, 30)
+    elif now < timetag(5, 30): return (30, 0, 20)
+    elif now < timetag(6, 0): return (60, 0, 20)
+    elif now < timetag(6, 30): return (90, 50, 0)
+    elif now < timetag(7, 0): return (80, 95, 0)
+    elif now < timetag(8, 0): return (0, 75, 0)
+    elif now < timetag(9, 0): return (60, 75, 0)
+    elif now < timetag(10, 0): return (45, 100, 75)
+    elif now < timetag(11, 0): return (0, 80, 100)
+    elif now < timetag(12, 0): return (0, 100, 90)
+    elif now < timetag(13, 0): return (0, 40, 100)
+    elif now < timetag(14, 0): return (0, 100, 100)
+    elif now < timetag(15, 0): return (20, 60, 100)
+    elif now < timetag(16, 0): return (0, 0, 90)
+    elif now < timetag(17, 0): return (30, 30, 80)
+    elif now < timetag(18, 0): return (15, 15, 0)
+    elif now < timetag(19, 0): return (90, 30, 0)
+    elif now < timetag(20, 0): return (40, 0, 20)
+    elif now < timetag(21, 0): return (0, 0, 50)
+    elif now < timetag(22, 0): return (20, 0, 20)
+    elif now < timetag(23, 0): return (0, 0, 20)
+    else: return (0, 0, 0)
+
 def calc_i(i, j):
     return (2*i+(1 if j%2==0 else 0))*size*sin60
 
@@ -114,7 +139,15 @@ def draw_img(name, scene, theme):
                 f.write(fmt_hex(size, (ptj, pti), color))
         f.write("""</svg>""")
     #dwg.save()
+
 def main():
+    metatheme = choose_metatheme(now)
+    print("metatheme:", metatheme)
+
+    theme1 = meanpoint(random_color(), metatheme, 0.3)
+    theme2 = meanpoint(random_color(), metatheme, 0.3)
+    print("themes:", theme1, theme2)
+
     max_i = calc_i(I, J)
     max_j = calc_j(I, J)
     scene = [[[theme1, calc_i(i, j)/max_i, calc_j(i, j)/max_j] for j in range(J)] for i in range(I)]
