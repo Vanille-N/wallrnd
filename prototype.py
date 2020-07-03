@@ -1,8 +1,22 @@
 #!/usr/bin/python3
 
 import math
+from datetime import datetime
 from random import randint, random
 from math import acos, asin, pi
+from cmath import phase
+import sys
+
+try:
+    import psutil
+    cpu = psutil.cpu_percent()
+    print("Current CPU usage: {}".format(cpu))
+    if cpu > 20:
+        print("Delaying wallpaper to later")
+        sys.exit(2)
+except ModuleNotFoundError:
+    print("psutil not found, continuing process")
+
 def cos(n):
     return math.cos(math.radians(n))
 
