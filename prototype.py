@@ -154,6 +154,9 @@ def main():
     style = randint(0, 2)
     if style == 0:
         # Triangles
+        N = 20
+        for n in range(N):
+            fill_triangle(*random_triangle((1-n/N)/2), scene)
     elif style == 1:
         # Circles
     elif style == 2:
