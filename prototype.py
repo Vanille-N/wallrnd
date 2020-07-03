@@ -2,6 +2,7 @@
 
 import math
 from random import randint, random
+from math import acos, asin, pi
 def cos(n):
     return math.cos(math.radians(n))
 
@@ -16,8 +17,42 @@ def sincos(theta):
 def meanpoint(add, base, weight):
     return tuple(a*weight + b*(1-weight) for (a, b) in zip(add, base))
 
+def diff(a, b):
+    return (a[0] - b[0], a[1] - b[1])
+
+def add(a, b):
+    return (a[0] - b[0], a[1] - b[1])
+
+def dot(a, b):
+    return (a[0] * b[0]) + (a[1] * b[1])
+
+def mul(l, a):
+    return (l * a[0], l * a[1])
+
+def sign(p1, p2, p3):
+    return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1])
+
 def random_color():
     return (randint(0, 100), randint(0, 100), randint(0, 100))
+def inside_circle(pt, c, r, ratio):
+    cp = diff(pt, c)
+    d = (cp[0]**2 + (cp[1]/ratio)**2)**.5
+    return (d < r)
+
+def random_circle(f):
+    center = (random(), random())
+    rad = random() * f + 0.1
+    return (center, rad)
+
+def fill_circle(c, r, ratio, scene):
+    I = len(scene)
+    J = len(scene[0])
+    color = random_color()
+    for i in range(I):
+        for j in range(J):
+            _, pti, ptj = scene[i][j]
+            if inside_circle((pti, ptj), c, r, ratio):
+                scene[i][j][0] = color
 def color_adjust(rgb):
     return (max(0, min(100, c)) for c in rgb)
 
@@ -83,6 +118,16 @@ def main():
     max_i = calc_i(I, J)
     max_j = calc_j(I, J)
     scene = [[[theme1, calc_i(i, j)/max_i, calc_j(i, j)/max_j] for j in range(J)] for i in range(I)]
+    style = randint(0, 2)
+    if style == 0:
+        # Triangles
+    elif style == 1:
+        # Circles
+    elif style == 2:
+        # Stripes
+    else:
+        print("Unimplemented")
+        sys.exit(3)
     for i in range(50):
         scene[randint(0, I-1)][randint(0, J-1)][0] = random_color()
 
