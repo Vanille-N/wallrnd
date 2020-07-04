@@ -11,3 +11,5 @@ keywords = []
 categories = []
 
 [dependencies]
+svg = "0.8.*"
+rand = "0.7.*"
