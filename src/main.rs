@@ -15,11 +15,13 @@ impl Pos {
 
 struct Movable(Vec<Pos>);
 
+#[derive(Clone, Copy, Debug)]
 struct Hexagon {
     size: f64,
     rot: i32,
 }
 
+#[derive(Clone, Copy, Debug)]
 struct Triangle {
     size: f64,
     rot: i32,
@@ -90,6 +92,12 @@ impl std::ops::Mul<isize> for Pos {
         Pos(self.0 * x as f64, self.1 * x as f64)
     }
 }
+impl std::ops::Mul<f64> for Pos {
+    type Output = Self;
+    fn mul(self, x: f64) -> Self::Output {
+        Pos(self.0 * x as f64, self.1 * x as f64)
+    }
+}
 
 #[derive(Clone, Copy)]
 pub struct Frame {
@@ -117,7 +125,7 @@ impl Frame {
             && pos.1 < (self.y + self.h) as f64 + yerr
     }
 
-    fn hexfill(&self, h: Hexagon) -> Vec<Path> {
+    fn hexagon_fill(&self, h: Hexagon) -> Vec<Path> {
         let mut v = Vec::new();
         let center = self.center();
         let idir = polar(radians(h.rot - 30), (h.size * 2.) * radians(30).cos());
