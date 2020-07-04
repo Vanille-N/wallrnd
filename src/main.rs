@@ -153,6 +153,38 @@ impl Frame {
         let m = Movable::hexagon(h);
         v.into_iter().map(|p| m.render(p)).collect::<Vec<_>>()
     }
+
+    fn triangle_fill(&self, t: Triangle) -> Vec<Path> {
+        let mut v = Vec::new();
+        let center = self.center();
+        let idir = polar(radians(t.rot - 30), (t.size * 2.) * radians(30).cos());
+        let jdir = polar(radians(t.rot + 30), (t.size * 2.) * radians(30).cos());
+        let adjust = polar(radians(t.rot + 60), t.size * radians(30).sin());
+        let mut set = HashSet::new();
+        let mut stk = Vec::new();
+        // Init
+        stk.push((0, 0));
+        set.insert((0, 0));
+        while !stk.is_empty() {
+            let pos = stk.pop().unwrap();
+            let (i0, j0) = pos;
+            let realpos = center + idir * i0 + jdir * j0;
+            if self.is_inside(realpos) {
+                v.push((realpos, false));
+                v.push((realpos + idir * 0.5 + adjust, true));
+                for (i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
+                    let p = (i0 + i, j0 + j);
+                    if !set.contains(&p) {
+                        set.insert(p);
+                        stk.push(p);
+                    }
+                }
+            }
+        }
+        let m1 = Movable::triangle(t);
+        let m2 = Movable::triangle(t.rotate(60));
+        v.into_iter().map(|(p, b)| (if b { &m1 } else { &m2 }).render(p)).collect::<Vec<_>>()
+    }
 }
 
 fn main() {
@@ -164,7 +196,7 @@ fn main() {
     };
     let mut document = Document::new().set("viewBox", frame.into_tuple());
 
-    for elem in frame.hexfill(Hexagon { size: 14., rot: 15 }) {
+    for elem in frame.triangle_fill(Triangle { size: 14., rot: 15 }) {
         document = document.add(elem)
     }
 
