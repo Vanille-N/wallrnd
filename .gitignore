@@ -1,2 +1,4 @@
 /target
 *.svg
+*.png
+Cargo.lock
