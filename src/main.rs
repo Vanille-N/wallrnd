@@ -98,8 +98,8 @@ impl Frame {
     fn hexfill(&self, h: Hexagon) -> Vec<Path> {
         let mut v = Vec::new();
         let center = self.center();
-        let idir = polar(radians(h.rot - 30), (h.size * 2 as f64) * radians(30).cos());
-        let jdir = polar(radians(h.rot + 30), (h.size * 2 as f64) * radians(30).cos());
+        let idir = polar(radians(h.rot - 30), (h.size * 2.) * radians(30).cos());
+        let jdir = polar(radians(h.rot + 30), (h.size * 2.) * radians(30).cos());
         let mut set = HashSet::new();
         let mut stk = Vec::new();
         // Init
@@ -111,7 +111,7 @@ impl Frame {
             let realpos = center + idir * i0 + jdir * j0;
             if self.is_inside(realpos) {
                 v.push(realpos);
-                for (i, j) in vec![(0, 1), (0, -1), (1, 0), (-1, 0)] {
+                for (i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
                     let p = (i0 + i, j0 + j);
                     if !set.contains(&p) {
                         set.insert(p);
