@@ -20,6 +20,18 @@ struct Hexagon {
     rot: i32,
 }
 
+struct Triangle {
+    size: f64,
+    rot: i32,
+}
+
+impl Triangle {
+    fn rotate(mut self, a: i32) -> Self {
+        self.rot += a;
+        self
+    }
+}
+
 pub fn polar(a: f64, r: f64) -> Pos {
     Pos(r * a.cos(), r * a.sin())
 }
@@ -47,6 +59,14 @@ impl Movable {
         let mut pts = Vec::new();
         for i in 0..6 {
             pts.push(polar(radians(h.rot + 60 * i), h.size))
+        }
+        Movable(pts)
+    }
+
+    pub fn triangle(t: Triangle) -> Self {
+        let mut pts = Vec::new();
+        for i in 0..3 {
+            pts.push(polar(radians(t.rot + 120 * i), t.size))
         }
         Movable(pts)
     }
