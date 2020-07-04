@@ -36,8 +36,8 @@ impl Movable {
         }
         let data = data.close();
         Path::new()
-            .set("fill", "none")
-            .set("stroke", "black")
+            .set("fill", "lawngreen")
+            .set("stroke", "blue")
             .set("stroke-width", 1)
             .set("d", data)
     }
@@ -48,12 +48,6 @@ impl Movable {
             pts.push(polar(radians(h.rot + 60*i), h.size))
         }
         Movable(pts)
-    }
-}
-
-impl From<Pos> for (f64, f64) {
-    fn from(p: Pos) -> (f64, f64) {
-        (p.0, p.1)
     }
 }
 
@@ -69,14 +63,44 @@ impl std::ops::Add<Pos> for Pos {
         Pos(self.0 + x, self.1 + y)
     }
 }
+impl std::ops::Mul<isize> for Pos {
+    type Output = Self;
+    fn mul(self, x: isize) -> Self::Output {
+        Pos(self.0 * x as f64, self.1 * x as f64)
+    }
+}
 
+#[derive(Clone, Copy)]
+pub struct Frame {
+    x: usize,
+    y: usize,
+    w: usize,
+    h: usize,
+}
 
+impl Frame {
+    pub fn into_tuple(self) -> (usize, usize, usize, usize) {
+        (self.x, self.y, self.x + self.w, self.y + self.h)
+    }
+
+    pub fn center(&self) -> Pos {
+        Pos((self.x + self.w / 2) as f64, (self.y + self.h / 2) as f64)
+    }
+
+    pub fn is_inside(&self, pos: Pos) -> bool {
+        let xerr = (self.w as f64) / 10.;
+        let yerr = (self.h as f64) / 10.;
+        (self.x as f64 - xerr) < pos.0 && pos.0 < (self.x + self.w) as f64 + xerr
+        && (self.y as f64 - yerr) < pos.1 && pos.1 < (self.y + self.h) as f64 + yerr
+    }
 fn main() {
+    let frame = Frame {x: 0, y: 0, w: 1000, h: 600};
     let mut document = Document::new()
-        .set("viewBox", (0, 0, 100, 100));
+        .set("viewBox", frame.into_tuple());
 
-    let h = Movable::hexagon(Hexagon {size: 14., rot: 60});
-    let document = document.add(h.render(Pos(20., 20.)));
+    for elem in frame.hexfill(Hexagon {size: 14., rot: 15}) {
+        document = document.add(elem)
+    }
 
     svg::save("image.svg", &document).unwrap();
 }
