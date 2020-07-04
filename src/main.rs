@@ -2,6 +2,7 @@ use svg::Document;
 use svg::node::element::Path;
 use svg::node::element::path::Data;
 use std::f64::consts::PI;
+use std::collections::HashSet;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(f64, f64);
@@ -93,6 +94,37 @@ impl Frame {
         (self.x as f64 - xerr) < pos.0 && pos.0 < (self.x + self.w) as f64 + xerr
         && (self.y as f64 - yerr) < pos.1 && pos.1 < (self.y + self.h) as f64 + yerr
     }
+
+    fn hexfill(&self, h: Hexagon) -> Vec<Path> {
+        let mut v = Vec::new();
+        let center = self.center();
+        let idir = polar(radians(h.rot - 30), (h.size * 2 as f64) * radians(30).cos());
+        let jdir = polar(radians(h.rot + 30), (h.size * 2 as f64) * radians(30).cos());
+        let mut set = HashSet::new();
+        let mut stk = Vec::new();
+        // Init
+        stk.push((0, 0));
+        set.insert((0, 0));
+        while !stk.is_empty() {
+            let pos = stk.pop().unwrap();
+            let (i0, j0) = pos;
+            let realpos = center + idir * i0 + jdir * j0;
+            if self.is_inside(realpos) {
+                v.push(realpos);
+                for (i, j) in vec![(0, 1), (0, -1), (1, 0), (-1, 0)] {
+                    let p = (i0 + i, j0 + j);
+                    if !set.contains(&p) {
+                        set.insert(p);
+                        stk.push(p);
+                    }
+                }
+            }
+        }
+        let m = Movable::hexagon(h);
+        v.into_iter().map(|p| m.render(p)).collect::<Vec<_>>()
+    }
+}
+
 fn main() {
     let frame = Frame {x: 0, y: 0, w: 1000, h: 600};
     let mut document = Document::new()
