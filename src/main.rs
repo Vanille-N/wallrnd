@@ -1,8 +1,8 @@
-use svg::Document;
-use svg::node::element::Path;
-use svg::node::element::path::Data;
-use std::f64::consts::PI;
 use std::collections::HashSet;
+use std::f64::consts::PI;
+use svg::node::element::path::Data;
+use svg::node::element::Path;
+use svg::Document;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(f64, f64);
@@ -21,7 +21,7 @@ struct Hexagon {
 }
 
 pub fn polar(a: f64, r: f64) -> Pos {
-    Pos(r * a.cos(), r*a.sin())
+    Pos(r * a.cos(), r * a.sin())
 }
 
 pub fn radians(a: i32) -> f64 {
@@ -46,7 +46,7 @@ impl Movable {
     pub fn hexagon(h: Hexagon) -> Self {
         let mut pts = Vec::new();
         for i in 0..6 {
-            pts.push(polar(radians(h.rot + 60*i), h.size))
+            pts.push(polar(radians(h.rot + 60 * i), h.size))
         }
         Movable(pts)
     }
@@ -91,8 +91,10 @@ impl Frame {
     pub fn is_inside(&self, pos: Pos) -> bool {
         let xerr = (self.w as f64) / 10.;
         let yerr = (self.h as f64) / 10.;
-        (self.x as f64 - xerr) < pos.0 && pos.0 < (self.x + self.w) as f64 + xerr
-        && (self.y as f64 - yerr) < pos.1 && pos.1 < (self.y + self.h) as f64 + yerr
+        (self.x as f64 - xerr) < pos.0
+            && pos.0 < (self.x + self.w) as f64 + xerr
+            && (self.y as f64 - yerr) < pos.1
+            && pos.1 < (self.y + self.h) as f64 + yerr
     }
 
     fn hexfill(&self, h: Hexagon) -> Vec<Path> {
@@ -126,11 +128,15 @@ impl Frame {
 }
 
 fn main() {
-    let frame = Frame {x: 0, y: 0, w: 1000, h: 600};
-    let mut document = Document::new()
-        .set("viewBox", frame.into_tuple());
+    let frame = Frame {
+        x: 0,
+        y: 0,
+        w: 1000,
+        h: 600,
+    };
+    let mut document = Document::new().set("viewBox", frame.into_tuple());
 
-    for elem in frame.hexfill(Hexagon {size: 14., rot: 15}) {
+    for elem in frame.hexfill(Hexagon { size: 14., rot: 15 }) {
         document = document.add(elem)
     }
 
