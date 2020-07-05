@@ -1,7 +1,7 @@
 use std::f64::consts::PI;
 use std::hash::{Hash, Hasher};
 use std::cmp::{Eq, PartialEq};
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Sub};
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(pub f64, pub f64);
@@ -35,6 +35,13 @@ impl Add<Pos> for Pos {
     type Output = Self;
     fn add(self, Pos(x, y): Pos) -> Self::Output {
         Pos(self.0 + x, self.1 + y)
+    }
+}
+
+impl Sub<Pos> for Pos {
+    type Output = Self;
+    fn sub(self, Pos(x, y): Pos) -> Self::Output {
+        Pos(self.0 - x, self.1 - y)
     }
 }
 
