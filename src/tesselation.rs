@@ -1,9 +1,15 @@
+use std::collections::HashSet;
+
+use svg::node::element::Path;
+use crate::shapes::*;
+use crate::pos::*;
+
 #[derive(Clone, Copy)]
 pub struct Frame {
-    x: usize,
-    y: usize,
-    w: usize,
-    h: usize,
+    pub x: usize,
+    pub y: usize,
+    pub w: usize,
+    pub h: usize,
 }
 
 impl Frame {
@@ -25,7 +31,7 @@ impl Frame {
     }
 }
 
-pub fn hexagon(f: &Frame, h: Hexagon) -> Vec<Path> {
+pub fn tile_hexagons(f: &Frame, h: Hexagon) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
     let idir = polar(radians(h.rot - 30), (h.size * 2.) * radians(30).cos());
@@ -54,7 +60,7 @@ pub fn hexagon(f: &Frame, h: Hexagon) -> Vec<Path> {
     v.into_iter().map(|p| m.render(p)).collect::<Vec<_>>()
 }
 
-fn triangle_fill(f: &Frame, t: Triangle) -> Vec<Path> {
+pub fn tile_triangles(f: &Frame, t: Triangle) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
     let idir = polar(radians(t.rot - 30), (t.size * 2.) * radians(30).cos());

@@ -1,8 +1,7 @@
-use std::collections::HashSet;
-use std::f64::consts::PI;
-use svg::node::element::path::Data;
-use svg::node::element::Path;
+
 use svg::Document;
+use wallrnd::tesselation::*;
+use wallrnd::shapes::*;
 
 fn main() {
     let frame = Frame {
@@ -13,7 +12,7 @@ fn main() {
     };
     let mut document = Document::new().set("viewBox", frame.into_tuple());
 
-    for elem in frame.triangle_fill(Triangle { size: 14., rot: 15 }) {
+    for elem in tile_triangles(&frame, Triangle { size: 14., rot: 15 }) {
         document = document.add(elem)
     }
 

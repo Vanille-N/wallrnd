@@ -1,19 +1,23 @@
-struct Movable(Vec<Pos>);
+use svg::node::element::Path;
+use svg::node::element::path::Data;
+use crate::pos::*;
+
+pub struct Movable(Vec<Pos>);
 
 #[derive(Clone, Copy, Debug)]
-struct Hexagon {
-    size: f64,
-    rot: i32,
+pub struct Hexagon {
+    pub size: f64,
+    pub rot: i32,
 }
 
 #[derive(Clone, Copy, Debug)]
-struct Triangle {
-    size: f64,
-    rot: i32,
+pub struct Triangle {
+    pub size: f64,
+    pub rot: i32,
 }
 
 impl Triangle {
-    fn rotate(mut self, a: i32) -> Self {
+    pub fn rotate(mut self, a: i32) -> Self {
         self.rot += a;
         self
     }

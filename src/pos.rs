@@ -1,5 +1,7 @@
+use std::f64::consts::PI;
+
 #[derive(Clone, Copy, Debug)]
-pub struct Pos(f64, f64);
+pub struct Pos(pub f64, pub f64);
 
 impl Pos {
     pub fn into_tuple(self) -> (f64, f64) {
