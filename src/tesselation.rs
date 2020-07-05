@@ -1,8 +1,8 @@
 use std::collections::HashSet;
 
-use svg::node::element::Path;
-use crate::shapes::*;
 use crate::pos::*;
+use crate::shapes::*;
+use svg::node::element::Path;
 
 #[derive(Clone, Copy)]
 pub struct Frame {
@@ -89,5 +89,7 @@ pub fn tile_triangles(f: &Frame, t: Triangle) -> Vec<Path> {
     }
     let m1 = Movable::triangle(t);
     let m2 = Movable::triangle(t.rotate(60));
-    v.into_iter().map(|(p, b)| (if b { &m1 } else { &m2 }).render(p)).collect::<Vec<_>>()
+    v.into_iter()
+        .map(|(p, b)| (if b { &m1 } else { &m2 }).render(p))
+        .collect::<Vec<_>>()
 }

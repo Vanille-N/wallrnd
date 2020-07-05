@@ -1,6 +1,6 @@
-use svg::node::element::Path;
-use svg::node::element::path::Data;
 use crate::pos::*;
+use svg::node::element::path::Data;
+use svg::node::element::Path;
 
 pub struct Movable(Vec<Pos>);
 

@@ -1,7 +1,6 @@
-
 use svg::Document;
-use wallrnd::tesselation::*;
 use wallrnd::shapes::*;
+use wallrnd::tesselation::*;
 
 fn main() {
     let frame = Frame {
