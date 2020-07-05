@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-
 use crate::pos::*;
 use crate::shapes::*;
 use svg::node::element::Path;
@@ -38,17 +37,14 @@ pub fn tile_hexagons(f: &Frame, h: Hexagon) -> Vec<Path> {
     let jdir = polar(radians(h.rot + 30), (h.size * 2.) * radians(30).cos());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
-    // Init
-    stk.push((0, 0));
-    set.insert((0, 0));
+    stk.push(center);
+    set.insert(center);
     while !stk.is_empty() {
         let pos = stk.pop().unwrap();
-        let (i0, j0) = pos;
-        let realpos = center + idir * i0 + jdir * j0;
-        if f.is_inside(realpos) {
-            v.push(realpos);
-            for (i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
-                let p = (i0 + i, j0 + j);
+        if f.is_inside(pos) {
+            v.push(pos);
+            for &(i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)]{
+                let p = pos + idir * i + jdir * j;
                 if !set.contains(&p) {
                     set.insert(p);
                     stk.push(p);
@@ -68,18 +64,15 @@ pub fn tile_triangles(f: &Frame, t: Triangle) -> Vec<Path> {
     let adjust = polar(radians(t.rot + 60), t.size * radians(30).sin());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
-    // Init
-    stk.push((0, 0));
-    set.insert((0, 0));
+    stk.push(center);
+    set.insert(center);
     while !stk.is_empty() {
         let pos = stk.pop().unwrap();
-        let (i0, j0) = pos;
-        let realpos = center + idir * i0 + jdir * j0;
-        if f.is_inside(realpos) {
-            v.push((realpos, false));
-            v.push((realpos + idir * 0.5 + adjust, true));
-            for (i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
-                let p = (i0 + i, j0 + j);
+        if f.is_inside(pos) {
+            v.push((pos, false));
+            v.push((pos + idir * 0.5 + adjust, true));
+            for &(i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
+                let p = pos + idir * i + jdir * j;
                 if !set.contains(&p) {
                     set.insert(p);
                     stk.push(p);
