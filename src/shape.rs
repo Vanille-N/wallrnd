@@ -5,20 +5,19 @@ use svg::node::element::Path;
 pub struct Movable(Vec<Pos>);
 
 #[derive(Clone, Copy, Debug)]
-pub struct Hexagon {
+pub struct Shape {
     pub size: f64,
     pub rot: i32,
 }
 
-#[derive(Clone, Copy, Debug)]
-pub struct Triangle {
-    pub size: f64,
-    pub rot: i32,
-}
-
-impl Triangle {
+impl Shape {
     pub fn rotate(mut self, a: i32) -> Self {
         self.rot += a;
+        self
+    }
+
+    pub fn redim(mut self, s: f64) -> Self {
+        self.size *= s;
         self
     }
 }
@@ -38,18 +37,18 @@ impl Movable {
             .set("d", data)
     }
 
-    pub fn hexagon(h: Hexagon) -> Self {
+    pub fn hexagon(x: Shape) -> Self {
         let mut pts = Vec::new();
         for i in 0..6 {
-            pts.push(polar(radians(h.rot + 60 * i), h.size))
+            pts.push(polar(radians(x.rot + 60 * i), x.size))
         }
         Movable(pts)
     }
 
-    pub fn triangle(t: Triangle) -> Self {
+    pub fn triangle(x: Shape) -> Self {
         let mut pts = Vec::new();
         for i in 0..3 {
-            pts.push(polar(radians(t.rot + 120 * i), t.size))
+            pts.push(polar(radians(x.rot + 120 * i), x.size))
         }
         Movable(pts)
     }
