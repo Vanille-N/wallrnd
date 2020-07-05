@@ -1,6 +1,6 @@
+use std::cmp::{Eq, PartialEq};
 use std::f64::consts::PI;
 use std::hash::{Hash, Hasher};
-use std::cmp::{Eq, PartialEq};
 use std::ops::{Add, Mul, Sub};
 
 #[derive(Clone, Copy, Debug)]
@@ -12,7 +12,10 @@ impl Pos {
     }
 
     pub fn round(self) -> (i32, i32) {
-        ((self.0 * 100.).round() as i32, (self.1 * 100.).round() as i32)
+        (
+            (self.0 * 100.).round() as i32,
+            (self.1 * 100.).round() as i32,
+        )
     }
 }
 

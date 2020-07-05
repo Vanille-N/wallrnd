@@ -1,6 +1,6 @@
-use std::collections::HashSet;
 use crate::pos::*;
 use crate::shape::*;
+use std::collections::HashSet;
 use svg::node::element::Path;
 
 #[derive(Clone, Copy)]
@@ -43,7 +43,7 @@ pub fn tile_hexagons(f: &Frame, x: Shape) -> Vec<Path> {
         let pos = stk.pop().unwrap();
         if f.is_inside(pos) {
             v.push(pos);
-            for &(i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)]{
+            for &(i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
                 let p = pos + idir * i + jdir * j;
                 if !set.contains(&p) {
                     set.insert(p);

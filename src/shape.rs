@@ -52,4 +52,12 @@ impl Movable {
         }
         Movable(pts)
     }
+
+    pub fn square(x: Shape) -> Self {
+        let mut pts = Vec::new();
+        for i in 0..4 {
+            pts.push(polar(radians(x.rot + 45 + 90 * i), x.size))
+        }
+        Movable(pts)
+    }
 }
