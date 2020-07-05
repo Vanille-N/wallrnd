@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use crate::pos::*;
-use crate::shapes::*;
+use crate::shape::*;
 use svg::node::element::Path;
 
 #[derive(Clone, Copy)]
@@ -30,11 +30,11 @@ impl Frame {
     }
 }
 
-pub fn tile_hexagons(f: &Frame, h: Hexagon) -> Vec<Path> {
+pub fn tile_hexagons(f: &Frame, x: Shape) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
-    let idir = polar(radians(h.rot - 30), (h.size * 2.) * radians(30).cos());
-    let jdir = polar(radians(h.rot + 30), (h.size * 2.) * radians(30).cos());
+    let idir = polar(radians(x.rot - 30), (x.size * 2.) * radians(30).cos());
+    let jdir = polar(radians(x.rot + 30), (x.size * 2.) * radians(30).cos());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
     stk.push(center);
@@ -52,16 +52,16 @@ pub fn tile_hexagons(f: &Frame, h: Hexagon) -> Vec<Path> {
             }
         }
     }
-    let m = Movable::hexagon(h);
+    let m = Movable::hexagon(x);
     v.into_iter().map(|p| m.render(p)).collect::<Vec<_>>()
 }
 
-pub fn tile_triangles(f: &Frame, t: Triangle) -> Vec<Path> {
+pub fn tile_triangles(f: &Frame, x: Shape) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
-    let idir = polar(radians(t.rot - 30), (t.size * 2.) * radians(30).cos());
-    let jdir = polar(radians(t.rot + 30), (t.size * 2.) * radians(30).cos());
-    let adjust = polar(radians(t.rot + 60), t.size * radians(30).sin());
+    let idir = polar(radians(x.rot - 30), (x.size * 2.) * radians(30).cos());
+    let jdir = polar(radians(x.rot + 30), (x.size * 2.) * radians(30).cos());
+    let adjust = polar(radians(x.rot + 60), x.size * radians(30).sin());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
     stk.push(center);

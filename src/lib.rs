@@ -1,3 +1,3 @@
 pub mod pos;
-pub mod shapes;
+pub mod shape;
 pub mod tesselation;

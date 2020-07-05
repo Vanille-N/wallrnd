@@ -1,5 +1,5 @@
 use svg::Document;
-use wallrnd::shapes::*;
+use wallrnd::shape::*;
 use wallrnd::tesselation::*;
 
 fn main() {
@@ -11,7 +11,7 @@ fn main() {
     };
     let mut document = Document::new().set("viewBox", frame.into_tuple());
 
-    for elem in tile_triangles(&frame, Triangle { size: 14., rot: 15 }) {
+    for elem in tile_hybrid_hexagons_triangles(&frame, Shape { size: 14., rot: 15 }) {
         document = document.add(elem)
     }
 
