@@ -2,6 +2,8 @@ use std::cmp::{Eq, PartialEq};
 use std::f64::consts::PI;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, Mul, Sub};
+use rand::{rngs::ThreadRng, Rng};
+use crate::tesselation::Frame;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(pub f64, pub f64);
@@ -24,6 +26,14 @@ impl Pos {
 
     pub fn dot(self, other: Self) -> f64 {
         self.0 * other.0 + self.1 * other.1
+    }
+
+    pub fn random(f: &Frame, rng: &mut ThreadRng) -> Self {
+        let errx = f.w as f64 / 10.;
+        let erry = f.h as f64 / 10.;
+        let x = f.x as f64 - errx + rng.gen::<f64>() * f.w as f64 * 1.2;
+        let y = f.y as f64 - erry + rng.gen::<f64>() * f.h as f64 * 1.2;
+        Self(x, y)
     }
 }
 
