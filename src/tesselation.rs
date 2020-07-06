@@ -30,11 +30,11 @@ impl Frame {
     }
 }
 
-pub fn tile_hexagons(f: &Frame, x: Shape) -> Vec<Path> {
+pub fn tile_hexagons(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
-    let idir = polar(radians(x.rot - 30), (x.size * 2.) * radians(30).cos());
-    let jdir = polar(radians(x.rot + 30), (x.size * 2.) * radians(30).cos());
+    let idir = polar(radians(rot - 30), (size * 2.) * radians(30).cos());
+    let jdir = polar(radians(rot + 30), (size * 2.) * radians(30).cos());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
     stk.push(center);
@@ -52,16 +52,16 @@ pub fn tile_hexagons(f: &Frame, x: Shape) -> Vec<Path> {
             }
         }
     }
-    let m = Movable::hexagon(x);
+    let m = Movable::hexagon(size, rot);
     v.into_iter().map(|p| m.render(p)).collect::<Vec<_>>()
 }
 
-pub fn tile_triangles(f: &Frame, x: Shape) -> Vec<Path> {
+pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
-    let idir = polar(radians(x.rot - 30), (x.size * 2.) * radians(30).cos());
-    let jdir = polar(radians(x.rot + 30), (x.size * 2.) * radians(30).cos());
-    let adjust = polar(radians(x.rot + 60), x.size * radians(30).sin());
+    let idir = polar(radians(rot - 30), (size * 2.) * radians(30).cos());
+    let jdir = polar(radians(rot + 30), (size * 2.) * radians(30).cos());
+    let adjust = polar(radians(rot + 60), size * radians(30).sin());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
     stk.push(center);
@@ -80,19 +80,19 @@ pub fn tile_triangles(f: &Frame, x: Shape) -> Vec<Path> {
             }
         }
     }
-    let m1 = Movable::triangle(x);
-    let m2 = Movable::triangle(x.rotate(60));
+    let m1 = Movable::triangle(size, rot);
+    let m2 = Movable::triangle(size, rot + 60);
     v.into_iter()
         .map(|(p, b)| (if b { &m1 } else { &m2 }).render(p))
         .collect::<Vec<_>>()
 }
 
-pub fn tile_hybrid_hexagons_triangles(f: &Frame, x: Shape) -> Vec<Path> {
+pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
-    let idir = polar(radians(x.rot), x.size * 2.);
-    let jdir = polar(radians(x.rot + 60), x.size * 2.);
-    let adjust = polar(radians(x.rot + 30), x.size / radians(30).cos());
+    let idir = polar(radians(rot), size * 2.);
+    let jdir = polar(radians(rot + 60), size * 2.);
+    let adjust = polar(radians(rot + 30), size / radians(30).cos());
     let mut set = HashSet::new();
     let mut stk = Vec::new();
     stk.push(center);
@@ -113,16 +113,16 @@ pub fn tile_hybrid_hexagons_triangles(f: &Frame, x: Shape) -> Vec<Path> {
         }
     }
     let m = [
-        Movable::hexagon(x),
-        Movable::triangle(x.redim(radians(30).sin()).rotate(30)),
-        Movable::triangle(x.redim(radians(30).sin()).rotate(90)),
+        Movable::hexagon(size, rot),
+        Movable::triangle(size * radians(30).sin(), rot + 30),
+        Movable::triangle(size * radians(30).sin(), rot + 90),
     ];
     v.into_iter()
         .map(|(p, i)| m[i].render(p))
         .collect::<Vec<_>>()
 }
 
-pub fn tile_hybrid_squares_triangles(f: &Frame, x: Shape) -> Vec<Path> {
+pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
     let mut v = Vec::new();
     let center = f.center();
     let mut set = HashSet::new();
@@ -140,30 +140,30 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, x: Shape) -> Vec<Path> {
     //  |               | ,-'
     //  +---------------+'
     //
-    let a = x.size / 2_f64.sqrt();
+    let a = size / 2_f64.sqrt();
     let b = a * radians(30).tan();
     let c = a / radians(30).cos();
-    let idir = polar(radians(x.rot), c + a*2. + 2.*b) + polar(radians(x.rot + 60), c + a*2. + 2.*b);
-    let jdir = polar(radians(x.rot), c + a*2. + 2.*b) + polar(radians(x.rot - 60), c + a*2. + 2.*b);
+    let idir = polar(radians(rot), c + a*2. + 2.*b) + polar(radians(rot + 60), c + a*2. + 2.*b);
+    let jdir = polar(radians(rot), c + a*2. + 2.*b) + polar(radians(rot - 60), c + a*2. + 2.*b);
     while !stk.is_empty() {
         let pos = stk.pop().unwrap();
         if f.is_inside(pos) {
             for i in 0..6 {
                 v.push((
-                    pos + polar(radians(x.rot + i * 60), c),
+                    pos + polar(radians(rot + i * 60), c),
                     3 + (i as usize % 2),
                 ));
                 v.push((
-                    pos + polar(radians(x.rot + i * 60), c + b + a),
+                    pos + polar(radians(rot + i * 60), c + b + a),
                     i as usize % 3,
                 ));
                 v.push((
-                    pos + polar(radians(x.rot + i * 60 + 30), 2. * a + c),
+                    pos + polar(radians(rot + i * 60 + 30), 2. * a + c),
                     5 + (i as usize % 2),
                 ));
             }
-            v.push((pos + polar(radians(x.rot), c + 2. * b + 2. * a), 4));
-            v.push((pos - polar(radians(x.rot), c + 2. * b + 2. * a), 3));
+            v.push((pos + polar(radians(rot), c + 2. * b + 2. * a), 4));
+            v.push((pos - polar(radians(rot), c + 2. * b + 2. * a), 3));
             for &(i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
                 let p = pos + idir * i + jdir * j;
                 if !set.contains(&p) {
@@ -174,13 +174,13 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, x: Shape) -> Vec<Path> {
         }
     }
     let m = [
-        Movable::square(x),
-        Movable::square(x.rotate(60)),
-        Movable::square(x.rotate(-60)),
-        Movable::triangle(x.redim(c / x.size).rotate(60)),
-        Movable::triangle(x.redim(c / x.size)),
-        Movable::triangle(x.redim(c / x.size).rotate(90)),
-        Movable::triangle(x.redim(c / x.size).rotate(30)),
+        Movable::square(size, rot),
+        Movable::square(size, rot + 60),
+        Movable::square(size, rot - 60),
+        Movable::triangle(c, rot + 60),
+        Movable::triangle(c, rot),
+        Movable::triangle(c, rot + 90),
+        Movable::triangle(c, rot + 30),
     ];
     v.into_iter()
         .map(|(p, i)| m[i].render(p))

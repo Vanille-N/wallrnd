@@ -4,24 +4,6 @@ use svg::node::element::Path;
 
 pub struct Movable(Vec<Pos>);
 
-#[derive(Clone, Copy, Debug)]
-pub struct Shape {
-    pub size: f64,
-    pub rot: i32,
-}
-
-impl Shape {
-    pub fn rotate(mut self, a: i32) -> Self {
-        self.rot += a;
-        self
-    }
-
-    pub fn redim(mut self, s: f64) -> Self {
-        self.size *= s;
-        self
-    }
-}
-
 impl Movable {
     pub fn render(&self, reference: Pos) -> Path {
         let mut data = Data::new();
@@ -37,26 +19,26 @@ impl Movable {
             .set("d", data)
     }
 
-    pub fn hexagon(x: Shape) -> Self {
+    pub fn hexagon(size: f64, rot: i32) -> Self {
         let mut pts = Vec::new();
         for i in 0..6 {
-            pts.push(polar(radians(x.rot + 60 * i), x.size))
+            pts.push(polar(radians(rot + 60 * i), size))
         }
         Movable(pts)
     }
 
-    pub fn triangle(x: Shape) -> Self {
+    pub fn triangle(size: f64, rot: i32) -> Self {
         let mut pts = Vec::new();
         for i in 0..3 {
-            pts.push(polar(radians(x.rot + 120 * i), x.size))
+            pts.push(polar(radians(rot + 120 * i), size))
         }
         Movable(pts)
     }
 
-    pub fn square(x: Shape) -> Self {
+    pub fn square(size: f64, rot: i32) -> Self {
         let mut pts = Vec::new();
         for i in 0..4 {
-            pts.push(polar(radians(x.rot + 45 + 90 * i), x.size))
+            pts.push(polar(radians(rot + 45 + 90 * i), size))
         }
         Movable(pts)
     }
