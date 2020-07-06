@@ -8,7 +8,10 @@ pub struct Scene {
 
 impl Scene {
     pub fn new() -> Self {
-        unimplemented!()
+        Self {
+            bg: Color(50, 50, 50),
+            items: create_items(),
+        }
     }
 
     pub fn color(&self, p: Pos) -> Color {
@@ -21,7 +24,10 @@ impl Scene {
     }
 }
 
-
 pub trait Contains {
     fn contains(&self, p: Pos) -> Option<Color>;
+}
+
+pub fn create_items() -> Vec<Box<dyn Contains>> {
+    vec![Box::new(Disc { center: Pos(500., 400.), radius: 100., color: Color(255, 0, 0) })]
 }
