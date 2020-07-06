@@ -153,3 +153,39 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
         jdir,
     )
 }
+
+fn boyer_watson(pts: &[Pos]) -> Vec<[Pos]> {
+    let super_triangle = encompass_triangle(pts);
+    let mut triangulation = set![(super_triangle, circumcircle(super_triangle))];
+    for pt in pts {
+        let mut bad_triangles = vec![];
+        for item in &triangulation {
+            let (triangle, circumcircle) = item;
+            if circumcircle.contains(pt) {
+                bad_triangles.push(item);
+            }
+        }
+        let bad_edges = set![];
+        for item in &bad_triangles {
+            let ((a, b, c), _) = *item;
+            for (x, y) in &[(a, b), (a, c), (b, c)] {
+                bad_edges.insert((x, y));
+                bad_edges.insert((y, x));
+            }
+        }
+        let polygon = vec![];
+        for item in bad_triangles {
+            let ((a, b, c), _) = *item;
+            for edge in &[(a, b), (a, c), (b, c)] {
+                if !bad_edges.contains(edge) {
+                    polygon.push(edge);
+                }
+            }
+            triangulation.remove(item);
+        }
+        for (x, y) in polygon {
+            triangulation.insert(((x, y, z), circumcircle((x, y, z))));
+        }
+    }
+    triangulation.iter().map(|(t, _)| t).collect::<Vec<_>>()
+}
