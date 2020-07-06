@@ -425,6 +425,6 @@ def main():
     add_timestamp(scene, datetime.now().strftime("%H:%M"))
     add_date(scene, make_date(datetime.today()))
     print("Done rendering, now saving image")
-    draw_img('img.svg', scene, theme2)
+    draw_img('/tmp/wallpaper-random.svg', scene, theme2)
 
 main()

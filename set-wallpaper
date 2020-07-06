@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+# Set the output image of `prototype.py` as wallpaper
+# Tested on Ubuntu 20.04 (Focal Fossa)
+
+user=$(whoami)
+
+fl=$(find /proc -maxdepth 2 -user $user -name environ -print -quit)
+while [ -z $(grep -z DBUS_SESSION_BUS_ADDRESS "$fl" | cut -d= -f2- | tr -d '\000' ) ]
+do
+  fl=$(find /proc -maxdepth 2 -user $user -name environ -newer "$fl" -print -quit)
+done
+
+export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS "$fl" | cut -d= -f2-)
+
+nice -n 20 -- ~/Algo/Repos/wallrnd/prototype.py
+IMG="/tmp/wallpaper-random.svg"
+
+nice -n 20 -- dconf write "/org/gnome/desktop/background/picture-uri" "'file://${IMG}'"
