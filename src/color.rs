@@ -23,10 +23,14 @@ impl Color {
         self
     }
 
-    pub fn theme(mut self, th: Self) -> Self {
-        self.0 = (self.0 + th.0) / 2;
-        self.1 = (self.1 + th.1) / 2;
-        self.2 = (self.2 + th.2) / 2;
+    pub fn theme(mut self, th: Self, weight: i32) -> Self {
+        self.0 = (self.0 * weight + th.0 * (100 - weight)) / 100;
+        self.1 = (self.1 * weight + th.1 * (100 - weight)) / 100;
+        self.2 = (self.2 * weight + th.2 * (100 - weight)) / 100;
         self
+    }
+
+    pub fn random(rng: ThreadRng) -> Self {
+        Self(rng.gen_range(0, 255), rng.gen_range(0, 255), rng.gen_range(0, 255))
     }
 }
