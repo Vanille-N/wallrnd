@@ -24,4 +24,12 @@ This will generate a new image every minute and set it as wallpaper. Note that e
 
 ### Alternative tools
 
-*Work in progress*
+#### Online
+
+* [Random Wallpaper Generator!](http://bjmiller.net/canvas/wallpaper/)
+
+* [Background Generator](https://bggenerator.com/)
+
+#### Scripts
+
+* [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
