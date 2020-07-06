@@ -37,6 +37,10 @@ impl Pos {
     }
 }
 
+pub fn crossprod_sign(a: Pos, b: Pos, c: Pos) -> bool {
+    (a.0 - c.0) * (b.1 - c.1) - (b.0 - c.0) * (a.1 - c.1) > 0.
+}
+
 pub fn polar(a: f64, r: f64) -> Pos {
     Pos(r * a.cos(), r * a.sin())
 }

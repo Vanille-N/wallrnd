@@ -14,13 +14,14 @@ fn main() {
     let scene = Scene::new();
     let stroke = Color(0, 0, 0).to_string();
     let theme = Color(0, 100, 0);
+    let weight = 40;
 
     let mut rng = rand::thread_rng();
 
     for (pos, elem) in random_delaunay(&frame, &mut rng) {
         let fill = scene.color(pos);
         document = document.add(
-            elem.set("fill", fill.variate(&mut rng, 20).theme(theme).to_string())
+            elem.set("fill", fill.variate(&mut rng, 20).theme(theme, weight).to_string())
                 .set("stroke", &stroke[..]),
         );
     }

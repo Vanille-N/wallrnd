@@ -428,3 +428,7 @@ def main():
     draw_img('/tmp/wallpaper-random.svg', scene, theme2)
 
 main()
+
+# TODO:
+# - waves
+# - stripes
