@@ -14,7 +14,7 @@ fn main() {
     let scene = Scene::new();
     let stroke = Color(0, 0, 0).to_string();
 
-    for (pos, elem) in tile_hybrid_squares_triangles(&frame, 15., 45) {
+    for (pos, elem) in random_delaunay(&frame, &mut rand::thread_rng()) {
         let fill = scene.color(pos);
         document = document.add(
             elem.set("fill", fill.to_string())

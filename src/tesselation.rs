@@ -236,4 +236,13 @@ fn boyer_watson(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
     }
     triangulation.keys().map(|&k| k).collect::<Vec<_>>()
 }
+
+pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
+    let mut pts = Vec::new();
+    for _ in 0..1000 {
+        pts.push(Pos::random(f, rng));
+    }
+    let triangulation = boyer_watson(&pts);
+    // println!("{}", triangulation.len());
+    triangulation.into_iter().map(|(a, b, c)| ((a + b + c) * 0.33, Path::new().set("stroke-width", 1).set("d", Data::new().move_to(a.into_tuple()).line_to(b.into_tuple()).line_to(c.into_tuple()).close()))).collect::<Vec<_>>()
 }
