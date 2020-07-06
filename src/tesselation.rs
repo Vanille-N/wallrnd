@@ -21,9 +21,9 @@ pub struct Frame {
     pub h: usize,
 }
 
-fn periodic_grid_tiling<F>(f: &Frame, gen: F, idir: Pos, jdir: Pos) -> Vec<Path>
+fn periodic_grid_tiling<F>(f: &Frame, gen: F, idir: Pos, jdir: Pos) -> Vec<(Pos, Path)>
 where
-    F: Fn(Pos) -> Vec<Path>,
+    F: Fn(Pos) -> Vec<(Pos, Path)>,
 {
     let mut v = Vec::new();
     let center = f.center();
@@ -65,14 +65,14 @@ impl Frame {
     }
 }
 
-pub fn tile_hexagons(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
+pub fn tile_hexagons(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
     let idir = polar(radians(rot - 30), (size * 2.) * radians(30).cos());
     let jdir = polar(radians(rot + 30), (size * 2.) * radians(30).cos());
     let m = Movable::hexagon(size, rot);
     periodic_grid_tiling(f, |p| vec![m.render(p)], idir, jdir)
 }
 
-pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
+pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
     let idir = polar(radians(rot - 30), (size * 2.) * radians(30).cos());
     let jdir = polar(radians(rot + 30), (size * 2.) * radians(30).cos());
     let adjust = polar(radians(rot + 60), size * radians(30).sin()) + idir * 0.5;
@@ -81,7 +81,7 @@ pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
     periodic_grid_tiling(f, |p| vec![m1.render(p), m2.render(p + adjust)], idir, jdir)
 }
 
-pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
+pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
     let idir = polar(radians(rot), size * 2.);
     let jdir = polar(radians(rot + 60), size * 2.);
     let adjust = polar(radians(rot + 30), size / radians(30).cos());
@@ -104,7 +104,7 @@ pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Pat
     )
 }
 
-pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<Path> {
+pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
     let a = size / 2_f64.sqrt();
     let b = a * radians(30).tan();
     let c = a / radians(30).cos();
