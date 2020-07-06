@@ -17,6 +17,14 @@ impl Pos {
             (self.1 * 100.).round() as i32,
         )
     }
+
+    pub fn dot_self(self) -> f64 {
+        self.0.powi(2) + self.1.powi(2)
+    }
+
+    pub fn dot(self, other: Self) -> f64 {
+        self.0 * other.0 + self.1 * other.1
+    }
 }
 
 pub fn polar(a: f64, r: f64) -> Pos {
