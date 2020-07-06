@@ -5,18 +5,17 @@ use svg::node::element::Path;
 pub struct Movable(Vec<Pos>);
 
 impl Movable {
-    pub fn render(&self, reference: Pos) -> Path {
+    pub fn render(&self, reference: Pos) -> (Pos, Path) {
         let mut data = Data::new();
         data = data.move_to((reference + self.0[0]).into_tuple());
         for p in self.0.iter().skip(1) {
             data = data.line_to((reference + *p).into_tuple());
         }
         let data = data.close();
-        Path::new()
-            .set("fill", "lawngreen")
-            .set("stroke", "blue")
+        (reference, Path::new()
             .set("stroke-width", 1)
             .set("d", data)
+        )
     }
 
     pub fn hexagon(size: f64, rot: i32) -> Self {
