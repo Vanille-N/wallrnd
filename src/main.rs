@@ -1,7 +1,7 @@
 use svg::Document;
-use wallrnd::tesselation::*;
-use wallrnd::scene::Scene;
 use wallrnd::color::Color;
+use wallrnd::scene::Scene;
+use wallrnd::tesselation::*;
 
 fn main() {
     let frame = Frame {
@@ -16,7 +16,10 @@ fn main() {
 
     for (pos, elem) in tile_hybrid_squares_triangles(&frame, 15., 45) {
         let fill = scene.color(pos);
-        document = document.add(elem.set("fill", fill.to_string()).set("stroke", &stroke[..]));
+        document = document.add(
+            elem.set("fill", fill.to_string())
+                .set("stroke", &stroke[..]),
+        );
     }
 
     svg::save("image.svg", &document).unwrap();

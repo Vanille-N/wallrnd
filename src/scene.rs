@@ -29,7 +29,11 @@ pub trait Contains {
 }
 
 pub fn create_items() -> Vec<Box<dyn Contains>> {
-    vec![Box::new(Disc { center: Pos(500., 400.), radius: 100., color: Color(255, 0, 0) })]
+    vec![Box::new(Disc {
+        center: Pos(500., 400.),
+        radius: 100.,
+        color: Color(255, 0, 0),
+    })]
 }
 
 struct Disc {

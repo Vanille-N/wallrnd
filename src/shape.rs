@@ -12,10 +12,7 @@ impl Movable {
             data = data.line_to((reference + *p).into_tuple());
         }
         let data = data.close();
-        (reference, Path::new()
-            .set("stroke-width", 1)
-            .set("d", data)
-        )
+        (reference, Path::new().set("stroke-width", 1).set("d", data))
     }
 
     pub fn hexagon(size: f64, rot: i32) -> Self {
