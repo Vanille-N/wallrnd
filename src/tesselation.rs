@@ -155,7 +155,6 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     )
 }
 
-fn boyer_watson(pts: &[Pos]) -> Vec<[Pos]> {
 fn circumcircle((pa, pb, pc): (Pos, Pos, Pos)) -> (Pos, f64) {
     let Pos(a, b) = pb - pa;
     let Pos(c, d) = pc - pa;
@@ -196,37 +195,45 @@ fn encompass_triangle(pts: &[Pos]) -> (Pos, Pos, Pos) {
     (a, b, c)
 }
 
+fn boyer_watson(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
+    let mut triangulation = HashMap::new();
     let super_triangle = encompass_triangle(pts);
-    let mut triangulation = set![(super_triangle, circumcircle(super_triangle))];
-    for pt in pts {
+    triangulation.insert(super_triangle, circumcircle(super_triangle));
+    for &pt in pts {
+        // println!("point {:?}", pt);
         let mut bad_triangles = vec![];
-        for item in &triangulation {
-            let (triangle, circumcircle) = item;
-            if circumcircle.contains(pt) {
-                bad_triangles.push(item);
+        for triangle in triangulation.keys() {
+            let circumcircle = triangulation[triangle];
+            // println!("{:?}, {:?}", triangle, circumcircle);
+            if inside_circle(circumcircle, pt) {
+                bad_triangles.push(*triangle);
             }
         }
-        let bad_edges = set![];
-        for item in &bad_triangles {
-            let ((a, b, c), _) = *item;
-            for (x, y) in &[(a, b), (a, c), (b, c)] {
-                bad_edges.insert((x, y));
-                bad_edges.insert((y, x));
+        let mut bad_edges = HashMap::new();
+        for &(a, b, c) in &bad_triangles {
+            for &(x, y) in &[(a, b), (a, c), (b, c)] {
+                for &(x, y) in &[(x, y), (y, x)] {
+                    match bad_edges.get(&(x, y)) {
+                        None => bad_edges.insert((x, y), 1),
+                        Some(&cnt) => bad_edges.insert((x, y), cnt + 1),
+                    };
+                }
             }
         }
-        let polygon = vec![];
-        for item in bad_triangles {
-            let ((a, b, c), _) = *item;
-            for edge in &[(a, b), (a, c), (b, c)] {
-                if !bad_edges.contains(edge) {
+        let mut polygon = Vec::new();
+        for (a, b, c) in bad_triangles {
+            for &edge in &[(a, b), (a, c), (b, c)] {
+                // println!("{}", bad_edges[&edge]);
+                if bad_edges[&edge] == 1 {
                     polygon.push(edge);
                 }
             }
-            triangulation.remove(item);
+            triangulation.remove(&(a, b, c));
         }
         for (x, y) in polygon {
-            triangulation.insert(((x, y, z), circumcircle((x, y, z))));
+            triangulation.insert((x, y, pt), circumcircle((x, y, pt)));
         }
     }
-    triangulation.iter().map(|(t, _)| t).collect::<Vec<_>>()
+    triangulation.keys().map(|&k| k).collect::<Vec<_>>()
+}
 }
