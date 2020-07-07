@@ -3,6 +3,7 @@ use crate::tesselation::*;
 use crate::scene::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use crate::pos::{radians, polar, Pos};
+use svg::node::element::Path;
 
 pub struct SceneCfg {
     pub themes: Vec<Color>,
@@ -19,6 +20,8 @@ pub struct SceneCfg {
     pub nb_parallel_stripes: i32,
     pub nb_concentric_circles: i32,
     pub var_parallel_stripes: i32,
+    pub tiling_size: f64,
+    pub delaunay_count: i32,
 }
 
 trait Dynamic<C>
@@ -106,16 +109,17 @@ impl SceneCfg {
 
     fn create_parallel_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
         let mut v = Vec::new();
-        let (a, b) = {
-            let c = Pos::random(&self.frame, rng);
+        let (a, b, dir) = {
+            let c = self.frame.center();
             let w = self.frame.h + self.frame.w;
-            let d = polar(radians(rng.gen_range(0, 360)), w as f64);
-            (c + d, c - d)
+            let dir = rng.gen_range(0, 360);
+            let d = polar(radians(dir), w as f64 / 2.);
+            (c + d, c - d, dir)
         };
         for i in 0..self.nb_parallel_stripes {
             let c = self.choose_color(rng);
             let p = i as f64 / self.nb_parallel_stripes as f64;
-            v.push(HalfPlane::random(rng, a * (1. - p) + b * p, b, self.var_parallel_stripes, c));
+            v.push(HalfPlane::random(rng, a * (1. - p) + b * p, 180 + dir, self.var_parallel_stripes, c));
         }
         v
     }
@@ -127,6 +131,17 @@ impl SceneCfg {
             v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
         }
         unimplemented!()
+    }
+
+    pub fn make_tiling(&self, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
+        use crate::tesselation::*;
+        match self.tiling {
+            Tiling::Hexagons => tile_hexagons(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
+            Tiling::Triangles => tile_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
+            Tiling::HexagonsAndTriangles => tile_hybrid_hexagons_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
+            Tiling::SquaresAndTriangles => tile_hybrid_squares_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
+            Tiling::Delaunay => random_delaunay(&self.frame, rng, self.delaunay_count),
+        }
     }
 }
 
@@ -141,8 +156,8 @@ pub enum Pattern {
 }
 
 pub enum Tiling {
-    Squares,
     Hexagons,
+    Triangles,
     HexagonsAndTriangles,
     SquaresAndTriangles,
     Delaunay,

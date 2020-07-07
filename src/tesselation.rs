@@ -237,9 +237,9 @@ fn boyer_watson(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
     triangulation.keys().map(|&k| k).collect::<Vec<_>>()
 }
 
-pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
+pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path)> {
     let mut pts = Vec::new();
-    for _ in 0..1000 {
+    for _ in 0..n {
         pts.push(Pos::random(f, rng));
     }
     let triangulation = boyer_watson(&pts);
