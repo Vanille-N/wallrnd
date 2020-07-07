@@ -1,0 +1,14 @@
+[global]
+deviation = 20
+weight = 40
+size = 15.0
+width = 1000
+height = 600
+
+[colors]
+cyan = [0, 255, 255]
+orange = "#AA7700"
+grey = [150, 150, 150]
+
+[themes]
+rust = [["cyan", 20], ["orange", 60], ["grey", 30]]

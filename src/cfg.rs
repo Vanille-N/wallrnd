@@ -4,6 +4,7 @@ use crate::scene::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use crate::pos::{radians, polar, Pos};
 use svg::node::element::Path;
+use serde_derive::Deserialize;
 
 pub struct SceneCfg {
     pub themes: Vec<Color>,
@@ -84,7 +85,7 @@ impl SceneCfg {
 
     fn create_free_stripes(&self, rng: &mut ThreadRng) -> Vec<Stripe> {
         let mut v = Vec::new();
-        for i in 0..self.nb_free_stripes {
+        for _ in 0..self.nb_free_stripes {
             let c = self.choose_color(rng);
             let w = self.stripe_width * self.frame.h as f64 * (rng.gen::<f64>() + 0.5);
             v.push(Stripe::random(rng, &self.frame, c, w));
@@ -150,6 +151,7 @@ impl SceneCfg {
     }
 }
 
+#[derive(Deserialize)]
 pub enum Pattern {
     FreeCircles,
     FreeTriangles,
@@ -160,6 +162,7 @@ pub enum Pattern {
     CrossedStripes,
 }
 
+#[derive(Deserialize)]
 pub enum Tiling {
     Hexagons,
     Triangles,
