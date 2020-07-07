@@ -137,31 +137,60 @@ impl Contains for Triangle {
 }
 
 pub struct Spiral {
+    pub center: Pos,
+    pub width: f64,
+    pub color: ColorItem,
 }
 
 impl Spiral {
-    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
-        unimplemented!()
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, width: f64) -> Self {
+        Self {
+            center: Pos::random(f, rng),
+            width,
+            color,
+        }
     }
 }
 
 impl Contains for Spiral {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
-        unimplemented!()
+        let Pos(di, dj) = self.center - p;
+        let theta = di.atan2(dj);
+        let radius = (di.powi(2) + dj.powi(2)).sqrt() + theta / std::f64::consts::PI * self.width;
+        if (radius / self.width).floor() as i32 % 2 == 0 {
+            Some(self.color.sample(rng))
+        } else {
+            None
+        }
     }
 }
 
 pub struct Stripe {
+    limit: Pos,
+    reference: Pos,
+    color: ColorItem,
 }
 
 impl Stripe {
-    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
-        unimplemented!()
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, width: f64) -> Self {
+        let limit = Pos::random(f, rng);
+        let reference = limit + polar(radians(rng.gen_range(0, 360)), width);
+        Self {
+            limit,
+            reference,
+            color,
+        }
     }
 }
 
 impl Contains for Stripe {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
-        unimplemented!()
+        let dotprod1 = (p - self.limit).dot(self.reference - self.limit);
+        let dotprod2 = (p - self.reference).dot(self.limit - self.reference);
+        if dotprod1 > 0. && dotprod2 > 0. {
+            Some(self.color.sample(rng))
+        } else {
+            None
+        }
     }
 }

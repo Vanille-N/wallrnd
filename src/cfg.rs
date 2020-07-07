@@ -22,6 +22,8 @@ pub struct SceneCfg {
     pub var_parallel_stripes: i32,
     pub tiling_size: f64,
     pub delaunay_count: i32,
+    pub stripe_width: f64,
+    pub spiral_width: f64,
 }
 
 trait Dynamic<C>
@@ -76,7 +78,7 @@ impl SceneCfg {
             let c = self.choose_color(rng);
             v.push(Disc::random(rng, &self.frame, c, i as f64 / self.nb_free_triangles as f64 * 0.7));
         }
-        v.sort_by(|a, b| b.radius.partial_cmp(&a.radius).unwrap());
+        v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
         v.into_iter().map(|d| Triangle::random(rng, d)).collect::<Vec<_>>()
     }
 
@@ -84,18 +86,21 @@ impl SceneCfg {
         let mut v = Vec::new();
         for i in 0..self.nb_free_stripes {
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+            let w = self.stripe_width * self.frame.h as f64 * (rng.gen::<f64>() + 0.5);
+            v.push(Stripe::random(rng, &self.frame, c, w));
         }
-        unimplemented!()
+        v
     }
 
     fn create_free_spirals(&self, rng: &mut ThreadRng) -> Vec<Spiral> {
         let mut v = Vec::new();
-        for i in 0..self.nb_free_spirals {
+        for _ in 0..self.nb_free_spirals {
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+            let w = self.spiral_width * self.frame.h as f64 * (rng.gen::<f64>() + 0.5);
+            v.push(Spiral::random(rng, &self.frame, c, w));
         }
-        unimplemented!()
+        v.sort_by(|a, b| a.width.partial_cmp(&b.width).unwrap());
+        v
     }
 
     fn create_concentric_circles(&self, rng: &mut ThreadRng) -> Vec<Disc> {

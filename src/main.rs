@@ -18,8 +18,8 @@ fn main() {
         weight: 40,
         themes: vec![Color(50, 50, 50), Color(100, 0, 0), Color(0, 100, 0)],
         frame,
-        tiling: Tiling::Hexagons,
-        pattern: Pattern::ParallelStripes,
+        tiling: Tiling::SquaresAndTriangles,
+        pattern: Pattern::FreeSpirals,
         nb_concentric_circles: 5,
         nb_free_circles: 10,
         nb_free_spirals: 3,
@@ -29,7 +29,9 @@ fn main() {
         nb_parallel_stripes: 15,
         var_parallel_stripes: 10,
         delaunay_count: 1000,
-        tiling_size: 20.,
+        tiling_size: 10.,
+        stripe_width: 0.1,
+        spiral_width: 0.3,
     };
 
     let scene = Scene::new(&cfg, &mut rng);
