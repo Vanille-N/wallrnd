@@ -43,16 +43,6 @@ def right_of_stripe(midpt, tilt, pt):
     line = add(midpt, sincos(tilt))
     return sign(midpt, line, pt) < 0
 
-def fill_stripe(midpt, tilt, scene):
-    I = len(scene)
-    J = len(scene[0])
-    color = random_color()
-    for i in range(I):
-        for j in range(J):
-            _, pti, ptj = scene[i][j]
-            if right_of_stripe(midpt, tilt, (pti, ptj)):
-                scene[i][j][0] = color
-
 def random_spiral():
     r = random() * 0.1 + 0.05
     c = (randint(3, 7)/10, randint(3, 7)/10)
@@ -66,16 +56,6 @@ def inside_spiral(c, r, ratio, pt):
     radius = (di**2 + dj**2)**.5 + theta / pi * r
     return int(radius/r) % 2 == 0
 
-def fill_spiral(c, r, ratio, scene):
-    I = len(scene)
-    J = len(scene[0])
-    color = random_color()
-    for i in range(I):
-        for j in range(J):
-            _, pti, ptj = scene[i][j]
-            if inside_spiral(c, r, ratio, (pti, ptj)):
-                scene[i][j][0] = color
-
 def random_lines():
     r = 0.1
     c = (0.5, 0.5)
@@ -88,27 +68,6 @@ def inside_lines(c, r, ratio, pt, fn, x):
     theta = fn((di if x == 0 else dj)/((di**2 + dj**2)**.5))
     radius = (di**2 + dj**2)**.5 + theta
     return int(radius/r) % 2 == 0
-
-def fill_lines(c, r, ratio, scene):
-    I = len(scene)
-    J = len(scene[0])
-    if random() < 0.5:
-        fn = [acos, asin][randint(0, 1)]
-        x = randint(0, 1)
-        color = random_color()
-        for i in range(I):
-            for j in range(J):
-                _, pti, ptj = scene[i][j]
-                if inside_lines(c, r, ratio, (pti, ptj), fn, x):
-                    scene[i][j][0] = color
-    else:
-        x = randint(0, 1)
-        color = random_color()
-        for i in range(I):
-            for j in range(J):
-                _, pti, ptj = scene[i][j]
-                if inside_lines(c, r, ratio, (pti, ptj), [acos, asin][randint(0, 1)], x):
-                    scene[i][j][0] = color
 
 HGT = 9
 WTH = 5
