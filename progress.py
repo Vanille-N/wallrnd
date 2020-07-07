@@ -33,26 +33,6 @@ def inside_triangle(pt, v1, v2, v3):
     has_pos = (d1 > 0) or (d2 > 0) or (d3 > 0)
     return not (has_neg and has_pos);
 
-def fill_triangle(a, b, c, scene):
-    I = len(scene)
-    J = len(scene[0])
-    color = random_color()
-    for i in range(I):
-        for j in range(J):
-            _, pti, ptj = scene[i][j]
-            if inside_triangle((pti, ptj), a, b, c):
-                scene[i][j][0] = color
-
-def random_triangle(f):
-    center = (random(), random())
-    rad = random() * f + 0.1
-    theta1 = randint(0, 360)
-    theta2 = randint(80, 150)
-    theta3 = randint(80, 150)
-    def polar(c, t, r):
-        return add(c, mul(r, sincos(t)))
-    return (polar(center, theta1, rad), polar(center, theta1+theta2, rad), polar(center, theta1+theta2+theta3, rad))
-
 def random_stripe(midpt, horiz=False):
     if horiz:
         return ((midpt, 0.5), randint(-10, 10) + 90)

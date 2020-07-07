@@ -64,7 +64,8 @@ impl SceneCfg {
             let c = self.choose_color(rng);
             v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
         }
-        unimplemented!()
+        v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
+        v.into_iter().map(|d| Triangle::random(rng, d)).collect::<Vec<_>>()
     }
 
     fn create_free_stripes(&self, rng: &mut ThreadRng) -> Vec<Stripe> {

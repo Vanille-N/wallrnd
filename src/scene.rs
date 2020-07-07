@@ -3,6 +3,7 @@ use crate::pos::Pos;
 use rand::{rngs::ThreadRng, Rng};
 use crate::tesselation::Frame;
 use crate::cfg::SceneCfg;
+use crate::pos::{radians, polar};
 
 pub struct Scene {
     bg: ColorItem,
@@ -75,6 +76,7 @@ impl Contains for Disc {
 pub struct HalfPlane {
     pub limit: Pos,
     pub reference: Pos,
+    pub color: ColorItem,
 }
 
 impl HalfPlane {
@@ -90,11 +92,23 @@ impl Contains for HalfPlane {
 }
 
 pub struct Triangle {
+    pub a: Pos,
+    pub b: Pos,
+    pub c: Pos,
+    pub color: ColorItem,
 }
 
 impl Triangle {
-    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
-        unimplemented!()
+    pub fn random(rng: &mut ThreadRng, circ: Disc) -> Self {
+        let theta0 = rng.gen_range(0, 360);
+        let theta1 = rng.gen_range(80, 150);
+        let theta2 = rng.gen_range(80, 150);
+        Self {
+            a: circ.center + polar(radians(theta0), circ.radius),
+            b: circ.center + polar(radians(theta0 + theta1), circ.radius),
+            c: circ.center + polar(radians(theta0 + theta1 + theta2), circ.radius),
+            color: circ.color,
+        }
     }
 }
 
