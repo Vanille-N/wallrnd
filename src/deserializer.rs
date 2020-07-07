@@ -174,9 +174,61 @@ fn color_from_value(v: &Value) -> Result<Color, String> {
             match &a[0..3] {
                 [Value::Integer(r), Value::Integer(g), Value::Integer(b)] => Ok(Color(*r as i32, *g as i32, *b as i32)),
                 _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", a))
+fn theme_item_from_value(
+    v: &Value,
+    dict: &HashMap<String, Color>,
+) -> Result<(Color, usize), String> {
+    match v {
+        Value::String(s) => {
+            match color_from_value(&v, dict) {
+                Ok(c) => Ok((c, 1)),
+                Err(e) => Err(format!("{} or provide a named color.", e)),
+            }
+        },
+        Value::Array(a) => {
+            if a.len() == 2 {
+                match &a[0..2] {
+                    [v, Value::Integer(w)] if *w >= 0 => {
+                        match color_from_value(&a[0], dict) {
+                            Ok(c) => Ok((c, *w as usize)),
+                            Err(e) => Err(format!("{} or provide a named color.", e)),
+                        }
+                    },
+                    _ => Err(format!("{} is not a valid theme item.
+Provide one of:
+    - a named color (\"blue\")
+    - a hex code (\"#0000FF\")
+    - an rgb tuple ([0, 0, 255])
+    - or any of the above along with an integer ponderation ([<COLOR>, 100])", &v)),
+                }
+            } else {
+                match color_from_value(&v, dict) {
+                    Ok(c) => Ok((c, 1)),
+                    Err(e) => Err(format!("{} or provide a named color.", e)),
+                }
             }
         }
-        _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", v))
+        _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\" or provide a named color", v)),
+    }
+}
+
+fn theme_from_value(v: &Value, dict: &HashMap<String, Color>) -> Result<Theme, String> {
+    if let Ok(i) = theme_item_from_value(v, dict) {
+        return Ok(Theme::new(vec![i]));
+    }
+    match v {
+        Value::Array(a) => {
+            let mut v = Vec::new();
+            for x in a {
+                match theme_item_from_value(x, dict) {
+                    Ok(i) => v.push(i),
+                    Err(e) => println!("{}", e),
+                }
+            }
+            Ok(Theme::new(v))
+        }
+        _ => Err(format!("{:?} is not a valid theme.
+Provide a theme item or an array of theme items", v)),
     }
 }
 
