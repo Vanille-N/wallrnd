@@ -19,9 +19,9 @@ fn main() {
     let mut rng = rand::thread_rng();
 
     for (pos, elem) in random_delaunay(&frame, &mut rng) {
-        let fill = scene.color(pos);
+        let fill = scene.color(pos, &mut rng);
         document = document.add(
-            elem.set("fill", fill.variate(&mut rng, 20).theme(theme, weight).to_string())
+            elem.set("fill", fill.to_string())
                 .set("stroke", &stroke[..]),
         );
     }
