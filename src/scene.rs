@@ -80,10 +80,10 @@ pub struct HalfPlane {
 }
 
 impl HalfPlane {
-    pub fn random(rng: &mut ThreadRng, limit: Pos, indic: Pos, var: i32, color: ColorItem) -> Self {
+    pub fn random(rng: &mut ThreadRng, limit: Pos, indic: i32, var: i32, color: ColorItem) -> Self {
         Self {
             limit,
-            reference: indic + polar(radians(rng.gen_range(-var, var)), 100.),
+            reference: limit + polar(radians(rng.gen_range(indic-var, indic+var)), 100.),
             color,
         }
     }
@@ -91,7 +91,12 @@ impl HalfPlane {
 
 impl Contains for HalfPlane {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
-        unimplemented!()
+        let dotprod = (p - self.limit).dot(self.reference - self.limit);
+        if dotprod < 0. {
+            Some(self.color.sample(rng))
+        } else {
+            None
+        }
     }
 }
 
