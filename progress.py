@@ -53,25 +53,10 @@ def random_triangle(f):
         return add(c, mul(r, sincos(t)))
     return (polar(center, theta1, rad), polar(center, theta1+theta2, rad), polar(center, theta1+theta2+theta3, rad))
 
-def inside_circle(pt, c, r, ratio):
-    cp = diff(pt, c)
-    d = (cp[0]**2 + (cp[1]/ratio)**2)**.5
-    return (d < r)
-
 def random_circle(f):
     center = (random(), random())
     rad = random() * f + 0.1
     return (center, rad)
-
-def fill_circle(c, r, ratio, scene):
-    I = len(scene)
-    J = len(scene[0])
-    color = random_color()
-    for i in range(I):
-        for j in range(J):
-            _, pti, ptj = scene[i][j]
-            if inside_circle((pti, ptj), c, r, ratio):
-                scene[i][j][0] = color
 
 def random_stripe(midpt, horiz=False):
     if horiz:

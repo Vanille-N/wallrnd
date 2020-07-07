@@ -58,6 +58,18 @@ struct Disc {
     color: ColorItem,
 }
 
+impl Disc {
+    fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem) -> Self {
+        let center = Pos::random(f, rng);
+        let radius = (rng.gen::<f64>() + 0.1) * (f.h.max(f.w) as f64);
+        Self {
+            center,
+            radius,
+            color,
+        }
+    }
+}
+
 impl Contains for Disc {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
         if (self.center - p).dot_self() < self.radius.powi(2) {
