@@ -25,14 +25,6 @@ try:
         print("Delaying wallpaper to later")
         sys.exit(2)
 
-def inside_triangle(pt, v1, v2, v3):
-    d1 = sign(pt, v1, v2)
-    d2 = sign(pt, v2, v3)
-    d3 = sign(pt, v3, v1)
-    has_neg = (d1 < 0) or (d2 < 0) or (d3 < 0)
-    has_pos = (d1 > 0) or (d2 > 0) or (d3 > 0)
-    return not (has_neg and has_pos);
-
 def random_stripe(midpt, horiz=False):
     if horiz:
         return ((midpt, 0.5), randint(-10, 10) + 90)

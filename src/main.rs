@@ -18,8 +18,16 @@ fn main() {
         weight: 40,
         themes: vec![Color(50, 50, 50), Color(100, 0, 0), Color(0, 100, 0)],
         frame,
-        tiling: Tiling::HexagonsAndTriangles,
-        pattern: Pattern::FreeCircles,
+        tiling: Tiling::Hexagons,
+        pattern: Pattern::FreeTriangles,
+        nb_concentric_circles: 5,
+        nb_free_circles: 10,
+        nb_free_spirals: 3,
+        nb_free_stripes: 10,
+        nb_free_triangles: 10,
+        nb_crossed_stripes: 7,
+        nb_parallel_stripes: 10,
+        var_parallel_stripes: 20,
     };
 
     let scene = Scene::new(&cfg, &mut rng);
