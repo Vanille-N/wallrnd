@@ -25,6 +25,13 @@ struct ConfigGlobal {
     colors: Option<Map<String, Value>>,
 }
 
+#[derive(Deserialize, Default, Debug)]
+struct ConfigColors {
+    #[serde(flatten)]
+    list: Map<String, Value>,
+}
+
+
 impl MetaConfig {
     pub fn from_string(src: String) -> Self {
         toml::from_str(src.as_str()).unwrap_or_else(|e| {
@@ -102,6 +109,21 @@ impl MetaConfig {
             (deviation, weight, size, width, height)
         };
 
+        println!("{:?}", self.colors);
+        let mut colors = HashMap::new();
+        if let Some(ConfigColors { list }) = self.colors {
+            for name in list.keys() {
+                match color_from_value(&list[name]) {
+                    Ok(c) => {
+                        colors.insert(name.clone(), c);
+                        ()
+                    },
+                    Err(s) => println!("{}", s),
+                }
+            }
+        }
+
+
         SceneCfg {
             deviation,
             weight,
@@ -130,6 +152,33 @@ impl MetaConfig {
     }
 }
 
+fn color_from_value(v: &Value) -> Result<Color, String> {
+    match &v {
+        Value::String(s) => {
+            if &s[0..1] == "#" && s.len() == 7 {
+                let r = i32::from_str_radix(&s[1..3], 16);
+                let g = i32::from_str_radix(&s[3..5], 16);
+                let b = i32::from_str_radix(&s[5..7], 16);
+                match (r, g, b) {
+                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r as i32, g as i32, b as i32)),
+                    _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", s)),
+                }
+            } else {
+                Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", s))
+            }
+        },
+        Value::Array(a) => {
+            if a.len() != 3 {
+                return Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", v))
+            }
+            match &a[0..3] {
+                [Value::Integer(r), Value::Integer(g), Value::Integer(b)] => Ok(Color(*r as i32, *g as i32, *b as i32)),
+                _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", a))
+            }
+        }
+        _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", v))
+    }
+}
 
 const DEVIATION: i32 = 20;
 const WEIGHT: i32 = 40;
