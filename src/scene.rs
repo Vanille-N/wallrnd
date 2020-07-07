@@ -31,11 +31,13 @@ pub trait Contains {
 }
 
 pub fn create_items(cfg: &SceneCfg, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
-    vec![Box::new(Disc {
-        center: Pos(500., 400.),
-        radius: 100.,
-        color: cfg.choose_color(rng),
-    })]
+    let mut v = Vec::new();
+    for i in 0..10 {
+        let c = cfg.choose_color(rng);
+        v.push(Disc::random(rng, &cfg.frame, c, i as f64/10.));
+    }
+    v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
+    v.into_iter().map(|d| Box::new(d) as Box<dyn Contains>).collect::<Vec<_>>()
 }
 
 struct ColorItem {
@@ -59,9 +61,9 @@ struct Disc {
 }
 
 impl Disc {
-    fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem) -> Self {
+    fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
         let center = Pos::random(f, rng);
-        let radius = (rng.gen::<f64>() + 0.1) * (f.h.max(f.w) as f64);
+        let radius = (rng.gen::<f64>() + 0.1) * (f.h.min(f.w) as f64 * size_hint);
         Self {
             center,
             radius,
@@ -84,6 +86,7 @@ pub struct SceneCfg {
     pub themes: Vec<Color>,
     pub weight: i32,
     pub deviation: i32,
+    pub frame: Frame,
 }
 
 impl SceneCfg {
