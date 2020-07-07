@@ -53,11 +53,6 @@ def random_triangle(f):
         return add(c, mul(r, sincos(t)))
     return (polar(center, theta1, rad), polar(center, theta1+theta2, rad), polar(center, theta1+theta2+theta3, rad))
 
-def random_circle(f):
-    center = (random(), random())
-    rad = random() * f + 0.1
-    return (center, rad)
-
 def random_stripe(midpt, horiz=False):
     if horiz:
         return ((midpt, 0.5), randint(-10, 10) + 90)

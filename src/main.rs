@@ -1,6 +1,7 @@
 use svg::Document;
 use wallrnd::color::Color;
-use wallrnd::scene::{Scene, SceneCfg};
+use wallrnd::scene::Scene;
+use wallrnd::cfg::*;
 use wallrnd::tesselation::*;
 
 fn main() {
@@ -14,9 +15,11 @@ fn main() {
 
     let cfg = SceneCfg {
         deviation: 20,
-        weight: 60,
+        weight: 40,
         themes: vec![Color(50, 50, 50), Color(100, 0, 0), Color(0, 100, 0)],
         frame,
+        tiling: Tiling::HexagonsAndTriangles,
+        pattern: Pattern::FreeCircles,
     };
 
     let scene = Scene::new(&cfg, &mut rng);
