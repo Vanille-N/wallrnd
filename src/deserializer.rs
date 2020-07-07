@@ -13,6 +13,7 @@ use toml::{map::Map, Value};
 pub struct MetaConfig {
     global: Option<ConfigGlobal>,
     colors: Option<ConfigColors>,
+    themes: Option<ConfigThemes>,
 }
 
 #[derive(Deserialize, Default)]
@@ -27,6 +28,12 @@ struct ConfigGlobal {
 
 #[derive(Deserialize, Default, Debug)]
 struct ConfigColors {
+    #[serde(flatten)]
+    list: Map<String, Value>,
+}
+
+#[derive(Deserialize, Default, Debug)]
+struct ConfigThemes {
     #[serde(flatten)]
     list: Map<String, Value>,
 }
@@ -132,6 +139,21 @@ impl MetaConfig {
             }
         }
         println!("{:?}", colors);
+
+        println!("{:?}", self.themes);
+        let mut themes = HashMap::new();
+        if let Some(ConfigThemes { list }) = self.themes {
+            for name in list.keys() {
+                match theme_from_value(&list[name], &colors) {
+                    Ok(th) => {
+                        themes.insert(name.clone(), th);
+                        ()
+                    }
+                    Err(s) => println!("{}", s),
+                }
+            }
+        }
+        println!("{:?}", themes);
 
         SceneCfg {
             deviation,

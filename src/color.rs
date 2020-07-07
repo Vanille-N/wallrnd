@@ -39,6 +39,7 @@ impl Color {
     }
 }
 
+#[derive(Debug)]
 pub struct Theme(usize, Vec<(Color, usize)>);
 
 impl Theme {

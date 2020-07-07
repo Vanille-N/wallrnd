@@ -9,6 +9,9 @@ height = 600
 cyan = [0, 255, 255]
 orange = "#AA7700"
 grey = [150, 150, 150]
+red = "#FF0000"
 
 [themes]
-rust = [["cyan", 20], ["orange", 60], ["grey", 30]]
+rust = [["cyan", 20], ["orange", 60], [[150, 150, 150], 30]]
+crimson = [["red", 30], ["#990000", 60]]
+blue = [0, 0, 255]
