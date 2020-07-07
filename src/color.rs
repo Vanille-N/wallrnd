@@ -40,14 +40,14 @@ impl Color {
 }
 
 #[derive(Debug)]
-pub struct Theme(usize, Vec<(Color, usize)>);
+pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);
 
-impl Theme {
+impl<T: Copy> Chooser<T> {
     pub fn default() -> Self {
-        Theme(1, vec![(Color(0, 0, 0), 1)])
+        Self(1, Vec::new())
     }
 
-    pub fn new(mut v: Vec<(Color, usize)>) -> Self {
+    pub fn new(mut v: Vec<(T, usize)>) -> Self {
         let mut sum = 0;
         for (_, w) in &mut v {
             sum += *w;
@@ -60,12 +60,16 @@ impl Theme {
         }
     }
 
-    pub fn choose_color(&self, rng: &mut ThreadRng) -> Color {
+    pub fn choose(&self, rng: &mut ThreadRng) -> Option<T> {
         let choice = rng.gen_range(0, self.0);
-        self.dichotomy(choice, 0, self.1.len())
+        if self.1.len() == 0 {
+            None
+        } else {
+            Some(self.dichotomy(choice, 0, self.1.len()))
+        }
     }
 
-    fn dichotomy(&self, target: usize, inf: usize, sup: usize) -> Color {
+    fn dichotomy(&self, target: usize, inf: usize, sup: usize) -> T {
         if inf == sup || inf + 1 == sup {
             self.1[inf].0
         } else {
@@ -75,6 +79,26 @@ impl Theme {
             } else {
                 self.dichotomy(target, mid, sup)
             }
+        }
+    }
+
+    pub fn extract(&self) -> Vec<(T, usize)> {
+        let mut cpy = self.1.clone();
+        let n = cpy.len();
+        for i in 1..n {
+            cpy[n-i].1 -= cpy[n-i-1].1;
+        }
+        cpy
+    }
+
+    pub fn push(&mut self, item: T, w: usize) {
+        self.0 += w;
+        self.1.push((item, self.0));
+    }
+
+    pub fn append(&mut self, items: Vec<(T, usize)>) {
+        for (item, w) in items {
+            self.push(item, w);
         }
     }
 }

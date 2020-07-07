@@ -1,7 +1,7 @@
 use crate::cfg::*;
-use crate::color::{Color, Theme};
+use crate::color::{Color, Chooser};
 use crate::tesselation::Frame;
-use rand::rngs::ThreadRng;
+use rand::{rngs::ThreadRng, seq::SliceRandom};
 use serde::de;
 use serde_derive::Deserialize;
 use std::collections::HashMap;
@@ -14,6 +14,7 @@ pub struct MetaConfig {
     global: Option<ConfigGlobal>,
     colors: Option<ConfigColors>,
     themes: Option<ConfigThemes>,
+    shapes: Option<ConfigShapes>,
 }
 
 #[derive(Deserialize, Default)]
@@ -34,6 +35,12 @@ struct ConfigColors {
 
 #[derive(Deserialize, Default, Debug)]
 struct ConfigThemes {
+    #[serde(flatten)]
+    list: Map<String, Value>,
+}
+
+#[derive(Deserialize, Default, Debug)]
+struct ConfigShapes {
     #[serde(flatten)]
     list: Map<String, Value>,
 }
@@ -125,7 +132,7 @@ impl MetaConfig {
             (deviation, weight, size, width, height)
         };
 
-        println!("{:?}", self.colors);
+        // println!("{:?}", self.colors);
         let mut colors = HashMap::new();
         if let Some(ConfigColors { list }) = self.colors {
             for name in list.keys() {
@@ -138,13 +145,13 @@ impl MetaConfig {
                 }
             }
         }
-        println!("{:?}", colors);
+        println!("{:?}\n", colors);
 
-        println!("{:?}", self.themes);
+        // println!("{:?}", self.themes);
         let mut themes = HashMap::new();
         if let Some(ConfigThemes { list }) = self.themes {
             for name in list.keys() {
-                match theme_from_value(&list[name], &colors) {
+                match theme_from_value(&list[name], &colors, &themes) {
                     Ok(th) => {
                         themes.insert(name.clone(), th);
                         ()
@@ -153,20 +160,37 @@ impl MetaConfig {
                 }
             }
         }
-        println!("{:?}", themes);
+        println!("{:?}\n", themes);
+
+        // println!("{:?}", self.shapes);
+        let mut shapes = HashMap::new();
+        if let Some(ConfigShapes { list }) = self.shapes {
+            for name in list.keys() {
+                shapes.insert(name.clone(), shapes_from_value(&list[name], &shapes));
+            }
+        }
+        println!("{:?}", shapes);
+        let theme_chosen = (*themes.keys().collect::<Vec<_>>().choose(rng).unwrap_or(&&String::from(""))).clone();
+        let shape_chosen = (*shapes.keys().collect::<Vec<_>>().choose(rng).unwrap_or(&&String::from(""))).clone();
+        let (tiling, pattern) = match shapes.get(&shape_chosen) {
+            None => (Tiling::choose(rng), Pattern::choose(rng)),
+            Some(t) => (t.1.choose(rng).unwrap_or_else(|| Tiling::choose(rng)), t.0.choose(rng).unwrap_or_else(|| Pattern::choose(rng))),
+        };
+
+        println!("{:?} {:?}", tiling, pattern);
 
         SceneCfg {
             deviation,
             weight,
-            theme: Theme::default(),
+            theme: themes.remove(&theme_chosen).unwrap(),
             frame: Frame {
                 x: 0,
                 y: 0,
                 w: width,
                 h: height,
             },
-            tiling: Tiling::SquaresAndTriangles,
-            pattern: Pattern::FreeSpirals,
+            tiling,
+            pattern,
             nb_concentric_circles: 5,
             nb_free_circles: 10,
             nb_free_spirals: 3,
@@ -269,23 +293,87 @@ Provide one of:
     }
 }
 
-fn theme_from_value(v: &Value, dict: &HashMap<String, Color>) -> Result<Theme, String> {
-    if let Ok(i) = theme_item_from_value(v, dict) {
-        return Ok(Theme::new(vec![i]));
+fn theme_from_value(v: &Value, colors: &HashMap<String, Color>, themes: &HashMap<String, Chooser<Color>>) -> Result<Chooser<Color>, String> {
+    if let Ok(i) = theme_item_from_value(v, colors) {
+        return Ok(Chooser::new(vec![i]));
+    }
+    let mut items = Vec::new();
+    if let Value::String(s) = v {
+        if let Some(th) = themes.get(s) {
+            items = th.extract();
+        }
     }
     match v {
         Value::Array(a) => {
-            let mut v = Vec::new();
             for x in a {
-                match theme_item_from_value(x, dict) {
-                    Ok(i) => v.push(i),
+                if let Value::String(s) = x {
+                    if let Some(th) = themes.get(s) {
+                        items.append(&mut th.extract());
+                        continue;
+                    }
+                }
+                match theme_item_from_value(x, colors) {
+                    Ok(i) => items.push(i),
                     Err(e) => println!("{}", e),
                 }
             }
-            Ok(Theme::new(v))
+            Ok(Chooser::new(items))
         }
         _ => Err(format!("{:?} is not a valid theme.
 Provide a theme item or an array of theme items", v)),
+    }
+}
+
+fn shapes_from_value(v: &Value, shapes: &HashMap<String, (Chooser<Pattern>, Chooser<Tiling>)>) -> (Chooser<Pattern>, Chooser<Tiling>) {
+    let mut tilings = Chooser::new(vec![]);
+    let mut patterns = Chooser::new(vec![]);
+    match v {
+        Value::Array(a) => {
+            for x in a {
+                match x {
+                    Value::String(s) => {
+                        if let Some(sh) = shapes.get(s) {
+                            let (p, t) = sh;
+                            tilings.append(t.extract());
+                            patterns.append(p.extract());
+                        } else {
+                            add_shape(&s[..], 1, &mut tilings, &mut patterns);
+                        }
+                    },
+                    Value::Array(a) => {
+                        if a.len() == 2 {
+                            match &a[..] {
+                                [Value::String(s), Value::Integer(w)] if *w > 0 => add_shape(&s[..], *w as usize, &mut tilings, &mut patterns),
+                                _ => println!("{} is not a valid shape.", x),
+                            }
+                        } else {
+                            println!("{} is not a valid shape.", x);
+                        }
+                    },
+                    _ => println!("{} is not a valid shape.", x),
+                }
+            }
+        }
+        _ => println!("{} is not an array of shapes.", v),
+    }
+    (patterns, tilings)
+}
+
+fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Chooser<Pattern>) {
+    match &s[..] {
+        "H" | "hex." | "hexagons" => tilings.push(Tiling::Hexagons, w),
+        "T" | "tri." | "triangles" => tilings.push(Tiling::Triangles, w),
+        "H&T" | "hex.&tri." | "hexagons&squares" => tilings.push(Tiling::HexagonsAndTriangles, w),
+        "S&T" | "squ.&tri." | "squares&triangles" => tilings.push(Tiling::SquaresAndTriangles, w),
+        "D" | "del." | "delaunay" => tilings.push(Tiling::Delaunay, w),
+        "FC" | "f-cir." | "free-circles" => patterns.push(Pattern::FreeCircles, w),
+        "FT" | "f-tri." | "free-triangles" => patterns.push(Pattern::FreeTriangles, w),
+        "FR" | "f-str." | "free-stripes" => patterns.push(Pattern::FreeStripes, w),
+        "FP" | "f-spi." | "free-spirals" => patterns.push(Pattern::FreeSpirals, w),
+        "CC" | "c-cir." | "concentric-circles" => patterns.push(Pattern::ConcentricCircles, w),
+        "PS" | "p-str." | "parallel-stripes" => patterns.push(Pattern::ParallelStripes, w),
+        "CS" | "c-str." | "crossed-stripes" => patterns.push(Pattern::CrossedStripes, w),
+        _ => println!("{} is not recognized as a shape", s),
     }
 }
 

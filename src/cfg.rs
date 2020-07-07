@@ -1,4 +1,4 @@
-use crate::color::{Color, Theme};
+use crate::color::{Color, Chooser};
 use crate::pos::{polar, radians, Pos};
 use crate::scene::*;
 use crate::tesselation::*;
@@ -7,7 +7,7 @@ use serde_derive::Deserialize;
 use svg::node::element::Path;
 
 pub struct SceneCfg {
-    pub theme: Theme,
+    pub theme: Chooser<Color>,
     pub weight: i32,
     pub deviation: i32,
     pub frame: Frame,
@@ -51,7 +51,7 @@ impl SceneCfg {
             shade: Color::random(rng),
             deviation: self.deviation,
             weight: self.weight,
-            theme: self.theme.choose_color(rng),
+            theme: self.theme.choose(rng).unwrap_or(Color(0, 0, 0)),
         }
     }
 
@@ -179,7 +179,7 @@ impl SceneCfg {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Clone, Copy)]
 pub enum Pattern {
     FreeCircles,
     FreeTriangles,
@@ -190,11 +190,25 @@ pub enum Pattern {
     CrossedStripes,
 }
 
-#[derive(Deserialize)]
+impl Pattern {
+    pub fn choose(rng: &mut ThreadRng) -> Self {
+        use Pattern::*;
+        *vec![FreeCircles, FreeTriangles, FreeStripes, FreeSpirals, ConcentricCircles, ParallelStripes, CrossedStripes].choose(rng).unwrap()
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
 pub enum Tiling {
     Hexagons,
     Triangles,
     HexagonsAndTriangles,
     SquaresAndTriangles,
     Delaunay,
+}
+
+impl Tiling {
+    pub fn choose(rng: &mut ThreadRng) -> Self {
+        use Tiling::*;
+        *vec![Hexagons, Triangles, HexagonsAndTriangles ,SquaresAndTriangles, Delaunay].choose(rng).unwrap()
+    }
 }
