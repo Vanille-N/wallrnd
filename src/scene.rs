@@ -45,30 +45,10 @@ impl ColorItem {
 }
 
 pub struct Disc {
-    center: Pos,
-    radius: f64,
-    color: ColorItem,
+    pub center: Pos,
+    pub radius: f64,
+    pub color: ColorItem,
 }
-
-impl Ord for Disc {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.radius.partial_cmp(&other.radius).unwrap()
-    }
-}
-
-impl PartialOrd for Disc {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl PartialEq for Disc {
-    fn eq(&self, _: &Self) -> bool {
-        false
-    }
-}
-
-impl Eq for Disc {}
 
 impl Disc {
     pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
@@ -89,5 +69,67 @@ impl Contains for Disc {
         } else {
             None
         }
+    }
+}
+
+pub struct HalfPlane {
+    pub limit: Pos,
+    pub reference: Pos,
+}
+
+impl HalfPlane {
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
+        unimplemented!()
+    }
+}
+
+impl Contains for HalfPlane {
+    fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        unimplemented!()
+    }
+}
+
+pub struct Triangle {
+}
+
+impl Triangle {
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
+        unimplemented!()
+    }
+}
+
+impl Contains for Triangle {
+    fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        unimplemented!()
+    }
+}
+
+pub struct Spiral {
+}
+
+impl Spiral {
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
+        unimplemented!()
+    }
+}
+
+impl Contains for Spiral {
+    fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        unimplemented!()
+    }
+}
+
+pub struct Stripe {
+}
+
+impl Stripe {
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
+        unimplemented!()
+    }
+}
+
+impl Contains for Stripe {
+    fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        unimplemented!()
     }
 }
