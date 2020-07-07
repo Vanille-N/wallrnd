@@ -12,6 +12,20 @@ pub struct SceneCfg {
     pub tiling: Tiling,
 }
 
+trait Dynamic<C>
+where C: Contains + 'static
+{
+    fn dynamic(self) -> Vec<Box<dyn Contains>>;
+}
+
+impl<C> Dynamic<C> for Vec<C>
+where C: Contains + 'static
+{
+    fn dynamic(self) -> Vec<Box<dyn Contains>> {
+        self.into_iter().map(|d| Box::new(d) as Box<dyn Contains>).collect::<Vec<_>>()
+    }
+}
+
 impl SceneCfg {
     pub fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
         ColorItem {
@@ -23,22 +37,91 @@ impl SceneCfg {
     }
 
     pub fn create_items(&self, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
+        match self.pattern {
+            Pattern::FreeCircles => self.create_free_circles(rng).dynamic(),
+            Pattern::FreeTriangles => self.create_free_triangles(rng).dynamic(),
+            Pattern::FreeStripes => self.create_free_stripes(rng).dynamic(),
+            Pattern::FreeSpirals => self.create_free_spirals(rng).dynamic(),
+            Pattern::ConcentricCircles => self.create_concentric_circles(rng).dynamic(),
+            Pattern::ParallelStripes => self.create_parallel_stripes(rng).dynamic(),
+            Pattern::CrossedStripes => self.create_crossed_stripes(rng).dynamic(),
+        }
+    }
+
+    fn create_free_circles(&self, rng: &mut ThreadRng) -> Vec<Disc> {
         let mut v = Vec::new();
         for i in 0..10 {
             let c = self.choose_color(rng);
             v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
         }
-        v.sort();
-        v.into_iter().map(|d| Box::new(d) as Box<dyn Contains>).collect::<Vec<_>>()
+        v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
+        v
     }
+
+    fn create_free_triangles(&self, rng: &mut ThreadRng) -> Vec<Triangle> {
+        let mut v = Vec::new();
+        for i in 0..10 {
+            let c = self.choose_color(rng);
+            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+        }
+        unimplemented!()
+    }
+
+    fn create_free_stripes(&self, rng: &mut ThreadRng) -> Vec<Stripe> {
+        let mut v = Vec::new();
+        for i in 0..10 {
+            let c = self.choose_color(rng);
+            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+        }
+        unimplemented!()
+    }
+
+    fn create_free_spirals(&self, rng: &mut ThreadRng) -> Vec<Spiral> {
+        let mut v = Vec::new();
+        for i in 0..10 {
+            let c = self.choose_color(rng);
+            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+        }
+        unimplemented!()
+    }
+
+    fn create_concentric_circles(&self, rng: &mut ThreadRng) -> Vec<Disc> {
+        let mut v = Vec::new();
+        for i in 0..10 {
+            let c = self.choose_color(rng);
+            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+        }
+        unimplemented!()
+    }
+
+    fn create_parallel_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
+        let mut v = Vec::new();
+        for i in 0..10 {
+            let c = self.choose_color(rng);
+            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+        }
+        unimplemented!()
+    }
+
+    fn create_crossed_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
+        let mut v = Vec::new();
+        for i in 0..10 {
+            let c = self.choose_color(rng);
+            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+        }
+        unimplemented!()
+    }
+
 }
 
 pub enum Pattern {
-    ConcentricCircles,
     FreeCircles,
     FreeTriangles,
     FreeStripes,
-    FreeSpirals
+    FreeSpirals,
+    ConcentricCircles,
+    ParallelStripes,
+    CrossedStripes,
 }
 
 pub enum Tiling {
