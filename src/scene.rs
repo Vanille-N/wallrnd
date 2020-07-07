@@ -1,7 +1,8 @@
 use crate::color::Color;
 use crate::pos::Pos;
-use rand::{rngs::ThreadRng, Rng, seq::SliceRandom};
+use rand::{rngs::ThreadRng, Rng};
 use crate::tesselation::Frame;
+use crate::cfg::SceneCfg;
 
 pub struct Scene {
     bg: ColorItem,
@@ -12,7 +13,7 @@ impl Scene {
     pub fn new(cfg: &SceneCfg, rng: &mut ThreadRng) -> Self {
         Self {
             bg: cfg.choose_color(rng),
-            items: create_items(cfg, rng),
+            items: cfg.create_items(rng),
         }
     }
 
@@ -30,38 +31,47 @@ pub trait Contains {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color>;
 }
 
-pub fn create_items(cfg: &SceneCfg, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
-    let mut v = Vec::new();
-    for i in 0..10 {
-        let c = cfg.choose_color(rng);
-        v.push(Disc::random(rng, &cfg.frame, c, i as f64/10.));
-    }
-    v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
-    v.into_iter().map(|d| Box::new(d) as Box<dyn Contains>).collect::<Vec<_>>()
-}
-
-struct ColorItem {
-    shade: Color,
-    deviation: i32,
-    theme: Color,
-    weight: i32,
+pub struct ColorItem {
+    pub shade: Color,
+    pub deviation: i32,
+    pub theme: Color,
+    pub weight: i32,
 }
 
 impl ColorItem {
-    fn sample(&self, rng: &mut ThreadRng) -> Color {
+    pub fn sample(&self, rng: &mut ThreadRng) -> Color {
         self.shade.variate(rng, self.deviation).meanpoint(self.theme, self.weight)
     }
 }
 
-
-struct Disc {
+pub struct Disc {
     center: Pos,
     radius: f64,
     color: ColorItem,
 }
 
+impl Ord for Disc {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.radius.partial_cmp(&other.radius).unwrap()
+    }
+}
+
+impl PartialOrd for Disc {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl PartialEq for Disc {
+    fn eq(&self, _: &Self) -> bool {
+        false
+    }
+}
+
+impl Eq for Disc {}
+
 impl Disc {
-    fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
         let center = Pos::random(f, rng);
         let radius = (rng.gen::<f64>() + 0.1) * (f.h.min(f.w) as f64 * size_hint);
         Self {
@@ -78,24 +88,6 @@ impl Contains for Disc {
             Some(self.color.sample(rng))
         } else {
             None
-        }
-    }
-}
-
-pub struct SceneCfg {
-    pub themes: Vec<Color>,
-    pub weight: i32,
-    pub deviation: i32,
-    pub frame: Frame,
-}
-
-impl SceneCfg {
-    fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
-        ColorItem {
-            shade: Color::random(rng),
-            deviation: self.deviation,
-            weight: self.weight,
-            theme: *self.themes.choose(rng).unwrap(),
         }
     }
 }
