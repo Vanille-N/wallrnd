@@ -1,9 +1,9 @@
+use crate::cfg::SceneCfg;
 use crate::color::Color;
 use crate::pos::Pos;
-use rand::{rngs::ThreadRng, Rng};
+use crate::pos::{crossprod_sign, polar, radians};
 use crate::tesselation::Frame;
-use crate::cfg::SceneCfg;
-use crate::pos::{radians, polar, crossprod_sign};
+use rand::{rngs::ThreadRng, Rng};
 
 pub struct Scene {
     bg: ColorItem,
@@ -41,7 +41,9 @@ pub struct ColorItem {
 
 impl ColorItem {
     pub fn sample(&self, rng: &mut ThreadRng) -> Color {
-        self.shade.variate(rng, self.deviation).meanpoint(self.theme, self.weight)
+        self.shade
+            .variate(rng, self.deviation)
+            .meanpoint(self.theme, self.weight)
     }
 }
 
@@ -83,7 +85,7 @@ impl HalfPlane {
     pub fn random(rng: &mut ThreadRng, limit: Pos, indic: i32, var: i32, color: ColorItem) -> Self {
         Self {
             limit,
-            reference: limit + polar(radians(rng.gen_range(indic-var, indic+var)), 100.),
+            reference: limit + polar(radians(rng.gen_range(indic - var, indic + var)), 100.),
             color,
         }
     }

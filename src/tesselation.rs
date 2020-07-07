@@ -1,8 +1,8 @@
 use crate::pos::*;
 use crate::shape::*;
-use std::collections::{HashSet, HashMap};
-use svg::node::element::{Path, path::Data};
 use rand::rngs::ThreadRng;
+use std::collections::{HashMap, HashSet};
+use svg::node::element::{path::Data, Path};
 
 macro_rules! set {
     { $( $elem:expr ),* } => {
@@ -189,7 +189,7 @@ fn encompass_triangle(pts: &[Pos]) -> (Pos, Pos, Pos) {
         maxx = maxx.max(x);
         maxy = maxy.max(y);
     }
-    let a = Pos((minx + maxx)/2., maxy + (maxy - miny) * 2.);
+    let a = Pos((minx + maxx) / 2., maxy + (maxy - miny) * 2.);
     let b = Pos(maxx + (maxx - minx) * 2., miny - (maxy - miny) * 2.);
     let c = Pos(minx - (maxx - minx) * 2., miny - (maxy - miny) * 2.);
     (a, b, c)
@@ -244,5 +244,20 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path
     }
     let triangulation = boyer_watson(&pts);
     // println!("{}", triangulation.len());
-    triangulation.into_iter().map(|(a, b, c)| ((a + b + c) * 0.33, Path::new().set("stroke-width", 1).set("d", Data::new().move_to(a.into_tuple()).line_to(b.into_tuple()).line_to(c.into_tuple()).close()))).collect::<Vec<_>>()
+    triangulation
+        .into_iter()
+        .map(|(a, b, c)| {
+            (
+                (a + b + c) * 0.33,
+                Path::new().set("stroke-width", 1).set(
+                    "d",
+                    Data::new()
+                        .move_to(a.into_tuple())
+                        .line_to(b.into_tuple())
+                        .line_to(c.into_tuple())
+                        .close(),
+                ),
+            )
+        })
+        .collect::<Vec<_>>()
 }

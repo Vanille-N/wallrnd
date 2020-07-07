@@ -1,9 +1,9 @@
+use crate::tesselation::Frame;
+use rand::{rngs::ThreadRng, Rng};
 use std::cmp::{Eq, PartialEq};
 use std::f64::consts::PI;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, Mul, Sub};
-use rand::{rngs::ThreadRng, Rng};
-use crate::tesselation::Frame;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(pub f64, pub f64);

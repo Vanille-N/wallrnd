@@ -31,7 +31,13 @@ impl Color {
     }
 
     pub fn random(rng: &mut ThreadRng) -> Self {
-        Self(rng.gen_range(0, 255), rng.gen_range(0, 255), rng.gen_range(0, 255))
+        Self(
+            rng.gen_range(0, 255),
+            rng.gen_range(0, 255),
+            rng.gen_range(0, 255),
+        )
+    }
+}
 
 pub struct Theme(usize, Vec<(Color, usize)>);
 

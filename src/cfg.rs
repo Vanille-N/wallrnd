@@ -1,13 +1,13 @@
-use crate::color::Color;
-use crate::tesselation::*;
+use crate::color::{Color, Theme};
+use crate::pos::{polar, radians, Pos};
 use crate::scene::*;
+use crate::tesselation::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
-use crate::pos::{radians, polar, Pos};
-use svg::node::element::Path;
 use serde_derive::Deserialize;
+use svg::node::element::Path;
 
 pub struct SceneCfg {
-    pub themes: Vec<Color>,
+    pub theme: Theme,
     pub weight: i32,
     pub deviation: i32,
     pub frame: Frame,
@@ -28,16 +28,20 @@ pub struct SceneCfg {
 }
 
 trait Dynamic<C>
-where C: Contains + 'static
+where
+    C: Contains + 'static,
 {
     fn dynamic(self) -> Vec<Box<dyn Contains>>;
 }
 
 impl<C> Dynamic<C> for Vec<C>
-where C: Contains + 'static
+where
+    C: Contains + 'static,
 {
     fn dynamic(self) -> Vec<Box<dyn Contains>> {
-        self.into_iter().map(|d| Box::new(d) as Box<dyn Contains>).collect::<Vec<_>>()
+        self.into_iter()
+            .map(|d| Box::new(d) as Box<dyn Contains>)
+            .collect::<Vec<_>>()
     }
 }
 
@@ -47,7 +51,7 @@ impl SceneCfg {
             shade: Color::random(rng),
             deviation: self.deviation,
             weight: self.weight,
-            theme: *self.themes.choose(rng).unwrap(),
+            theme: self.theme.choose_color(rng),
         }
     }
 
@@ -67,7 +71,12 @@ impl SceneCfg {
         let mut v = Vec::new();
         for i in 0..self.nb_free_circles {
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64/self.nb_free_circles as f64 * 0.5));
+            v.push(Disc::random(
+                rng,
+                &self.frame,
+                c,
+                i as f64 / self.nb_free_circles as f64 * 0.5,
+            ));
         }
         v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
         v
@@ -77,10 +86,17 @@ impl SceneCfg {
         let mut v = Vec::new();
         for i in 0..self.nb_free_triangles {
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64 / self.nb_free_triangles as f64 * 0.7));
+            v.push(Disc::random(
+                rng,
+                &self.frame,
+                c,
+                i as f64 / self.nb_free_triangles as f64 * 0.7,
+            ));
         }
         v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
-        v.into_iter().map(|d| Triangle::random(rng, d)).collect::<Vec<_>>()
+        v.into_iter()
+            .map(|d| Triangle::random(rng, d))
+            .collect::<Vec<_>>()
     }
 
     fn create_free_stripes(&self, rng: &mut ThreadRng) -> Vec<Stripe> {
@@ -108,7 +124,7 @@ impl SceneCfg {
         let mut v = Vec::new();
         for i in 0..self.nb_concentric_circles {
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+            v.push(Disc::random(rng, &self.frame, c, i as f64 / 10.));
         }
         unimplemented!()
     }
@@ -125,7 +141,13 @@ impl SceneCfg {
         for i in 0..self.nb_parallel_stripes {
             let c = self.choose_color(rng);
             let p = i as f64 / self.nb_parallel_stripes as f64;
-            v.push(HalfPlane::random(rng, a * (1. - p) + b * p, 180 + dir, self.var_parallel_stripes, c));
+            v.push(HalfPlane::random(
+                rng,
+                a * (1. - p) + b * p,
+                180 + dir,
+                self.var_parallel_stripes,
+                c,
+            ));
         }
         v
     }
@@ -134,7 +156,7 @@ impl SceneCfg {
         let mut v = Vec::new();
         for i in 0..self.nb_crossed_stripes {
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64/10.));
+            v.push(Disc::random(rng, &self.frame, c, i as f64 / 10.));
         }
         unimplemented!()
     }
@@ -143,9 +165,15 @@ impl SceneCfg {
         use crate::tesselation::*;
         match self.tiling {
             Tiling::Hexagons => tile_hexagons(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
-            Tiling::Triangles => tile_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
-            Tiling::HexagonsAndTriangles => tile_hybrid_hexagons_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
-            Tiling::SquaresAndTriangles => tile_hybrid_squares_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360)),
+            Tiling::Triangles => {
+                tile_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360))
+            }
+            Tiling::HexagonsAndTriangles => {
+                tile_hybrid_hexagons_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360))
+            }
+            Tiling::SquaresAndTriangles => {
+                tile_hybrid_squares_triangles(&self.frame, self.tiling_size, rng.gen_range(0, 360))
+            }
             Tiling::Delaunay => random_delaunay(&self.frame, rng, self.delaunay_count),
         }
     }

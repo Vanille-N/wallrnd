@@ -1,11 +1,11 @@
-use svg::Document;
-use wallrnd::color::Color;
-use wallrnd::scene::Scene;
-use wallrnd::cfg::*;
-use wallrnd::deserializer::MetaConfig;
-use wallrnd::tesselation::Frame;
 use std::fs::File;
 use std::io::prelude::*;
+use svg::Document;
+use wallrnd::cfg::*;
+use wallrnd::color::Color;
+use wallrnd::deserializer::MetaConfig;
+use wallrnd::scene::Scene;
+use wallrnd::tesselation::Frame;
 
 fn main() {
     let mut rng = rand::thread_rng();

@@ -1,13 +1,13 @@
-use serde_derive::Deserialize;
-use serde::de;
-use std::fmt;
-use toml::{map::Map, Value};
 use crate::cfg::*;
-use crate::color::Color;
+use crate::color::{Color, Theme};
 use crate::tesselation::Frame;
 use rand::rngs::ThreadRng;
-use std::convert::TryInto;
+use serde::de;
+use serde_derive::Deserialize;
 use std::collections::HashMap;
+use std::convert::TryInto;
+use std::fmt;
+use toml::{map::Map, Value};
 
 #[derive(Deserialize, Default)]
 pub struct MetaConfig {
@@ -31,7 +31,6 @@ struct ConfigColors {
     list: Map<String, Value>,
 }
 
-
 impl MetaConfig {
     pub fn from_string(src: String) -> Self {
         toml::from_str(src.as_str()).unwrap_or_else(|e| {
@@ -52,59 +51,69 @@ impl MetaConfig {
                     size = SIZE;
                     width = WIDTH;
                     height = HEIGHT;
-                },
+                }
                 Some(g) => {
                     match g.deviation {
                         None => {
                             println!("Default global.deviation");
                             deviation = DEVIATION;
-                        },
-                        Some(d) => deviation = d.try_into().unwrap_or_else(|_| {
-                            println!("Unreadable global.deviation");
-                            DEVIATION
-                        }),
+                        }
+                        Some(d) => {
+                            deviation = d.try_into().unwrap_or_else(|_| {
+                                println!("Unreadable global.deviation");
+                                DEVIATION
+                            })
+                        }
                     }
                     match g.weight {
                         None => {
                             println!("Default global.weight");
                             weight = WEIGHT;
-                        },
-                        Some(w) => weight = w.try_into().unwrap_or_else(|_| {
-                            println!("Unreadable global.weight");
-                            WEIGHT
-                        }),
+                        }
+                        Some(w) => {
+                            weight = w.try_into().unwrap_or_else(|_| {
+                                println!("Unreadable global.weight");
+                                WEIGHT
+                            })
+                        }
                     }
                     match g.size {
                         None => {
                             println!("Default global.size");
                             size = SIZE;
-                        },
-                        Some(s) => size = s.try_into().unwrap_or_else(|_| {
-                            println!("Unreadable global.size");
-                            SIZE
-                        }),
+                        }
+                        Some(s) => {
+                            size = s.try_into().unwrap_or_else(|_| {
+                                println!("Unreadable global.size");
+                                SIZE
+                            })
+                        }
                     }
                     match g.width {
                         None => {
                             println!("Default global.width");
                             width = WIDTH;
-                        },
-                        Some(w) => width = w.try_into().unwrap_or_else(|_| {
-                            println!("Unreadable global.width");
-                            WIDTH
-                        }),
+                        }
+                        Some(w) => {
+                            width = w.try_into().unwrap_or_else(|_| {
+                                println!("Unreadable global.width");
+                                WIDTH
+                            })
+                        }
                     }
                     match g.height {
                         None => {
                             println!("Default global.height");
                             height = HEIGHT;
-                        },
-                        Some(s) => height = s.try_into().unwrap_or_else(|_| {
-                            println!("Unreadable global.height");
-                            HEIGHT
-                        }),
+                        }
+                        Some(s) => {
+                            height = s.try_into().unwrap_or_else(|_| {
+                                println!("Unreadable global.height");
+                                HEIGHT
+                            })
+                        }
                     }
-                },
+                }
             }
             (deviation, weight, size, width, height)
         };
@@ -113,21 +122,21 @@ impl MetaConfig {
         let mut colors = HashMap::new();
         if let Some(ConfigColors { list }) = self.colors {
             for name in list.keys() {
-                match color_from_value(&list[name]) {
+                match color_from_value(&list[name], &colors) {
                     Ok(c) => {
                         colors.insert(name.clone(), c);
                         ()
-                    },
+                    }
                     Err(s) => println!("{}", s),
                 }
             }
         }
-
+        println!("{:?}", colors);
 
         SceneCfg {
             deviation,
             weight,
-            themes: vec![Color(50, 50, 50), Color(100, 0, 0), Color(0, 100, 0)],
+            theme: Theme::default(),
             frame: Frame {
                 x: 0,
                 y: 0,
@@ -152,28 +161,54 @@ impl MetaConfig {
     }
 }
 
-fn color_from_value(v: &Value) -> Result<Color, String> {
-    match &v {
+fn color_from_value(v: &Value, dict: &HashMap<String, Color>) -> Result<Color, String> {
+    match v {
         Value::String(s) => {
+            if let Some(c) = dict.get(s.as_str()) {
+                return Ok(*c);
+            }
             if &s[0..1] == "#" && s.len() == 7 {
                 let r = i32::from_str_radix(&s[1..3], 16);
                 let g = i32::from_str_radix(&s[3..5], 16);
                 let b = i32::from_str_radix(&s[5..7], 16);
                 match (r, g, b) {
                     (Ok(r), Ok(g), Ok(b)) => Ok(Color(r as i32, g as i32, b as i32)),
-                    _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", s)),
+                    _ => Err(format!(
+                        "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
+                        s
+                    )),
                 }
             } else {
-                Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", s))
+                Err(format!(
+                    "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
+                    s
+                ))
             }
-        },
+        }
         Value::Array(a) => {
             if a.len() != 3 {
-                return Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", v))
+                return Err(format!(
+                    "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
+                    v
+                ));
             }
             match &a[0..3] {
-                [Value::Integer(r), Value::Integer(g), Value::Integer(b)] => Ok(Color(*r as i32, *g as i32, *b as i32)),
-                _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"", a))
+                [Value::Integer(r), Value::Integer(g), Value::Integer(b)] => {
+                    Ok(Color(*r as i32, *g as i32, *b as i32))
+                }
+                _ => Err(format!(
+                    "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
+                    a
+                )),
+            }
+        }
+        _ => Err(format!(
+            "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
+            v
+        )),
+    }
+}
+
 fn theme_item_from_value(
     v: &Value,
     dict: &HashMap<String, Color>,
