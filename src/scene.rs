@@ -1,6 +1,7 @@
 use crate::color::Color;
 use crate::pos::Pos;
-use rand::rngs::ThreadRng;
+use rand::{rngs::ThreadRng, Rng, seq::SliceRandom};
+use crate::tesselation::Frame;
 
 pub struct Scene {
     bg: ColorItem,
@@ -8,15 +9,10 @@ pub struct Scene {
 }
 
 impl Scene {
-    pub fn new() -> Self {
+    pub fn new(cfg: &SceneCfg, rng: &mut ThreadRng) -> Self {
         Self {
-            bg: ColorItem {
-                shade: Color(50, 50,50),
-                deviation: 20,
-                theme: Color(0, 100, 100),
-                weight: 20,
-            },
-            items: create_items(),
+            bg: cfg.choose_color(rng),
+            items: create_items(cfg, rng),
         }
     }
 
@@ -34,16 +30,11 @@ pub trait Contains {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color>;
 }
 
-pub fn create_items() -> Vec<Box<dyn Contains>> {
+pub fn create_items(cfg: &SceneCfg, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
     vec![Box::new(Disc {
         center: Pos(500., 400.),
         radius: 100.,
-        color: ColorItem {
-            shade: Color(255, 0, 0),
-            deviation: 20,
-            theme: Color(0, 100, 0),
-            weight: 20,
-        },
+        color: cfg.choose_color(rng),
     })]
 }
 
@@ -73,6 +64,23 @@ impl Contains for Disc {
             Some(self.color.sample(rng))
         } else {
             None
+        }
+    }
+}
+
+pub struct SceneCfg {
+    pub themes: Vec<Color>,
+    pub weight: i32,
+    pub deviation: i32,
+}
+
+impl SceneCfg {
+    fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
+        ColorItem {
+            shade: Color::random(rng),
+            deviation: self.deviation,
+            weight: self.weight,
+            theme: *self.themes.choose(rng).unwrap(),
         }
     }
 }

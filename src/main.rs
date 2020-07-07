@@ -1,6 +1,6 @@
 use svg::Document;
 use wallrnd::color::Color;
-use wallrnd::scene::Scene;
+use wallrnd::scene::{Scene, SceneCfg};
 use wallrnd::tesselation::*;
 
 fn main() {
@@ -10,15 +10,19 @@ fn main() {
         w: 1000,
         h: 600,
     };
-    let mut document = Document::new().set("viewBox", frame.into_tuple());
-    let scene = Scene::new();
-    let stroke = Color(0, 0, 0).to_string();
-    let theme = Color(0, 100, 0);
-    let weight = 40;
-
     let mut rng = rand::thread_rng();
 
-    for (pos, elem) in random_delaunay(&frame, &mut rng) {
+    let cfg = SceneCfg {
+        deviation: 20,
+        weight: 60,
+        themes: vec![Color(50, 50, 50), Color(100, 0, 0), Color(0, 100, 0)],
+    };
+
+    let scene = Scene::new(&cfg, &mut rng);
+    let stroke = Color(0, 0, 0).to_string();
+
+    let mut document = Document::new().set("viewBox", frame.into_tuple());
+    for (pos, elem) in tile_hybrid_squares_triangles(&frame, 15., 50) {
         let fill = scene.color(pos, &mut rng);
         document = document.add(
             elem.set("fill", fill.to_string())
