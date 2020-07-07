@@ -1,12 +1,10 @@
 use crate::cfg::*;
-use crate::color::{Color, Chooser};
+use crate::color::{Chooser, Color};
 use crate::tesselation::Frame;
 use rand::{rngs::ThreadRng, seq::SliceRandom};
-use serde::de;
 use serde_derive::Deserialize;
 use std::collections::HashMap;
 use std::convert::TryInto;
-use std::fmt;
 use toml::{map::Map, Value};
 
 #[derive(Deserialize, Default)]
@@ -15,6 +13,7 @@ pub struct MetaConfig {
     colors: Option<ConfigColors>,
     themes: Option<ConfigThemes>,
     shapes: Option<ConfigShapes>,
+    data: Option<ConfigData>,
 }
 
 #[derive(Deserialize, Default)]
@@ -24,7 +23,6 @@ struct ConfigGlobal {
     size: Option<f64>,
     width: Option<usize>,
     height: Option<usize>,
-    colors: Option<Map<String, Value>>,
 }
 
 #[derive(Deserialize, Default, Debug)]
@@ -43,6 +41,36 @@ struct ConfigThemes {
 struct ConfigShapes {
     #[serde(flatten)]
     list: Map<String, Value>,
+}
+
+#[derive(Deserialize, Default, Debug)]
+struct ConfigData {
+    patterns: Option<ConfigPatterns>,
+    tilings: Option<ConfigTilings>,
+}
+
+#[derive(Deserialize, Default, Debug)]
+struct ConfigTilings {
+    size_hex: Option<f64>,
+    size_tri: Option<f64>,
+    size_hex_and_tri: Option<f64>,
+    size_squ_and_tri: Option<f64>,
+    nb_del: Option<usize>,
+}
+
+#[derive(Deserialize, Default, Debug)]
+struct ConfigPatterns {
+    nb_f_cir: Option<usize>,
+    nb_f_spi: Option<usize>,
+    nb_f_str: Option<usize>,
+    nb_c_str: Option<usize>,
+    nb_p_str: Option<usize>,
+    nb_c_cir: Option<usize>,
+    nb_f_tri: Option<usize>,
+    var_p_str: Option<usize>,
+    var_c_str: Option<usize>,
+    width_spi: Option<f64>,
+    width_str: Option<f64>,
 }
 
 impl MetaConfig {
@@ -170,14 +198,107 @@ impl MetaConfig {
             }
         }
         println!("{:?}", shapes);
-        let theme_chosen = (*themes.keys().collect::<Vec<_>>().choose(rng).unwrap_or(&&String::from(""))).clone();
-        let shape_chosen = (*shapes.keys().collect::<Vec<_>>().choose(rng).unwrap_or(&&String::from(""))).clone();
+        let theme_chosen = (*themes
+            .keys()
+            .collect::<Vec<_>>()
+            .choose(rng)
+            .unwrap_or(&&String::from("")))
+        .clone();
+        let shape_chosen = (*shapes
+            .keys()
+            .collect::<Vec<_>>()
+            .choose(rng)
+            .unwrap_or(&&String::from("")))
+        .clone();
         let (tiling, pattern) = match shapes.get(&shape_chosen) {
             None => (Tiling::choose(rng), Pattern::choose(rng)),
-            Some(t) => (t.1.choose(rng).unwrap_or_else(|| Tiling::choose(rng)), t.0.choose(rng).unwrap_or_else(|| Pattern::choose(rng))),
+            Some(t) => (
+                t.1.choose(rng).unwrap_or_else(|| Tiling::choose(rng)),
+                t.0.choose(rng).unwrap_or_else(|| Pattern::choose(rng)),
+            ),
         };
 
         println!("{:?} {:?}", tiling, pattern);
+
+        println!("{:?}", self.data);
+        let (nb_pattern, var_stripes, width_pattern) = {
+            let nb_pattern;
+            let (mut var_stripes, mut width_pattern) = (0, 0.0);
+            if let Some(ConfigData {
+                patterns: Some(p),
+                tilings: _,
+            }) = &self.data
+            {
+                match pattern {
+                    Pattern::FreeCircles => nb_pattern = p.nb_f_cir.unwrap_or(NBFCIR) as i32,
+                    Pattern::FreeTriangles => nb_pattern = p.nb_f_tri.unwrap_or(NBFTRI) as i32,
+                    Pattern::FreeStripes => {
+                        nb_pattern = p.nb_f_str.unwrap_or(NBFSTR) as i32;
+                        width_pattern = p.width_str.unwrap_or(WSTR) as f64;
+                    }
+                    Pattern::FreeSpirals => {
+                        nb_pattern = p.nb_f_spi.unwrap_or(NBFSPI) as i32;
+                        width_pattern = p.width_spi.unwrap_or(WSPI);
+                    }
+                    Pattern::ConcentricCircles => nb_pattern = p.nb_c_cir.unwrap_or(NBCCIR) as i32,
+                    Pattern::ParallelStripes => {
+                        nb_pattern = p.nb_p_str.unwrap_or(NBPSTR) as i32;
+                        var_stripes = p.var_p_str.unwrap_or(VARPSTR) as i32;
+                    }
+                    Pattern::CrossedStripes => {
+                        nb_pattern = p.nb_c_str.unwrap_or(NBCSTR) as i32;
+                        var_stripes = p.var_c_str.unwrap_or(VARCSTR) as i32;
+                    }
+                }
+            } else {
+                match pattern {
+                    Pattern::FreeCircles => nb_pattern = NBFCIR as i32,
+                    Pattern::FreeTriangles => nb_pattern = NBFTRI as i32,
+                    Pattern::FreeStripes => {
+                        nb_pattern = NBFSTR as i32;
+                        width_pattern = WSTR;
+                    }
+                    Pattern::FreeSpirals => {
+                        nb_pattern = NBFSPI as i32;
+                        width_pattern = WSPI;
+                    }
+                    Pattern::ConcentricCircles => nb_pattern = NBCCIR as i32,
+                    Pattern::ParallelStripes => {
+                        nb_pattern = NBPSTR as i32;
+                        var_stripes = VARPSTR as i32;
+                    }
+                    Pattern::CrossedStripes => {
+                        nb_pattern = NBCSTR as i32;
+                        var_stripes = VARCSTR as i32;
+                    }
+                }
+            }
+            (nb_pattern, var_stripes, width_pattern)
+        };
+
+        let (size_tiling, nb_delaunay) = {
+            if let Some(ConfigData {
+                patterns: _,
+                tilings: Some(t),
+            }) = self.data
+            {
+                match tiling {
+                    Tiling::Hexagons => (t.size_hex.unwrap_or(size), 0),
+                    Tiling::Triangles => (t.size_tri.unwrap_or(size), 0),
+                    Tiling::HexagonsAndTriangles => (t.size_hex_and_tri.unwrap_or(size), 0),
+                    Tiling::SquaresAndTriangles => (t.size_squ_and_tri.unwrap_or(size), 0),
+                    Tiling::Delaunay => (0.0, t.nb_del.unwrap_or(NBDEL) as i32),
+                }
+            } else {
+                match tiling {
+                    Tiling::Hexagons => (size, 0),
+                    Tiling::Triangles => (size, 0),
+                    Tiling::HexagonsAndTriangles => (size, 0),
+                    Tiling::SquaresAndTriangles => (size, 0),
+                    Tiling::Delaunay => (0.0, NBDEL as i32),
+                }
+            }
+        };
 
         SceneCfg {
             deviation,
@@ -191,18 +312,11 @@ impl MetaConfig {
             },
             tiling,
             pattern,
-            nb_concentric_circles: 5,
-            nb_free_circles: 10,
-            nb_free_spirals: 3,
-            nb_free_stripes: 10,
-            nb_free_triangles: 10,
-            nb_crossed_stripes: 7,
-            nb_parallel_stripes: 15,
-            var_parallel_stripes: 10,
-            delaunay_count: 1000,
-            tiling_size: 10.,
-            stripe_width: 0.1,
-            spiral_width: 0.3,
+            nb_pattern,
+            var_stripes,
+            nb_delaunay,
+            size_tiling,
+            width_pattern,
         }
     }
 }
@@ -260,7 +374,7 @@ fn theme_item_from_value(
     dict: &HashMap<String, Color>,
 ) -> Result<(Color, usize), String> {
     match v {
-        Value::String(s) => {
+        Value::String(_) => {
             match color_from_value(&v, dict) {
                 Ok(c) => Ok((c, 1)),
                 Err(e) => Err(format!("{} or provide a named color.", e)),
@@ -269,8 +383,8 @@ fn theme_item_from_value(
         Value::Array(a) => {
             if a.len() == 2 {
                 match &a[0..2] {
-                    [v, Value::Integer(w)] if *w >= 0 => {
-                        match color_from_value(&a[0], dict) {
+                    [x, Value::Integer(w)] if *w >= 0 => {
+                        match color_from_value(x, dict) {
                             Ok(c) => Ok((c, *w as usize)),
                             Err(e) => Err(format!("{} or provide a named color.", e)),
                         }
@@ -293,7 +407,11 @@ Provide one of:
     }
 }
 
-fn theme_from_value(v: &Value, colors: &HashMap<String, Color>, themes: &HashMap<String, Chooser<Color>>) -> Result<Chooser<Color>, String> {
+fn theme_from_value(
+    v: &Value,
+    colors: &HashMap<String, Color>,
+    themes: &HashMap<String, Chooser<Color>>,
+) -> Result<Chooser<Color>, String> {
     if let Ok(i) = theme_item_from_value(v, colors) {
         return Ok(Chooser::new(vec![i]));
     }
@@ -319,12 +437,18 @@ fn theme_from_value(v: &Value, colors: &HashMap<String, Color>, themes: &HashMap
             }
             Ok(Chooser::new(items))
         }
-        _ => Err(format!("{:?} is not a valid theme.
-Provide a theme item or an array of theme items", v)),
+        _ => Err(format!(
+            "{:?} is not a valid theme.
+Provide a theme item or an array of theme items",
+            v
+        )),
     }
 }
 
-fn shapes_from_value(v: &Value, shapes: &HashMap<String, (Chooser<Pattern>, Chooser<Tiling>)>) -> (Chooser<Pattern>, Chooser<Tiling>) {
+fn shapes_from_value(
+    v: &Value,
+    shapes: &HashMap<String, (Chooser<Pattern>, Chooser<Tiling>)>,
+) -> (Chooser<Pattern>, Chooser<Tiling>) {
     let mut tilings = Chooser::new(vec![]);
     let mut patterns = Chooser::new(vec![]);
     match v {
@@ -339,17 +463,19 @@ fn shapes_from_value(v: &Value, shapes: &HashMap<String, (Chooser<Pattern>, Choo
                         } else {
                             add_shape(&s[..], 1, &mut tilings, &mut patterns);
                         }
-                    },
+                    }
                     Value::Array(a) => {
                         if a.len() == 2 {
                             match &a[..] {
-                                [Value::String(s), Value::Integer(w)] if *w > 0 => add_shape(&s[..], *w as usize, &mut tilings, &mut patterns),
+                                [Value::String(s), Value::Integer(w)] if *w > 0 => {
+                                    add_shape(&s[..], *w as usize, &mut tilings, &mut patterns)
+                                }
                                 _ => println!("{} is not a valid shape.", x),
                             }
                         } else {
                             println!("{} is not a valid shape.", x);
                         }
-                    },
+                    }
                     _ => println!("{} is not a valid shape.", x),
                 }
             }
@@ -382,3 +508,15 @@ const WEIGHT: i32 = 40;
 const SIZE: f64 = 15.;
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 600;
+const NBFCIR: usize = 10;
+const NBFTRI: usize = 15;
+const NBFSTR: usize = 7;
+const NBPSTR: usize = 15;
+const NBCCIR: usize = 5;
+const NBCSTR: usize = 10;
+const NBFSPI: usize = 3;
+const VARPSTR: usize = 15;
+const VARCSTR: usize = 10;
+const WSPI: f64 = 0.3;
+const WSTR: f64 = 0.1;
+const NBDEL: usize = 1000;

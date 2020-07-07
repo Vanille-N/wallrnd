@@ -42,7 +42,7 @@ impl Color {
 #[derive(Debug)]
 pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);
 
-impl<T: Copy> Chooser<T> {
+impl<T: Copy + std::fmt::Debug> Chooser<T> {
     pub fn default() -> Self {
         Self(1, Vec::new())
     }
@@ -70,8 +70,14 @@ impl<T: Copy> Chooser<T> {
     }
 
     fn dichotomy(&self, target: usize, inf: usize, sup: usize) -> T {
-        if inf == sup || inf + 1 == sup {
+        if inf == sup {
             self.1[inf].0
+        } else if inf + 1 == sup {
+            if self.1[inf].1 < target {
+                self.1[inf + 1].0
+            } else {
+                self.1[inf].0
+            }
         } else {
             let mid = (sup + inf) / 2;
             if self.1[mid].1 > target {
@@ -86,7 +92,7 @@ impl<T: Copy> Chooser<T> {
         let mut cpy = self.1.clone();
         let n = cpy.len();
         for i in 1..n {
-            cpy[n-i].1 -= cpy[n-i-1].1;
+            cpy[n - i].1 -= cpy[n - i - 1].1;
         }
         cpy
     }
