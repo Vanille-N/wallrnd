@@ -3,7 +3,7 @@ use crate::pos::Pos;
 use rand::{rngs::ThreadRng, Rng};
 use crate::tesselation::Frame;
 use crate::cfg::SceneCfg;
-use crate::pos::{radians, polar};
+use crate::pos::{radians, polar, crossprod_sign};
 
 pub struct Scene {
     bg: ColorItem,
@@ -54,7 +54,7 @@ pub struct Disc {
 impl Disc {
     pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
         let center = Pos::random(f, rng);
-        let radius = (rng.gen::<f64>() + 0.1) * (f.h.min(f.w) as f64 * size_hint);
+        let radius = (rng.gen::<f64>() * size_hint + 0.1) * (f.h.min(f.w) as f64);
         Self {
             center,
             radius,
@@ -80,8 +80,12 @@ pub struct HalfPlane {
 }
 
 impl HalfPlane {
-    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, size_hint: f64) -> Self {
-        unimplemented!()
+    pub fn random(rng: &mut ThreadRng, limit: Pos, indic: Pos, var: i32, color: ColorItem) -> Self {
+        Self {
+            limit,
+            reference: indic + polar(radians(rng.gen_range(-var, var)), 100.),
+            color,
+        }
     }
 }
 
@@ -114,7 +118,16 @@ impl Triangle {
 
 impl Contains for Triangle {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
-        unimplemented!()
+        let d1 = crossprod_sign(p, self.a, self.b);
+        let d2 = crossprod_sign(p, self.b, self.c);
+        let d3 = crossprod_sign(p, self.c, self.a);
+        let has_pos = d1 || d2 || d3;
+        let has_neg = !(d1 && d2 && d3);
+        if !(has_neg && has_pos) {
+            Some(self.color.sample(rng))
+        } else {
+            None
+        }
     }
 }
 
