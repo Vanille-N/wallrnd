@@ -301,19 +301,19 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
 }
 
 fn theme_item_from_value(
-    v: &Value,
+    val: &Value,
     dict: &HashMap<String, Color>,
 ) -> Result<(Color, usize), String> {
-    match v {
+    match val {
         Value::String(_) => {
-            match color_from_value(&v, dict) {
+            match color_from_value(&val, dict) {
                 Ok(c) => Ok((c, 1)),
                 Err(e) => Err(format!("{} or provide a named color.", e)),
             }
         },
-        Value::Array(a) => {
-            if a.len() == 2 {
-                match &a[0..2] {
+        Value::Array(arr) => {
+            if arr.len() == 2 {
+                match &arr[0..2] {
                     [x, Value::Integer(w)] if *w >= 0 => {
                         match color_from_value(x, dict) {
                             Ok(c) => Ok((c, *w as usize)),
@@ -325,16 +325,16 @@ Provide one of:
     - a named color (\"blue\")
     - a hex code (\"#0000FF\")
     - an rgb tuple ([0, 0, 255])
-    - or any of the above along with an integer ponderation ([<COLOR>, 100])", &v)),
+    - or any of the above along with an integer ponderation ([<COLOR>, 100])", &val)),
                 }
             } else {
-                match color_from_value(&v, dict) {
+                match color_from_value(&val, dict) {
                     Ok(c) => Ok((c, 1)),
                     Err(e) => Err(format!("{} or provide a named color.", e)),
                 }
             }
         }
-        _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\" or provide a named color", v)),
+        _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\" or provide a named color", val)),
     }
 }
 
@@ -377,14 +377,14 @@ Provide a theme item or an array of theme items",
 }
 
 fn shapes_from_value(
-    v: &Value,
+    val: &Value,
     shapes: &HashMap<String, (Chooser<Pattern>, Chooser<Tiling>)>,
 ) -> (Chooser<Pattern>, Chooser<Tiling>) {
     let mut tilings = Chooser::new(vec![]);
     let mut patterns = Chooser::new(vec![]);
-    match v {
-        Value::Array(a) => {
-            for x in a {
+    match val {
+        Value::Array(arr) => {
+            for x in arr {
                 match x {
                     Value::String(s) => {
                         if let Some(sh) = shapes.get(s) {
@@ -411,7 +411,7 @@ fn shapes_from_value(
                 }
             }
         }
-        _ => println!("{} is not an array of shapes.", v),
+        _ => println!("{} is not an array of shapes.", val),
     }
     (patterns, tilings)
 }
@@ -451,11 +451,11 @@ fn choose_theme_shapes(rng: &mut ThreadRng, entry: &Option<Vec<ConfigEntry>>, ti
                 Some(chosen_entry) => {
                     let chosen_theme = match &chosen_entry.themes {
                         None => String::from(""),
-                        Some(th) => th.choose(rng).map(|s| String::from(s)).unwrap_or(String::from("")),
+                        Some(th) => th.choose(rng).map(String::from).unwrap_or_else(|| String::from("")),
                     };
                     let chosen_shapes = match &chosen_entry.shapes {
                         None => String::from(""),
-                        Some(sh) => sh.choose(rng).map(|s| String::from(s)).unwrap_or(String::from("")),
+                        Some(sh) => sh.choose(rng).map(String::from).unwrap_or_else(|| String::from("")),
                     };
                     (chosen_theme, chosen_shapes)
                 },

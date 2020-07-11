@@ -4,11 +4,6 @@ use rand::{rngs::ThreadRng, Rng};
 pub struct Color(pub i32, pub i32, pub i32);
 
 impl Color {
-    pub fn to_string(self) -> String {
-        let c = self.validate();
-        format!("rgb({},{},{})", c.0, c.1, c.2)
-    }
-
     fn validate(mut self) -> Self {
         self.0 = self.0.min(255).max(0);
         self.1 = self.1.min(255).max(0);
@@ -17,9 +12,9 @@ impl Color {
     }
 
     pub fn variate(mut self, rng: &mut ThreadRng, amount: i32) -> Self {
-        self.0 = self.0 + rng.gen_range(-amount, amount);
-        self.1 = self.1 + rng.gen_range(-amount, amount);
-        self.2 = self.2 + rng.gen_range(-amount, amount);
+        self.0 += rng.gen_range(-amount, amount);
+        self.1 += rng.gen_range(-amount, amount);
+        self.2 += rng.gen_range(-amount, amount);
         self
     }
 
@@ -36,6 +31,13 @@ impl Color {
             rng.gen_range(0, 255),
             rng.gen_range(0, 255),
         )
+    }
+}
+
+impl ToString for Color {
+    fn to_string(&self) -> String {
+        let c = self.validate();
+        format!("rgb({},{},{})", c.0, c.1, c.2)
     }
 }
 
@@ -62,7 +64,7 @@ impl<T: Copy> Chooser<T> {
 
     pub fn choose(&self, rng: &mut ThreadRng) -> Option<T> {
         let choice = rng.gen_range(0, self.0);
-        if self.1.len() == 0 {
+        if self.1.is_empty() {
             None
         } else {
             Some(self.dichotomy(choice, 0, self.1.len()))

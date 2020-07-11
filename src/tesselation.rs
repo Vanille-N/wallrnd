@@ -27,14 +27,14 @@ fn periodic_grid_tiling<F>(f: &Frame, gen: F, idir: Pos, jdir: Pos) -> Vec<(Pos,
 where
     F: Fn(Pos) -> Vec<(Pos, Path)>,
 {
-    let mut v = Vec::new();
+    let mut items = Vec::new();
     let center = f.center();
     let mut set = set![center];
     let mut stk = vec![center];
     while let Some(pos) = stk.pop() {
         if f.is_inside(pos) {
             for item in gen(pos) {
-                v.push(item);
+                items.push(item);
             }
             for &(i, j) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
                 let p = pos + idir * i + jdir * j;
@@ -45,7 +45,7 @@ where
             }
         }
     }
-    v
+    items
 }
 
 impl Frame {
@@ -125,7 +125,7 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
         polar(radians(rot), c + a * 2. + 2. * b) + polar(radians(rot + 60), c + a * 2. + 2. * b);
     let jdir =
         polar(radians(rot), c + a * 2. + 2. * b) + polar(radians(rot - 60), c + a * 2. + 2. * b);
-    let m = [
+    let mv = [
         Movable::square(size, rot),
         Movable::square(size, rot + 60),
         Movable::square(size, rot - 60),
@@ -136,20 +136,20 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     ];
     periodic_grid_tiling(
         f,
-        |p| {
-            let mut v = vec![
-                m[4].render(p + polar(radians(rot), c + 2. * b + 2. * a)),
-                m[3].render(p - polar(radians(rot), c + 2. * b + 2. * a)),
+        |pos| {
+            let mut items = vec![
+                mv[4].render(pos + polar(radians(rot), c + 2. * b + 2. * a)),
+                mv[3].render(pos - polar(radians(rot), c + 2. * b + 2. * a)),
             ];
             for i in 0..6 {
-                v.push(m[3 + (i as usize % 2)].render(p + polar(radians(rot + i * 60), c)));
-                v.push(m[i as usize % 3].render(p + polar(radians(rot + i * 60), c + b + a)));
-                v.push(
-                    m[5 + (i as usize % 2)]
-                        .render(p + polar(radians(rot + i * 60 + 30), 2. * a + c)),
+                items.push(mv[3 + (i as usize % 2)].render(pos + polar(radians(rot + i * 60), c)));
+                items.push(mv[i as usize % 3].render(pos + polar(radians(rot + i * 60), c + b + a)));
+                items.push(
+                    mv[5 + (i as usize % 2)]
+                        .render(pos + polar(radians(rot + i * 60 + 30), 2. * a + c)),
                 );
             }
-            v
+            items
         },
         idir,
         jdir,

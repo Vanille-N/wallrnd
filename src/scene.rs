@@ -24,7 +24,7 @@ impl Scene {
                 return c;
             }
         }
-        return self.bg.sample(rng);
+        self.bg.sample(rng)
     }
 }
 
