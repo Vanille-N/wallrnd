@@ -2,86 +2,10 @@ use crate::cfg::*;
 use crate::color::{Chooser, Color};
 use crate::tesselation::Frame;
 use rand::{rngs::ThreadRng, seq::SliceRandom};
-use serde_derive::Deserialize;
 use std::collections::HashMap;
 use std::convert::TryInto;
-use toml::{map::Map, Value, value::Datetime};
-
-#[derive(Deserialize, Default)]
-pub struct MetaConfig {
-    global: Option<ConfigGlobal>,
-    colors: Option<ConfigColors>,
-    themes: Option<ConfigThemes>,
-    shapes: Option<ConfigShapes>,
-    data: Option<ConfigData>,
-    entry: Option<Vec<ConfigEntry>>,
-}
-
-#[derive(Deserialize, Default)]
-struct ConfigGlobal {
-    deviation: Option<usize>,
-    weight: Option<usize>,
-    size: Option<f64>,
-    width: Option<usize>,
-    height: Option<usize>,
-}
-
-#[derive(Deserialize, Default, Debug)]
-struct ConfigColors {
-    #[serde(flatten)]
-    list: Map<String, Value>,
-}
-
-#[derive(Deserialize, Default, Debug)]
-struct ConfigThemes {
-    #[serde(flatten)]
-    list: Map<String, Value>,
-}
-
-#[derive(Deserialize, Default, Debug)]
-struct ConfigShapes {
-    #[serde(flatten)]
-    list: Map<String, Value>,
-}
-
-#[derive(Deserialize, Default, Debug)]
-struct ConfigData {
-    patterns: Option<ConfigPatterns>,
-    tilings: Option<ConfigTilings>,
-}
-
-#[derive(Deserialize, Default, Debug)]
-struct ConfigTilings {
-    size_hex: Option<f64>,
-    size_tri: Option<f64>,
-    size_hex_and_tri: Option<f64>,
-    size_squ_and_tri: Option<f64>,
-    nb_del: Option<usize>,
-}
-
-#[derive(Deserialize, Default, Debug)]
-struct ConfigPatterns {
-    nb_f_cir: Option<usize>,
-    nb_f_spi: Option<usize>,
-    nb_f_str: Option<usize>,
-    nb_c_str: Option<usize>,
-    nb_p_str: Option<usize>,
-    nb_c_cir: Option<usize>,
-    nb_f_tri: Option<usize>,
-    var_p_str: Option<usize>,
-    var_c_str: Option<usize>,
-    width_spi: Option<f64>,
-    width_str: Option<f64>,
-}
-
-#[derive(Deserialize, Debug)]
-struct ConfigEntry {
-    start: Option<String>,
-    end: Option<String>,
-    weight: Option<usize>,
-    themes: Vec<String>,
-    shapes: Vec<String>,
-}
+use toml::Value;
+use crate::optionfmt::*;
 
 impl MetaConfig {
     pub fn from_string(src: String) -> Self {
@@ -213,6 +137,8 @@ impl MetaConfig {
         };
 
         let (theme, shape) = choose_theme_shapes(rng, &self.entry, time);
+        println!("<{}|{}>", theme, shape);
+
         let (tiling, pattern) = match shapes.get(&shape) {
             None => (Tiling::choose(rng), Pattern::choose(rng)),
             Some(t) => (
@@ -299,7 +225,6 @@ impl MetaConfig {
                 }
             }
         };
-        println!("<{}>", theme);
 
         SceneCfg {
             deviation,
