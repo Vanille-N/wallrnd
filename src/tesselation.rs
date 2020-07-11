@@ -1,7 +1,7 @@
 use crate::pos::*;
 use crate::shape::*;
 use rand::rngs::ThreadRng;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 use svg::node::element::{path::Data, Path};
 use delaunator as del;
 
@@ -154,88 +154,6 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
         idir,
         jdir,
     )
-}
-
-fn circumcircle((pa, pb, pc): (Pos, Pos, Pos)) -> (Pos, f64) {
-    let Pos(a, b) = pb - pa;
-    let Pos(c, d) = pc - pa;
-    let e = a * (pa.0 + pb.0) + b * (pa.1 + pb.1);
-    let f = c * (pa.0 + pc.0) + d * (pa.1 + pc.1);
-    let g = 2. * (a * (pc.1 - pb.1) - b * (pc.0 - pb.0));
-    if g.abs() < 0.00001 {
-        let minx = pa.0.min(pb.0).min(pc.0);
-        let miny = pa.1.min(pb.1).min(pc.1);
-        let dx = (pa.0.max(pb.0).max(pc.0) - minx) * 0.5;
-        let dy = (pa.1.max(pb.1).max(pc.1) - miny) * 0.5;
-        (Pos(minx + dx, miny + dy), dx.powi(2) + dy.powi(2))
-    } else {
-        let x = (d * e - b * f) / g;
-        let y = (a * f - c * e) / g;
-        let dx = x - pa.0;
-        let dy = y - pa.1;
-        (Pos(x, y), dx.powi(2) + dy.powi(2))
-    }
-}
-
-fn inside_circle((c, r): (Pos, f64), pt: Pos) -> bool {
-    (c - pt).dot_self() < r
-}
-
-fn encompass_triangle(pts: &[Pos]) -> (Pos, Pos, Pos) {
-    let Pos(mut minx, mut miny) = pts[0];
-    let Pos(mut maxx, mut maxy) = pts[0];
-    for &Pos(x, y) in pts.iter().skip(1) {
-        minx = minx.min(x);
-        miny = miny.min(y);
-        maxx = maxx.max(x);
-        maxy = maxy.max(y);
-    }
-    let a = Pos((minx + maxx) / 2., maxy + (maxy - miny) * 2.);
-    let b = Pos(maxx + (maxx - minx) * 2., miny - (maxy - miny) * 2.);
-    let c = Pos(minx - (maxx - minx) * 2., miny - (maxy - miny) * 2.);
-    (a, b, c)
-}
-
-fn boyer_watson(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
-    let mut triangulation = HashMap::new();
-    let super_triangle = encompass_triangle(pts);
-    triangulation.insert(super_triangle, circumcircle(super_triangle));
-    for &pt in pts {
-        // println!("point {:?}", pt);
-        let mut bad_triangles = vec![];
-        for triangle in triangulation.keys() {
-            let circumcircle = triangulation[triangle];
-            // println!("{:?}, {:?}", triangle, circumcircle);
-            if inside_circle(circumcircle, pt) {
-                bad_triangles.push(*triangle);
-            }
-        }
-        let mut bad_edges = HashMap::new();
-        for &(a, b, c) in &bad_triangles {
-            for &(x, y) in &[(a, b), (a, c), (b, c)] {
-                for &(x, y) in &[(x, y), (y, x)] {
-                    match bad_edges.get(&(x, y)) {
-                        None => bad_edges.insert((x, y), 1),
-                        Some(&cnt) => bad_edges.insert((x, y), cnt + 1),
-                    };
-                }
-            }
-        }
-        let mut polygon = Vec::new();
-        for (a, b, c) in bad_triangles {
-            for &edge in &[(a, b), (a, c), (b, c)] {
-                // println!("{}", bad_edges[&edge]);
-                if bad_edges[&edge] == 1 {
-                    polygon.push(edge);
-                }
-            }
-            triangulation.remove(&(a, b, c));
-        }
-        for (x, y) in polygon {
-            triangulation.insert((x, y, pt), circumcircle((x, y, pt)));
-        }
-    }
-    triangulation.keys().map(|&k| k).collect::<Vec<_>>()
 }
 
 fn fast_triangulate(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {

@@ -101,7 +101,6 @@ impl MetaConfig {
                     match color_from_value(&list[name], &colors) {
                         Ok(c) => {
                             colors.insert(name.clone(), c);
-                            ()
                         }
                         Err(s) => println!("{}", s),
                     }
@@ -117,7 +116,6 @@ impl MetaConfig {
                     match theme_from_value(&list[name], &colors, &themes) {
                         Ok(th) => {
                             themes.insert(name.clone(), th);
-                            ()
                         }
                         Err(s) => println!("{}", s),
                     }
@@ -247,11 +245,11 @@ impl MetaConfig {
     }
 }
 
-fn color_from_value(v: &Value, dict: &HashMap<String, Color>) -> Result<Color, String> {
-    match v {
+fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color, String> {
+    match val {
         Value::String(s) => {
-            if let Some(c) = dict.get(s.as_str()) {
-                return Ok(*c);
+            if let Some(color) = dict.get(s.as_str()) {
+                return Ok(*color);
             }
             if &s[0..1] == "#" && s.len() == 7 {
                 let r = i32::from_str_radix(&s[1..3], 16);
@@ -275,7 +273,7 @@ fn color_from_value(v: &Value, dict: &HashMap<String, Color>) -> Result<Color, S
             if a.len() != 3 {
                 return Err(format!(
                     "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
-                    v
+                    val
                 ));
             }
             match &a[0..3] {
@@ -290,7 +288,7 @@ fn color_from_value(v: &Value, dict: &HashMap<String, Color>) -> Result<Color, S
         }
         _ => Err(format!(
             "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
-            v
+            val
         )),
     }
 }
