@@ -39,10 +39,10 @@ impl Color {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone)]
 pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);
 
-impl<T: Copy + std::fmt::Debug> Chooser<T> {
+impl<T: Copy> Chooser<T> {
     pub fn default() -> Self {
         Self(1, Vec::new())
     }

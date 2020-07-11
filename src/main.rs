@@ -4,13 +4,21 @@ use svg::Document;
 use wallrnd::color::Color;
 use wallrnd::deserializer::MetaConfig;
 use wallrnd::scene::Scene;
+use chrono::{Utc, Timelike};
 
 fn main() {
+    let time = {
+        let now = Utc::now();
+        let h = now.hour();
+        let m = now.minute();
+        (h * 100 + m) as usize
+    };
+
     let mut rng = rand::thread_rng();
     let mut cfg_file = File::open("wallrnd.toml").unwrap();
     let mut cfg_contents = String::new();
     cfg_file.read_to_string(&mut cfg_contents).unwrap();
-    let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng);
+    let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng, time);
 
     let scene = Scene::new(&cfg, &mut rng);
     let stroke = Color(0, 0, 0).to_string();

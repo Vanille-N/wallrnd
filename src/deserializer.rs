@@ -5,7 +5,7 @@ use rand::{rngs::ThreadRng, seq::SliceRandom};
 use serde_derive::Deserialize;
 use std::collections::HashMap;
 use std::convert::TryInto;
-use toml::{map::Map, Value};
+use toml::{map::Map, Value, value::Datetime};
 
 #[derive(Deserialize, Default)]
 pub struct MetaConfig {
@@ -14,6 +14,7 @@ pub struct MetaConfig {
     themes: Option<ConfigThemes>,
     shapes: Option<ConfigShapes>,
     data: Option<ConfigData>,
+    entry: Option<Vec<ConfigEntry>>,
 }
 
 #[derive(Deserialize, Default)]
@@ -73,6 +74,15 @@ struct ConfigPatterns {
     width_str: Option<f64>,
 }
 
+#[derive(Deserialize, Debug)]
+struct ConfigEntry {
+    start: Option<String>,
+    end: Option<String>,
+    weight: Option<usize>,
+    themes: Vec<String>,
+    shapes: Vec<String>,
+}
+
 impl MetaConfig {
     pub fn from_string(src: String) -> Self {
         toml::from_str(src.as_str()).unwrap_or_else(|e| {
@@ -82,7 +92,7 @@ impl MetaConfig {
         })
     }
 
-    pub fn pick_cfg(self, rng: &mut ThreadRng) -> SceneCfg {
+    pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize) -> SceneCfg {
         let (deviation, weight, size, width, height) = {
             let (deviation, weight, size, width, height);
             match self.global {
@@ -160,67 +170,57 @@ impl MetaConfig {
             (deviation, weight, size, width, height)
         };
 
-        // println!("{:?}", self.colors);
-        let mut colors = HashMap::new();
-        if let Some(ConfigColors { list }) = self.colors {
-            for name in list.keys() {
-                match color_from_value(&list[name], &colors) {
-                    Ok(c) => {
-                        colors.insert(name.clone(), c);
-                        ()
+        let colors = {
+            let mut colors = HashMap::new();
+            if let Some(ConfigColors { list }) = self.colors {
+                for name in list.keys() {
+                    match color_from_value(&list[name], &colors) {
+                        Ok(c) => {
+                            colors.insert(name.clone(), c);
+                            ()
+                        }
+                        Err(s) => println!("{}", s),
                     }
-                    Err(s) => println!("{}", s),
                 }
             }
-        }
-        println!("{:?}\n", colors);
+            colors
+        };
 
-        // println!("{:?}", self.themes);
-        let mut themes = HashMap::new();
-        if let Some(ConfigThemes { list }) = self.themes {
-            for name in list.keys() {
-                match theme_from_value(&list[name], &colors, &themes) {
-                    Ok(th) => {
-                        themes.insert(name.clone(), th);
-                        ()
+        let themes = {
+            let mut themes = HashMap::new();
+            if let Some(ConfigThemes { list }) = self.themes {
+                for name in list.keys() {
+                    match theme_from_value(&list[name], &colors, &themes) {
+                        Ok(th) => {
+                            themes.insert(name.clone(), th);
+                            ()
+                        }
+                        Err(s) => println!("{}", s),
                     }
-                    Err(s) => println!("{}", s),
                 }
             }
-        }
-        println!("{:?}\n", themes);
+            themes
+        };
 
-        // println!("{:?}", self.shapes);
-        let mut shapes = HashMap::new();
-        if let Some(ConfigShapes { list }) = self.shapes {
-            for name in list.keys() {
-                shapes.insert(name.clone(), shapes_from_value(&list[name], &shapes));
+        let shapes = {
+            let mut shapes = HashMap::new();
+            if let Some(ConfigShapes { list }) = self.shapes {
+                for name in list.keys() {
+                    shapes.insert(name.clone(), shapes_from_value(&list[name], &shapes));
+                }
             }
-        }
-        println!("{:?}", shapes);
-        let theme_chosen = (*themes
-            .keys()
-            .collect::<Vec<_>>()
-            .choose(rng)
-            .unwrap_or(&&String::from("")))
-        .clone();
-        let shape_chosen = (*shapes
-            .keys()
-            .collect::<Vec<_>>()
-            .choose(rng)
-            .unwrap_or(&&String::from("")))
-        .clone();
-        let (tiling, pattern) = match shapes.get(&shape_chosen) {
+            shapes
+        };
+
+        let (theme, shape) = choose_theme_shapes(rng, &self.entry, time);
+        let (tiling, pattern) = match shapes.get(&shape) {
             None => (Tiling::choose(rng), Pattern::choose(rng)),
             Some(t) => (
                 t.1.choose(rng).unwrap_or_else(|| Tiling::choose(rng)),
                 t.0.choose(rng).unwrap_or_else(|| Pattern::choose(rng)),
-            ),
+            )
         };
 
-        println!("{:?} {:?}", tiling, pattern);
-
-        println!("{:?}", self.data);
         let (nb_pattern, var_stripes, width_pattern) = {
             let nb_pattern;
             let (mut var_stripes, mut width_pattern) = (0, 0.0);
@@ -299,11 +299,12 @@ impl MetaConfig {
                 }
             }
         };
+        println!("<{}>", theme);
 
         SceneCfg {
             deviation,
             weight,
-            theme: themes.remove(&theme_chosen).unwrap(),
+            theme: themes.get(&theme).unwrap_or_else(|| themes.get(themes.keys().collect::<Vec<_>>().choose(rng).unwrap().clone()).unwrap()).clone(),
             frame: Frame {
                 x: 0,
                 y: 0,
@@ -502,6 +503,36 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
         _ => println!("{} is not recognized as a shape", s),
     }
 }
+
+fn choose_theme_shapes(rng: &mut ThreadRng, entry: &Option<Vec<ConfigEntry>>, time: usize) -> (String, String) {
+    match entry {
+        None => (String::from(""), String::from("")),
+        Some(v) => {
+            let mut valid = Chooser::new(vec![]);
+            for e in v {
+                let start = usize_of_time(&e.start);
+                let end = usize_of_time(&e.end);
+                if start <= time && time <= end {
+                    valid.push(e, e.weight.unwrap_or(1));
+                }
+            }
+            match valid.choose(rng) {
+                None => (String::from(""), String::from("")),
+                Some(chosen_entry) => {
+                    let chosen_theme = chosen_entry.themes.choose(rng).map(|s| String::from(s)).unwrap_or(String::from(""));
+                    let chosen_shapes = chosen_entry.shapes.choose(rng).map(|s| String::from(s)).unwrap_or(String::from(""));
+                    (chosen_theme, chosen_shapes)
+                },
+            }
+        }
+    }
+}
+
+fn usize_of_time(t: &Option<String>) -> usize {
+    t.as_ref().unwrap_or(&String::from("0")).parse::<usize>().unwrap_or(0)
+}
+
+
 
 const DEVIATION: i32 = 20;
 const WEIGHT: i32 = 40;

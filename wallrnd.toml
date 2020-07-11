@@ -14,9 +14,10 @@ redcpy = "red"
 
 [themes]
 rust = [["cyan", 10], ["orange", 60], ["grey", 20]]
+crimson = [["red", 50], ["grey", 10]]
 
 [shapes]
-tri = ["p-str.", "del."]
+all = []
 
 [data.patterns]
 nb_f_tri = 15
@@ -37,3 +38,17 @@ size_tri = 15.0
 size_hex_and_tri = 13.0
 size_squ_and_tri = 15.0
 nb_del = 1000
+
+[[entry]]
+start = "2230"
+end = "2300"
+weight = 10
+themes = ["rust"]
+shapes = ["all"]
+
+[[entry]]
+start = "0800"
+end = "1000"
+weight = 10
+themes = ["crimson"]
+shapes = ["all"]
