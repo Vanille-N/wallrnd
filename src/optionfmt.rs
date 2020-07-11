@@ -62,10 +62,12 @@ pub struct ConfigPatterns {
     pub nb_p_str: Option<usize>,
     pub nb_c_cir: Option<usize>,
     pub nb_f_tri: Option<usize>,
+    pub nb_p_wav: Option<usize>,
     pub var_p_str: Option<usize>,
     pub var_c_str: Option<usize>,
     pub width_spi: Option<f64>,
     pub width_str: Option<f64>,
+    pub width_wav: Option<f64>,
 }
 
 #[derive(Deserialize, Debug)]

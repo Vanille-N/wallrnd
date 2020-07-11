@@ -24,6 +24,10 @@ impl Pos {
         self.dot_self().sqrt()
     }
 
+    pub fn unit(self) -> Self {
+        self * (1. / self.norm())
+    }
+
     pub fn dot_self(self) -> f64 {
         self.0.powi(2) + self.1.powi(2)
     }
@@ -42,6 +46,11 @@ impl Pos {
 
     pub fn dist(self, other: Self) -> f64 {
         (self - other).norm()
+    }
+
+    pub fn project(self, other: Self) -> Self {
+        let other = other.unit();
+        other * self.dot(other)
     }
 }
 

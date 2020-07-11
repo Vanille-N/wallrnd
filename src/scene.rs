@@ -196,3 +196,36 @@ impl Contains for Stripe {
         }
     }
 }
+
+pub struct Wave {
+    limit: Pos,
+    reference: Pos,
+    amplitude: f64,
+    frequency: f64,
+    color: ColorItem,
+}
+
+impl Wave {
+    pub fn random(_rng: &mut ThreadRng, limit: Pos, indic: i32, width: f64, amplitude: f64, color: ColorItem) -> Self {
+        Self {
+            limit,
+            reference: limit + polar(radians(indic), 100.),
+            amplitude,
+            frequency: 0.003 / width,
+            color,
+        }
+    }
+}
+
+impl Contains for Wave {
+    fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        let proj = (p - self.limit).project(self.reference - self.limit);
+        let nearpt = p - proj;
+        let phase = (self.limit - nearpt).norm() * self.frequency;
+        if phase.cos() * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit()) {
+            Some(self.color.sample(rng))
+        } else {
+            None
+        }
+    }
+}

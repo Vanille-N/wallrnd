@@ -56,6 +56,7 @@ impl SceneCfg {
             Pattern::ConcentricCircles => self.create_concentric_circles(rng).dynamic(),
             Pattern::ParallelStripes => self.create_parallel_stripes(rng).dynamic(),
             Pattern::CrossedStripes => self.create_crossed_stripes(rng).dynamic(),
+            Pattern::ParallelWaves => self.create_waves(rng).dynamic(),
         }
     }
 
@@ -178,6 +179,32 @@ impl SceneCfg {
         items
     }
 
+    fn create_waves(&self, rng: &mut ThreadRng) -> Vec<Wave> {
+        let mut items = Vec::new();
+        let (a, b, dir) = {
+            let c = self.frame.center();
+            let w = self.frame.h + self.frame.w;
+            let dir = rng.gen_range(0, 360);
+            let d = polar(radians(dir), w as f64 / 2.);
+            (c + d, c - d, dir)
+        };
+        let amplitude = (b - a).norm() / self.nb_pattern as f64 / 2.;
+        for i in 0..self.nb_pattern {
+            let c = self.choose_color(rng);
+            let p = i as f64 / self.nb_pattern as f64;
+            items.push(Wave::random(
+                rng,
+                a * (1. - p) + b * p,
+                180 + dir,
+                self.width_pattern / 5.,
+                amplitude,
+                c,
+            ));
+        }
+        items
+    }
+
+
     pub fn make_tiling(&self, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
         use crate::tesselation::*;
         match self.tiling {
@@ -205,6 +232,7 @@ pub enum Pattern {
     ConcentricCircles,
     ParallelStripes,
     CrossedStripes,
+    ParallelWaves,
 }
 
 impl Pattern {
@@ -218,6 +246,7 @@ impl Pattern {
             ConcentricCircles,
             ParallelStripes,
             CrossedStripes,
+            ParallelWaves,
         ]
         .choose(rng)
         .unwrap()

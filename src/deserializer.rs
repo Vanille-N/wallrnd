@@ -172,6 +172,10 @@ impl MetaConfig {
                         nb_pattern = p.nb_c_str.unwrap_or(NBCSTR) as i32;
                         var_stripes = p.var_c_str.unwrap_or(VARCSTR) as i32;
                     }
+                    Pattern::ParallelWaves => {
+                        nb_pattern = p.nb_p_wav.unwrap_or(NBPWAV) as i32;
+                        width_pattern = p.width_wav.unwrap_or(WWAV);
+                    }
                 }
             } else {
                 match pattern {
@@ -193,6 +197,10 @@ impl MetaConfig {
                     Pattern::CrossedStripes => {
                         nb_pattern = NBCSTR as i32;
                         var_stripes = VARCSTR as i32;
+                    }
+                    Pattern::ParallelWaves => {
+                        nb_pattern = NBPWAV as i32;
+                        width_pattern = WWAV;
                     }
                 }
             }
@@ -430,6 +438,7 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
         "CC" | "c-cir." | "concentric-circles" => patterns.push(Pattern::ConcentricCircles, w),
         "PS" | "p-str." | "parallel-stripes" => patterns.push(Pattern::ParallelStripes, w),
         "CS" | "c-str." | "crossed-stripes" => patterns.push(Pattern::CrossedStripes, w),
+        "PW" | "p-wav." | "parallel-waves" => patterns.push(Pattern::ParallelWaves, w),
         _ => println!("{} is not recognized as a shape", s),
     }
 }
@@ -476,8 +485,10 @@ const NBPSTR: usize = 15;
 const NBCCIR: usize = 5;
 const NBCSTR: usize = 10;
 const NBFSPI: usize = 3;
+const NBPWAV: usize = 15;
 const VARPSTR: usize = 15;
 const VARCSTR: usize = 10;
 const WSPI: f64 = 0.3;
 const WSTR: f64 = 0.1;
+const WWAV: f64 = 0.1;
 const NBDEL: usize = 1000;
