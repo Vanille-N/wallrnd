@@ -203,7 +203,7 @@ impl MetaConfig {
             if colors.is_empty() {
                 themes.insert(String::from("-default-"), Chooser::new(vec![(Color::random(rng), 1)]));
             } else {
-                themes.insert(String::from("-default-"), Chooser::new(vec![(colors.get(colors.keys().collect::<Vec<_>>().choose(rng).unwrap().clone()).unwrap().clone(), 1)]));
+                themes.insert(String::from("-default-"), Chooser::new(vec![(*colors.get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap()).unwrap(), 1)]));
             }
         }
 
@@ -234,7 +234,7 @@ impl MetaConfig {
         SceneCfg {
             deviation,
             weight,
-            theme: themes.get(&theme).unwrap_or_else(|| themes.get(themes.keys().collect::<Vec<_>>().choose(rng).unwrap().clone()).unwrap()).clone(),
+            theme: themes.get(&theme).unwrap_or_else(|| themes.get(*themes.keys().collect::<Vec<_>>().choose(rng).unwrap()).unwrap()).clone(),
             frame: Frame {
                 x: 0,
                 y: 0,
