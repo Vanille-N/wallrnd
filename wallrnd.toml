@@ -191,15 +191,56 @@ size_squ_and_tri = 15.0
 nb_del = 3000
 
 [[entry]]
-start = "2230"
-end = "2300"
-weight = 10
 themes = ["rust"]
-shapes = ["all"]
+begin = "0700"
+end = "1200"
 
 [[entry]]
-start = "0800"
-end = "1000"
-weight = 10
-themes = ["crimson"]
-shapes = ["all"]
+themes = ["ocean"]
+begin = "1200"
+end = "1800"
+
+[[entry]]
+themes = ["sky"]
+begin = "1100"
+end = "1500"
+
+[[entry]]
+themes = ["night"]
+begin = "0000"
+end = "0600"
+
+[[entry]]
+themes = ["forest"]
+begin = "1300"
+end = "1830"
+
+[[entry]]
+themes = ["blood"]
+begin = "1500"
+end = "1900"
+
+[[entry]]
+themes = ["fire"]
+begin = "1100"
+end = "1400"
+
+[[entry]]
+themes = ["spring"]
+begin = "0800"
+end = "1300"
+
+[[entry]]
+themes = ["shadow"]
+begin = "1900"
+end = "2400"
+
+[[entry]]
+themes = ["dawn"]
+begin = "0500"
+end = "0800"
+
+[[entry]]
+themes = ["dusk"]
+begin = "1830"
+end = "2100"
