@@ -73,6 +73,6 @@ pub struct ConfigEntry {
     pub start: Option<String>,
     pub end: Option<String>,
     pub weight: Option<usize>,
-    pub themes: Vec<String>,
-    pub shapes: Vec<String>,
+    pub themes: Option<Vec<String>>,
+    pub shapes: Option<Vec<String>>,
 }

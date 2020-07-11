@@ -172,7 +172,6 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path
         pts.push(Pos::random(f, rng));
     }
     let triangulation = fast_triangulate(&pts);
-    // println!("{}", triangulation.len());
     triangulation
         .into_iter()
         .map(|(a, b, c)| {
