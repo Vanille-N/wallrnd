@@ -3,6 +3,7 @@ use crate::shape::*;
 use rand::rngs::ThreadRng;
 use std::collections::{HashMap, HashSet};
 use svg::node::element::{path::Data, Path};
+use delaunator as del;
 
 macro_rules! set {
     { $( $elem:expr ),* } => {
@@ -237,12 +238,22 @@ fn boyer_watson(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
     triangulation.keys().map(|&k| k).collect::<Vec<_>>()
 }
 
+fn fast_triangulate(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
+    let points = pts.iter().map(|&Pos(x, y)| del::Point { x, y }).collect::<Vec<_>>();
+    let result = del::triangulate(&points).unwrap().triangles.iter().map(|&i| pts[i]).collect::<Vec<_>>();
+    let mut v = Vec::new();
+    for i in 0..result.len()/3 {
+        v.push((result[i*3], result[i*3+1], result[i*3+2]));
+    }
+    v
+}
+
 pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path)> {
     let mut pts = Vec::new();
     for _ in 0..n {
         pts.push(Pos::random(f, rng));
     }
-    let triangulation = boyer_watson(&pts);
+    let triangulation = fast_triangulate(&pts);
     // println!("{}", triangulation.len());
     triangulation
         .into_iter()
