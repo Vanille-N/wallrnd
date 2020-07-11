@@ -148,11 +148,34 @@ impl SceneCfg {
 
     fn create_crossed_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
         let mut v = Vec::new();
+        let (a, b, a_orth, b_orth, dir) = {
+            let c = self.frame.center();
+            let w = self.frame.h + self.frame.w;
+            let dir = rng.gen_range(0, 360);
+            let d = polar(radians(dir), w as f64 / 2.);
+            let d_orth = polar(radians(dir + 90), w as f64 / 2.);
+            (c + d, c - d, c - d_orth, c + d_orth, dir)
+        };
         for i in 0..self.nb_pattern {
+            let p = i as f64 / self.nb_pattern as f64;
             let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64 / 10.));
+            v.push(HalfPlane::random(
+                rng,
+                a * (1. - p) + b * p,
+                180 + dir,
+                self.var_stripes,
+                c,
+            ));
+            let c = self.choose_color(rng);
+            v.push(HalfPlane::random(
+                rng,
+                a_orth * (1. - p) + b_orth * p,
+                90 + dir,
+                self.var_stripes,
+                c,
+            ));
         }
-        unimplemented!()
+        v
     }
 
     pub fn make_tiling(&self, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
