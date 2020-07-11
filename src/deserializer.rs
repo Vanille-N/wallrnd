@@ -200,6 +200,14 @@ impl MetaConfig {
             (nb_pattern, var_stripes, width_pattern)
         };
 
+        if themes.is_empty() {
+            if colors.is_empty() {
+                themes.insert(String::from("-default-"), Chooser::new(vec![(Color::random(rng), 1)]));
+            } else {
+                themes.insert(String::from("-default-"), Chooser::new(vec![(colors.get(colors.keys().collect::<Vec<_>>().choose(rng).unwrap().clone()).unwrap().clone(), 1)]));
+            }
+        }
+
         let (size_tiling, nb_delaunay) = {
             if let Some(ConfigData {
                 patterns: _,
