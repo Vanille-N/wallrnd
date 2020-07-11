@@ -2,13 +2,13 @@ use std::fs::File;
 use std::io::prelude::*;
 use svg::Document;
 use wallrnd::color::Color;
-use wallrnd::deserializer::MetaConfig;
+use wallrnd::optionfmt::MetaConfig;
 use wallrnd::scene::Scene;
-use chrono::{Utc, Timelike};
+use chrono::{Local, Timelike};
 
 fn main() {
     let time = {
-        let now = Utc::now();
+        let now = Local::now();
         let h = now.hour();
         let m = now.minute();
         (h * 100 + m) as usize

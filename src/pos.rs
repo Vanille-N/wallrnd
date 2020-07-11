@@ -20,6 +20,10 @@ impl Pos {
         )
     }
 
+    pub fn norm(self) -> f64 {
+        self.dot_self().sqrt()
+    }
+
     pub fn dot_self(self) -> f64 {
         self.0.powi(2) + self.1.powi(2)
     }
@@ -34,6 +38,10 @@ impl Pos {
         let x = f.x as f64 - errx + rng.gen::<f64>() * f.w as f64 * 1.2;
         let y = f.y as f64 - erry + rng.gen::<f64>() * f.h as f64 * 1.2;
         Self(x, y)
+    }
+
+    pub fn dist(self, other: Self) -> f64 {
+        (self - other).norm()
     }
 }
 
