@@ -114,11 +114,13 @@ impl SceneCfg {
 
     fn create_concentric_circles(&self, rng: &mut ThreadRng) -> Vec<Disc> {
         let mut v = Vec::new();
+        let center = Pos::random(&self.frame, rng);
+        let d = center.dist(Pos(0., 0.)).max(center.dist(Pos(0., self.frame.w as f64))).max(center.dist(Pos(self.frame.h as f64, 0.))).max(center.dist(Pos(self.frame.h as f64, self.frame.w as f64)));
         for i in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            v.push(Disc::random(rng, &self.frame, c, i as f64 / 10.));
+            v.push(Disc { center, radius: d * i as f64 / self.nb_pattern as f64, color: self.choose_color(rng) })
         }
-        unimplemented!()
+        v.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
+        v
     }
 
     fn create_parallel_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
