@@ -490,5 +490,5 @@ const VARPSTR: usize = 15;
 const VARCSTR: usize = 10;
 const WSPI: f64 = 0.3;
 const WSTR: f64 = 0.1;
-const WWAV: f64 = 0.1;
+const WWAV: f64 = 0.3;
 const NBDEL: usize = 1000;

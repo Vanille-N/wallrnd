@@ -18,3 +18,6 @@ serde_derive = "1.0.*"
 toml = "0.5.*"
 chrono = "0.4.*"
 delaunator = "0.2.*"
+
+[[bin]]
+name = "wallrnd"

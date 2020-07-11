@@ -5,8 +5,21 @@ use wallrnd::color::Color;
 use wallrnd::optionfmt::MetaConfig;
 use wallrnd::scene::Scene;
 use chrono::{Local, Timelike};
+use std::env;
 
 fn main() {
+    let args = env::args().collect::<Vec<_>>();
+    let dest = if args.len() > 1 {
+        args[1].clone()
+    } else {
+        println!("No destination specified, saving to /tmp/wallpaper-random.svg");
+        String::from("/tmp/wallpaper-random.svg")
+    };
+    let fname = if args.len() > 2 {
+        args[2].clone()
+    } else {
+        String::from("")
+    };
     let time = {
         let now = Local::now();
         let h = now.hour();
@@ -15,9 +28,15 @@ fn main() {
     };
 
     let mut rng = rand::thread_rng();
-    let mut cfg_file = File::open("wallrnd.toml").unwrap();
+    let cfg_file = File::open(fname);
     let mut cfg_contents = String::new();
-    cfg_file.read_to_string(&mut cfg_contents).unwrap();
+    if let Ok(mut f) = cfg_file {
+        if let Err(e) = f.read_to_string(&mut cfg_contents) {
+            println!("{}; Switching to default settings.", e);
+        }
+    } else {
+        println!("Settings file not found");
+    }
     let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng, time);
 
     let scene = Scene::new(&cfg, &mut rng);
@@ -32,5 +51,5 @@ fn main() {
         );
     }
 
-    svg::save("image.svg", &document).unwrap();
+    svg::save(dest, &document).unwrap();
 }
