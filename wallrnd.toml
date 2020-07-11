@@ -175,7 +175,7 @@ nb_f_tri = 15
 nb_f_cir = 10
 nb_f_str = 7
 nb_p_str = 15
-nb_c_cir = 5
+nb_c_cir = 13
 nb_c_str = 10
 nb_f_spi = 3
 var_p_str = 15
@@ -188,7 +188,7 @@ size_hex = 12.0
 size_tri = 15.0
 size_hex_and_tri = 13.0
 size_squ_and_tri = 15.0
-nb_del = 1000
+nb_del = 3000
 
 [[entry]]
 start = "2230"
