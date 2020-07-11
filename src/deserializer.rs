@@ -109,7 +109,7 @@ impl MetaConfig {
             colors
         };
 
-        let themes = {
+        let mut themes = {
             let mut themes = HashMap::new();
             if let Some(ConfigThemes { list }) = self.themes {
                 for name in list.keys() {
@@ -135,7 +135,6 @@ impl MetaConfig {
         };
 
         let (theme, shape) = choose_theme_shapes(rng, &self.entry, time);
-        println!("<{}|{}>", theme, shape);
 
         let (tiling, pattern) = match shapes.get(&shape) {
             None => (Tiling::choose(rng), Pattern::choose(rng)),
@@ -441,8 +440,8 @@ fn choose_theme_shapes(rng: &mut ThreadRng, entry: &Option<Vec<ConfigEntry>>, ti
         Some(v) => {
             let mut valid = Chooser::new(vec![]);
             for e in v {
-                let start = usize_of_time(&e.start);
-                let end = usize_of_time(&e.end);
+                let start = e.start.as_ref().unwrap_or(&String::from("0")).parse::<usize>().unwrap_or(0);
+                let end = e.end.as_ref().unwrap_or(&String::from("2400")).parse::<usize>().unwrap_or(2400);
                 if start <= time && time <= end {
                     valid.push(e, e.weight.unwrap_or(1));
                 }
@@ -450,20 +449,20 @@ fn choose_theme_shapes(rng: &mut ThreadRng, entry: &Option<Vec<ConfigEntry>>, ti
             match valid.choose(rng) {
                 None => (String::from(""), String::from("")),
                 Some(chosen_entry) => {
-                    let chosen_theme = chosen_entry.themes.choose(rng).map(|s| String::from(s)).unwrap_or(String::from(""));
-                    let chosen_shapes = chosen_entry.shapes.choose(rng).map(|s| String::from(s)).unwrap_or(String::from(""));
+                    let chosen_theme = match &chosen_entry.themes {
+                        None => String::from(""),
+                        Some(th) => th.choose(rng).map(|s| String::from(s)).unwrap_or(String::from("")),
+                    };
+                    let chosen_shapes = match &chosen_entry.shapes {
+                        None => String::from(""),
+                        Some(sh) => sh.choose(rng).map(|s| String::from(s)).unwrap_or(String::from("")),
+                    };
                     (chosen_theme, chosen_shapes)
                 },
             }
         }
     }
 }
-
-fn usize_of_time(t: &Option<String>) -> usize {
-    t.as_ref().unwrap_or(&String::from("0")).parse::<usize>().unwrap_or(0)
-}
-
-
 
 const DEVIATION: i32 = 20;
 const WEIGHT: i32 = 40;
