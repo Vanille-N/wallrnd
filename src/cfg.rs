@@ -5,6 +5,8 @@ use crate::scene::*;
 use crate::frame::Frame;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use svg::node::element::Path;
+use crate::paint::*;
+use crate::tesselate::*;
 
 pub struct SceneCfg {
     pub theme: Chooser<Color>,
@@ -50,164 +52,18 @@ impl SceneCfg {
 
     pub fn create_items(&self, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
         match self.pattern {
-            Pattern::FreeCircles => self.create_free_circles(rng).dynamic(),
-            Pattern::FreeTriangles => self.create_free_triangles(rng).dynamic(),
-            Pattern::FreeStripes => self.create_free_stripes(rng).dynamic(),
-            Pattern::FreeSpirals => self.create_free_spirals(rng).dynamic(),
-            Pattern::ConcentricCircles => self.create_concentric_circles(rng).dynamic(),
-            Pattern::ParallelStripes => self.create_parallel_stripes(rng).dynamic(),
-            Pattern::CrossedStripes => self.create_crossed_stripes(rng).dynamic(),
-            Pattern::ParallelWaves => self.create_waves(rng).dynamic(),
+            Pattern::FreeCircles => create_free_circles(rng, &self).dynamic(),
+            Pattern::FreeTriangles => create_free_triangles(rng, &self).dynamic(),
+            Pattern::FreeStripes => create_free_stripes(rng, &self).dynamic(),
+            Pattern::FreeSpirals => create_free_spirals(rng, &self).dynamic(),
+            Pattern::ConcentricCircles => create_concentric_circles(rng, &self).dynamic(),
+            Pattern::ParallelStripes => create_parallel_stripes(rng, &self).dynamic(),
+            Pattern::CrossedStripes => create_crossed_stripes(rng, &self).dynamic(),
+            Pattern::ParallelWaves => create_waves(rng, &self).dynamic(),
         }
     }
-
-    fn create_free_circles(&self, rng: &mut ThreadRng) -> Vec<Disc> {
-        let mut items = Vec::new();
-        for i in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            items.push(Disc::random(
-                rng,
-                &self.frame,
-                c,
-                i as f64 / self.nb_pattern as f64 * 0.5,
-            ));
-        }
-        items.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
-        items
-    }
-
-    fn create_free_triangles(&self, rng: &mut ThreadRng) -> Vec<Triangle> {
-        let mut items = Vec::new();
-        for i in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            items.push(Disc::random(
-                rng,
-                &self.frame,
-                c,
-                i as f64 / self.nb_pattern as f64 * 0.7,
-            ));
-        }
-        items.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
-        items.into_iter()
-            .map(|d| Triangle::random(rng, d))
-            .collect::<Vec<_>>()
-    }
-
-    fn create_free_stripes(&self, rng: &mut ThreadRng) -> Vec<Stripe> {
-        let mut items = Vec::new();
-        for _ in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            let w = self.width_pattern * self.frame.h as f64 * (rng.gen::<f64>() + 0.5);
-            items.push(Stripe::random(rng, &self.frame, c, w));
-        }
-        items
-    }
-
-    fn create_free_spirals(&self, rng: &mut ThreadRng) -> Vec<Spiral> {
-        let mut items = Vec::new();
-        for _ in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            let w = self.width_pattern * self.frame.h as f64 * (rng.gen::<f64>() + 0.5);
-            items.push(Spiral::random(rng, &self.frame, c, w));
-        }
-        items.sort_by(|a, b| a.width.partial_cmp(&b.width).unwrap());
-        items
-    }
-
-    fn create_concentric_circles(&self, rng: &mut ThreadRng) -> Vec<Disc> {
-        let mut items = Vec::new();
-        let center = Pos::random(&self.frame, rng);
-        let d = center.dist(Pos(0., 0.)).max(center.dist(Pos(0., self.frame.w as f64))).max(center.dist(Pos(self.frame.h as f64, 0.))).max(center.dist(Pos(self.frame.h as f64, self.frame.w as f64)));
-        for i in 0..self.nb_pattern {
-            items.push(Disc { center, radius: d * i as f64 / self.nb_pattern as f64, color: self.choose_color(rng) })
-        }
-        items.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
-        items
-    }
-
-    fn create_parallel_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
-        let mut items = Vec::new();
-        let (a, b, dir) = {
-            let c = self.frame.center();
-            let w = self.frame.h + self.frame.w;
-            let dir = rng.gen_range(0, 360);
-            let d = polar(dir, w as f64 / 2.);
-            (c + d, c - d, dir)
-        };
-        for i in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            let p = i as f64 / self.nb_pattern as f64;
-            items.push(HalfPlane::random(
-                rng,
-                a * (1. - p) + b * p,
-                180 + dir,
-                self.var_stripes,
-                c,
-            ));
-        }
-        items
-    }
-
-    fn create_crossed_stripes(&self, rng: &mut ThreadRng) -> Vec<HalfPlane> {
-        let mut items = Vec::new();
-        let (a, b, a_orth, b_orth, dir) = {
-            let c = self.frame.center();
-            let w = self.frame.h + self.frame.w;
-            let dir = rng.gen_range(0, 360);
-            let d = polar(dir, w as f64 / 2.);
-            let d_orth = polar(dir + 90, w as f64 / 2.);
-            (c + d, c - d, c - d_orth, c + d_orth, dir)
-        };
-        for i in 0..self.nb_pattern {
-            let p = i as f64 / self.nb_pattern as f64;
-            let c = self.choose_color(rng);
-            items.push(HalfPlane::random(
-                rng,
-                a * (1. - p) + b * p,
-                180 + dir,
-                self.var_stripes,
-                c,
-            ));
-            let c = self.choose_color(rng);
-            items.push(HalfPlane::random(
-                rng,
-                a_orth * (1. - p) + b_orth * p,
-                90 + dir,
-                self.var_stripes,
-                c,
-            ));
-        }
-        items
-    }
-
-    fn create_waves(&self, rng: &mut ThreadRng) -> Vec<Wave> {
-        let mut items = Vec::new();
-        let (a, b, dir) = {
-            let c = self.frame.center();
-            let w = self.frame.h + self.frame.w;
-            let dir = rng.gen_range(0, 360);
-            let d = polar(dir, w as f64 / 2.);
-            (c + d, c - d, dir)
-        };
-        let amplitude = (b - a).norm() / self.nb_pattern as f64 / 2.;
-        for i in 0..self.nb_pattern {
-            let c = self.choose_color(rng);
-            let p = i as f64 / self.nb_pattern as f64;
-            items.push(Wave::random(
-                rng,
-                a * (1. - p) + b * p,
-                180 + dir,
-                self.width_pattern / 5.,
-                amplitude,
-                c,
-            ));
-        }
-        items
-    }
-
 
     pub fn make_tiling(&self, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
-        use crate::tesselation::*;
         match self.tiling {
             Tiling::Hexagons => tile_hexagons(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
             Tiling::Triangles => {
