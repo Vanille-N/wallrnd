@@ -2,7 +2,7 @@ use crate::cfg::SceneCfg;
 use crate::color::Color;
 use crate::pos::Pos;
 use crate::pos::{crossprod_sign, polar};
-use crate::tesselation::Frame;
+use crate::frame::Frame;
 use rand::{rngs::ThreadRng, Rng};
 
 pub struct Scene {

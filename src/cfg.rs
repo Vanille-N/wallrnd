@@ -2,7 +2,7 @@ use crate::color::Color;
 use crate::chooser::Chooser;
 use crate::pos::{polar, Pos};
 use crate::scene::*;
-use crate::tesselation::*;
+use crate::frame::Frame;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use svg::node::element::Path;
 
