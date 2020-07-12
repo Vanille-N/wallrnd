@@ -1,11 +1,11 @@
+use chrono::{Local, Timelike};
+use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use svg::Document;
 use wallrnd::color::Color;
 use wallrnd::optionfmt::MetaConfig;
 use wallrnd::scene::Scene;
-use chrono::{Local, Timelike};
-use std::env;
 
 fn main() {
     let args = env::args().collect::<Vec<_>>();

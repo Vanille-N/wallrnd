@@ -18,7 +18,7 @@ impl Movable {
     pub fn hexagon(size: f64, rot: i32) -> Self {
         let mut pts = Vec::new();
         for i in 0..6 {
-            pts.push(polar(rot + 60 * i, size))
+            pts.push(Pos::polar(rot + 60 * i, size))
         }
         Movable(pts)
     }
@@ -26,7 +26,7 @@ impl Movable {
     pub fn triangle(size: f64, rot: i32) -> Self {
         let mut pts = Vec::new();
         for i in 0..3 {
-            pts.push(polar(rot + 120 * i, size))
+            pts.push(Pos::polar(rot + 120 * i, size))
         }
         Movable(pts)
     }
@@ -34,7 +34,7 @@ impl Movable {
     pub fn square(size: f64, rot: i32) -> Self {
         let mut pts = Vec::new();
         for i in 0..4 {
-            pts.push(polar(rot + 45 + 90 * i, size))
+            pts.push(Pos::polar(rot + 45 + 90 * i, size))
         }
         Movable(pts)
     }

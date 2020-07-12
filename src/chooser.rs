@@ -1,4 +1,4 @@
-use rand::{Rng, rngs::ThreadRng};
+use rand::{rngs::ThreadRng, Rng};
 
 #[derive(Clone)]
 pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);

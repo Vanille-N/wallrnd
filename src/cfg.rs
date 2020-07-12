@@ -1,12 +1,12 @@
-use crate::color::Color;
 use crate::chooser::Chooser;
-use crate::pos::{polar, Pos};
-use crate::scene::*;
+use crate::color::Color;
 use crate::frame::Frame;
+use crate::paint::*;
+use crate::pos::Pos;
+use crate::scene::*;
+use crate::tesselate::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use svg::node::element::Path;
-use crate::paint::*;
-use crate::tesselate::*;
 
 pub struct SceneCfg {
     pub theme: Chooser<Color>,

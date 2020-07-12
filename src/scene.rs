@@ -1,8 +1,8 @@
 use crate::cfg::SceneCfg;
 use crate::color::Color;
-use crate::pos::Pos;
-use crate::pos::{crossprod_sign, polar};
 use crate::frame::Frame;
+use crate::pos::crossprod_sign;
+use crate::pos::Pos;
 use rand::{rngs::ThreadRng, Rng};
 
 pub struct Scene {
@@ -85,7 +85,7 @@ impl HalfPlane {
     pub fn random(rng: &mut ThreadRng, limit: Pos, indic: i32, var: i32, color: ColorItem) -> Self {
         Self {
             limit,
-            reference: limit + polar(rng.gen_range(indic - var, indic + var), 100.),
+            reference: limit + Pos::polar(rng.gen_range(indic - var, indic + var), 100.),
             color,
         }
     }
@@ -115,9 +115,9 @@ impl Triangle {
         let theta1 = rng.gen_range(80, 150);
         let theta2 = rng.gen_range(80, 150);
         Self {
-            a: circ.center + polar(theta0, circ.radius),
-            b: circ.center + polar(theta0 + theta1, circ.radius),
-            c: circ.center + polar(theta0 + theta1 + theta2, circ.radius),
+            a: circ.center + Pos::polar(theta0, circ.radius),
+            b: circ.center + Pos::polar(theta0 + theta1, circ.radius),
+            c: circ.center + Pos::polar(theta0 + theta1 + theta2, circ.radius),
             color: circ.color,
         }
     }
@@ -176,7 +176,7 @@ pub struct Stripe {
 impl Stripe {
     pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, width: f64) -> Self {
         let limit = Pos::random(f, rng);
-        let reference = limit + polar(rng.gen_range(0, 360), width);
+        let reference = limit + Pos::polar(rng.gen_range(0, 360), width);
         Self {
             limit,
             reference,
@@ -206,10 +206,17 @@ pub struct Wave {
 }
 
 impl Wave {
-    pub fn random(_rng: &mut ThreadRng, limit: Pos, indic: i32, width: f64, amplitude: f64, color: ColorItem) -> Self {
+    pub fn random(
+        _rng: &mut ThreadRng,
+        limit: Pos,
+        indic: i32,
+        width: f64,
+        amplitude: f64,
+        color: ColorItem,
+    ) -> Self {
         Self {
             limit,
-            reference: limit + polar(indic, 100.),
+            reference: limit + Pos::polar(indic, 100.),
             amplitude,
             frequency: 0.003 / width,
             color,
@@ -222,7 +229,8 @@ impl Contains for Wave {
         let proj = (p - self.limit).project(self.reference - self.limit);
         let nearpt = p - proj;
         let phase = (self.limit - nearpt).norm() * self.frequency;
-        if phase.cos() * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit()) {
+        if phase.cos() * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit())
+        {
             Some(self.color.sample(rng))
         } else {
             None

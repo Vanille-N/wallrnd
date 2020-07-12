@@ -1,12 +1,12 @@
 use crate::cfg::*;
-use crate::color::Color;
 use crate::chooser::Chooser;
+use crate::color::Color;
 use crate::frame::Frame;
+use crate::optionfmt::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom};
 use std::collections::HashMap;
 use std::convert::TryInto;
 use toml::Value;
-use crate::optionfmt::*;
 
 impl MetaConfig {
     pub fn from_string(src: String) -> Self {
@@ -142,7 +142,7 @@ impl MetaConfig {
             Some(t) => (
                 t.1.choose(rng).unwrap_or_else(|| Tiling::choose(rng)),
                 t.0.choose(rng).unwrap_or_else(|| Pattern::choose(rng)),
-            )
+            ),
         };
 
         let (nb_pattern, var_stripes, width_pattern) = {
@@ -210,9 +210,20 @@ impl MetaConfig {
 
         if themes.is_empty() {
             if colors.is_empty() {
-                themes.insert(String::from("-default-"), Chooser::new(vec![(Color::random(rng), 1)]));
+                themes.insert(
+                    String::from("-default-"),
+                    Chooser::new(vec![(Color::random(rng), 1)]),
+                );
             } else {
-                themes.insert(String::from("-default-"), Chooser::new(vec![(*colors.get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap()).unwrap(), 1)]));
+                themes.insert(
+                    String::from("-default-"),
+                    Chooser::new(vec![(
+                        *colors
+                            .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
+                            .unwrap(),
+                        1,
+                    )]),
+                );
             }
         }
 
@@ -243,7 +254,14 @@ impl MetaConfig {
         SceneCfg {
             deviation,
             weight,
-            theme: themes.get(&theme).unwrap_or_else(|| themes.get(*themes.keys().collect::<Vec<_>>().choose(rng).unwrap()).unwrap()).clone(),
+            theme: themes
+                .get(&theme)
+                .unwrap_or_else(|| {
+                    themes
+                        .get(*themes.keys().collect::<Vec<_>>().choose(rng).unwrap())
+                        .unwrap()
+                })
+                .clone(),
             frame: Frame {
                 x: 0,
                 y: 0,
@@ -444,14 +462,28 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
     }
 }
 
-fn choose_theme_shapes(rng: &mut ThreadRng, entry: &Option<Vec<ConfigEntry>>, time: usize) -> (String, String) {
+fn choose_theme_shapes(
+    rng: &mut ThreadRng,
+    entry: &Option<Vec<ConfigEntry>>,
+    time: usize,
+) -> (String, String) {
     match entry {
         None => (String::from(""), String::from("")),
         Some(v) => {
             let mut valid = Chooser::new(vec![]);
             for e in v {
-                let start = e.start.as_ref().unwrap_or(&String::from("0")).parse::<usize>().unwrap_or(0);
-                let end = e.end.as_ref().unwrap_or(&String::from("2400")).parse::<usize>().unwrap_or(2400);
+                let start = e
+                    .start
+                    .as_ref()
+                    .unwrap_or(&String::from("0"))
+                    .parse::<usize>()
+                    .unwrap_or(0);
+                let end = e
+                    .end
+                    .as_ref()
+                    .unwrap_or(&String::from("2400"))
+                    .parse::<usize>()
+                    .unwrap_or(2400);
                 if start <= time && time <= end {
                     valid.push(e, e.weight.unwrap_or(1));
                 }
@@ -461,14 +493,20 @@ fn choose_theme_shapes(rng: &mut ThreadRng, entry: &Option<Vec<ConfigEntry>>, ti
                 Some(chosen_entry) => {
                     let chosen_theme = match &chosen_entry.themes {
                         None => String::from(""),
-                        Some(th) => th.choose(rng).map(String::from).unwrap_or_else(|| String::from("")),
+                        Some(th) => th
+                            .choose(rng)
+                            .map(String::from)
+                            .unwrap_or_else(|| String::from("")),
                     };
                     let chosen_shapes = match &chosen_entry.shapes {
                         None => String::from(""),
-                        Some(sh) => sh.choose(rng).map(String::from).unwrap_or_else(|| String::from("")),
+                        Some(sh) => sh
+                            .choose(rng)
+                            .map(String::from)
+                            .unwrap_or_else(|| String::from("")),
                     };
                     (chosen_theme, chosen_shapes)
-                },
+                }
             }
         }
     }

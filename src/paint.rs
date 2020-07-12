@@ -1,7 +1,7 @@
 use crate::cfg::SceneCfg;
-use rand::{Rng, rngs::ThreadRng};
+use crate::pos::Pos;
 use crate::scene::*;
-use crate::pos::{Pos, polar};
+use rand::{rngs::ThreadRng, Rng};
 
 pub fn create_free_circles(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<Disc> {
     let mut items = Vec::new();
@@ -30,7 +30,8 @@ pub fn create_free_triangles(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<Triangl
         ));
     }
     items.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
-    items.into_iter()
+    items
+        .into_iter()
         .map(|d| Triangle::random(rng, d))
         .collect::<Vec<_>>()
 }
@@ -59,9 +60,17 @@ pub fn create_free_spirals(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<Spiral> {
 pub fn create_concentric_circles(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<Disc> {
     let mut items = Vec::new();
     let center = Pos::random(&cfg.frame, rng);
-    let d = center.dist(Pos(0., 0.)).max(center.dist(Pos(0., cfg.frame.w as f64))).max(center.dist(Pos(cfg.frame.h as f64, 0.))).max(center.dist(Pos(cfg.frame.h as f64, cfg.frame.w as f64)));
+    let d = center
+        .dist(Pos(0., 0.))
+        .max(center.dist(Pos(0., cfg.frame.w as f64)))
+        .max(center.dist(Pos(cfg.frame.h as f64, 0.)))
+        .max(center.dist(Pos(cfg.frame.h as f64, cfg.frame.w as f64)));
     for i in 0..cfg.nb_pattern {
-        items.push(Disc { center, radius: d * i as f64 / cfg.nb_pattern as f64, color: cfg.choose_color(rng) })
+        items.push(Disc {
+            center,
+            radius: d * i as f64 / cfg.nb_pattern as f64,
+            color: cfg.choose_color(rng),
+        })
     }
     items.sort_by(|a, b| a.radius.partial_cmp(&b.radius).unwrap());
     items
@@ -73,7 +82,7 @@ pub fn create_parallel_stripes(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<HalfP
         let c = cfg.frame.center();
         let w = cfg.frame.h + cfg.frame.w;
         let dir = rng.gen_range(0, 360);
-        let d = polar(dir, w as f64 / 2.);
+        let d = Pos::polar(dir, w as f64 / 2.);
         (c + d, c - d, dir)
     };
     for i in 0..cfg.nb_pattern {
@@ -96,8 +105,8 @@ pub fn create_crossed_stripes(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<HalfPl
         let c = cfg.frame.center();
         let w = cfg.frame.h + cfg.frame.w;
         let dir = rng.gen_range(0, 360);
-        let d = polar(dir, w as f64 / 2.);
-        let d_orth = polar(dir + 90, w as f64 / 2.);
+        let d = Pos::polar(dir, w as f64 / 2.);
+        let d_orth = Pos::polar(dir + 90, w as f64 / 2.);
         (c + d, c - d, c - d_orth, c + d_orth, dir)
     };
     for i in 0..cfg.nb_pattern {
@@ -128,7 +137,7 @@ pub fn create_waves(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<Wave> {
         let c = cfg.frame.center();
         let w = cfg.frame.h + cfg.frame.w;
         let dir = rng.gen_range(0, 360);
-        let d = polar(dir, w as f64 / 2.);
+        let d = Pos::polar(dir, w as f64 / 2.);
         (c + d, c - d, dir)
     };
     let amplitude = (b - a).norm() / cfg.nb_pattern as f64 / 2.;

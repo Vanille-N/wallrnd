@@ -1,10 +1,10 @@
+use crate::frame::Frame;
 use crate::pos::*;
 use crate::shape::*;
-use crate::frame::Frame;
+use delaunator as del;
 use rand::rngs::ThreadRng;
 use std::collections::HashSet;
 use svg::node::element::{path::Data, Path};
-use delaunator as del;
 
 macro_rules! set {
     { $( $elem:expr ),* } => {
@@ -42,25 +42,25 @@ where
 }
 
 pub fn tile_hexagons(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
-    let idir = polar(rot - 30, (size * 2.) * radians(30).cos());
-    let jdir = polar(rot + 30, (size * 2.) * radians(30).cos());
+    let idir = Pos::polar(rot - 30, (size * 2.) * radians(30).cos());
+    let jdir = Pos::polar(rot + 30, (size * 2.) * radians(30).cos());
     let m = Movable::hexagon(size, rot);
     periodic_grid_tiling(f, |p| vec![m.render(p)], idir, jdir)
 }
 
 pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
-    let idir = polar(rot - 30, (size * 2.) * radians(30).cos());
-    let jdir = polar(rot + 30, (size * 2.) * radians(30).cos());
-    let adjust = polar(rot + 60, size * radians(30).sin()) + idir * 0.5;
+    let idir = Pos::polar(rot - 30, (size * 2.) * radians(30).cos());
+    let jdir = Pos::polar(rot + 30, (size * 2.) * radians(30).cos());
+    let adjust = Pos::polar(rot + 60, size * radians(30).sin()) + idir * 0.5;
     let m1 = Movable::triangle(size, rot + 60);
     let m2 = Movable::triangle(size, rot);
     periodic_grid_tiling(f, |p| vec![m1.render(p), m2.render(p + adjust)], idir, jdir)
 }
 
 pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
-    let idir = polar(rot, size * 2.);
-    let jdir = polar(rot + 60, size * 2.);
-    let adjust = polar(rot + 30, size / radians(30).cos());
+    let idir = Pos::polar(rot, size * 2.);
+    let jdir = Pos::polar(rot + 60, size * 2.);
+    let adjust = Pos::polar(rot + 30, size / radians(30).cos());
     let m = [
         Movable::hexagon(size, rot),
         Movable::triangle(size * radians(30).sin(), rot + 30),
@@ -95,10 +95,8 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     //  |               | ,-'
     //  +---------------+'
     //
-    let idir =
-        polar(rot, c + a * 2. + 2. * b) + polar(rot + 60, c + a * 2. + 2. * b);
-    let jdir =
-        polar(rot, c + a * 2. + 2. * b) + polar(rot - 60, c + a * 2. + 2. * b);
+    let idir = Pos::polar(rot, c + a * 2. + 2. * b) + Pos::polar(rot + 60, c + a * 2. + 2. * b);
+    let jdir = Pos::polar(rot, c + a * 2. + 2. * b) + Pos::polar(rot - 60, c + a * 2. + 2. * b);
     let mv = [
         Movable::square(size, rot),
         Movable::square(size, rot + 60),
@@ -112,15 +110,15 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
         f,
         |pos| {
             let mut items = vec![
-                mv[4].render(pos + polar(rot, c + 2. * b + 2. * a)),
-                mv[3].render(pos - polar(rot, c + 2. * b + 2. * a)),
+                mv[4].render(pos + Pos::polar(rot, c + 2. * b + 2. * a)),
+                mv[3].render(pos - Pos::polar(rot, c + 2. * b + 2. * a)),
             ];
             for i in 0..6 {
-                items.push(mv[3 + (i as usize % 2)].render(pos + polar(rot + i * 60, c)));
-                items.push(mv[i as usize % 3].render(pos + polar(rot + i * 60, c + b + a)));
+                items.push(mv[3 + (i as usize % 2)].render(pos + Pos::polar(rot + i * 60, c)));
+                items.push(mv[i as usize % 3].render(pos + Pos::polar(rot + i * 60, c + b + a)));
                 items.push(
                     mv[5 + (i as usize % 2)]
-                        .render(pos + polar(rot + i * 60 + 30, 2. * a + c)),
+                        .render(pos + Pos::polar(rot + i * 60 + 30, 2. * a + c)),
                 );
             }
             items
@@ -131,11 +129,19 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
 }
 
 fn fast_triangulate(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
-    let points = pts.iter().map(|&Pos(x, y)| del::Point { x, y }).collect::<Vec<_>>();
-    let result = del::triangulate(&points).unwrap().triangles.iter().map(|&i| pts[i]).collect::<Vec<_>>();
+    let points = pts
+        .iter()
+        .map(|&Pos(x, y)| del::Point { x, y })
+        .collect::<Vec<_>>();
+    let result = del::triangulate(&points)
+        .unwrap()
+        .triangles
+        .iter()
+        .map(|&i| pts[i])
+        .collect::<Vec<_>>();
     let mut v = Vec::new();
-    for i in 0..result.len()/3 {
-        v.push((result[i*3], result[i*3+1], result[i*3+2]));
+    for i in 0..result.len() / 3 {
+        v.push((result[i * 3], result[i * 3 + 1], result[i * 3 + 2]));
     }
     v
 }
