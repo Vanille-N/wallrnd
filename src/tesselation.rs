@@ -68,25 +68,25 @@ impl Frame {
 }
 
 pub fn tile_hexagons(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
-    let idir = polar(radians(rot - 30), (size * 2.) * radians(30).cos());
-    let jdir = polar(radians(rot + 30), (size * 2.) * radians(30).cos());
+    let idir = polar(rot - 30, (size * 2.) * radians(30).cos());
+    let jdir = polar(rot + 30, (size * 2.) * radians(30).cos());
     let m = Movable::hexagon(size, rot);
     periodic_grid_tiling(f, |p| vec![m.render(p)], idir, jdir)
 }
 
 pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
-    let idir = polar(radians(rot - 30), (size * 2.) * radians(30).cos());
-    let jdir = polar(radians(rot + 30), (size * 2.) * radians(30).cos());
-    let adjust = polar(radians(rot + 60), size * radians(30).sin()) + idir * 0.5;
+    let idir = polar(rot - 30, (size * 2.) * radians(30).cos());
+    let jdir = polar(rot + 30, (size * 2.) * radians(30).cos());
+    let adjust = polar(rot + 60, size * radians(30).sin()) + idir * 0.5;
     let m1 = Movable::triangle(size, rot + 60);
     let m2 = Movable::triangle(size, rot);
     periodic_grid_tiling(f, |p| vec![m1.render(p), m2.render(p + adjust)], idir, jdir)
 }
 
 pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
-    let idir = polar(radians(rot), size * 2.);
-    let jdir = polar(radians(rot + 60), size * 2.);
-    let adjust = polar(radians(rot + 30), size / radians(30).cos());
+    let idir = polar(rot, size * 2.);
+    let jdir = polar(rot + 60, size * 2.);
+    let adjust = polar(rot + 30, size / radians(30).cos());
     let m = [
         Movable::hexagon(size, rot),
         Movable::triangle(size * radians(30).sin(), rot + 30),
@@ -122,9 +122,9 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     //  +---------------+'
     //
     let idir =
-        polar(radians(rot), c + a * 2. + 2. * b) + polar(radians(rot + 60), c + a * 2. + 2. * b);
+        polar(rot, c + a * 2. + 2. * b) + polar(rot + 60, c + a * 2. + 2. * b);
     let jdir =
-        polar(radians(rot), c + a * 2. + 2. * b) + polar(radians(rot - 60), c + a * 2. + 2. * b);
+        polar(rot, c + a * 2. + 2. * b) + polar(rot - 60, c + a * 2. + 2. * b);
     let mv = [
         Movable::square(size, rot),
         Movable::square(size, rot + 60),
@@ -138,15 +138,15 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
         f,
         |pos| {
             let mut items = vec![
-                mv[4].render(pos + polar(radians(rot), c + 2. * b + 2. * a)),
-                mv[3].render(pos - polar(radians(rot), c + 2. * b + 2. * a)),
+                mv[4].render(pos + polar(rot, c + 2. * b + 2. * a)),
+                mv[3].render(pos - polar(rot, c + 2. * b + 2. * a)),
             ];
             for i in 0..6 {
-                items.push(mv[3 + (i as usize % 2)].render(pos + polar(radians(rot + i * 60), c)));
-                items.push(mv[i as usize % 3].render(pos + polar(radians(rot + i * 60), c + b + a)));
+                items.push(mv[3 + (i as usize % 2)].render(pos + polar(rot + i * 60, c)));
+                items.push(mv[i as usize % 3].render(pos + polar(rot + i * 60, c + b + a)));
                 items.push(
                     mv[5 + (i as usize % 2)]
-                        .render(pos + polar(radians(rot + i * 60 + 30), 2. * a + c)),
+                        .render(pos + polar(rot + i * 60 + 30, 2. * a + c)),
                 );
             }
             items

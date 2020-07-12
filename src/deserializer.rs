@@ -1,5 +1,6 @@
 use crate::cfg::*;
-use crate::color::{Chooser, Color};
+use crate::color::Color;
+use crate::chooser::Chooser;
 use crate::tesselation::Frame;
 use rand::{rngs::ThreadRng, seq::SliceRandom};
 use std::collections::HashMap;

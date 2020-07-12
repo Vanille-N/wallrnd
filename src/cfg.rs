@@ -1,5 +1,6 @@
-use crate::color::{Chooser, Color};
-use crate::pos::{polar, radians, Pos};
+use crate::color::Color;
+use crate::chooser::Chooser;
+use crate::pos::{polar, Pos};
 use crate::scene::*;
 use crate::tesselation::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
@@ -130,7 +131,7 @@ impl SceneCfg {
             let c = self.frame.center();
             let w = self.frame.h + self.frame.w;
             let dir = rng.gen_range(0, 360);
-            let d = polar(radians(dir), w as f64 / 2.);
+            let d = polar(dir, w as f64 / 2.);
             (c + d, c - d, dir)
         };
         for i in 0..self.nb_pattern {
@@ -153,8 +154,8 @@ impl SceneCfg {
             let c = self.frame.center();
             let w = self.frame.h + self.frame.w;
             let dir = rng.gen_range(0, 360);
-            let d = polar(radians(dir), w as f64 / 2.);
-            let d_orth = polar(radians(dir + 90), w as f64 / 2.);
+            let d = polar(dir, w as f64 / 2.);
+            let d_orth = polar(dir + 90, w as f64 / 2.);
             (c + d, c - d, c - d_orth, c + d_orth, dir)
         };
         for i in 0..self.nb_pattern {
@@ -185,7 +186,7 @@ impl SceneCfg {
             let c = self.frame.center();
             let w = self.frame.h + self.frame.w;
             let dir = rng.gen_range(0, 360);
-            let d = polar(radians(dir), w as f64 / 2.);
+            let d = polar(dir, w as f64 / 2.);
             (c + d, c - d, dir)
         };
         let amplitude = (b - a).norm() / self.nb_pattern as f64 / 2.;
