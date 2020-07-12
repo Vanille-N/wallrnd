@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use svg::Document;
 use wallrnd::color::Color;
-use wallrnd::optionfmt::MetaConfig;
+use wallrnd::deserializer::MetaConfig;
 use wallrnd::scene::Scene;
 
 fn main() {

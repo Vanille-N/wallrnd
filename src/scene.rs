@@ -1,8 +1,6 @@
 use crate::cfg::SceneCfg;
-use crate::color::Color;
-use crate::frame::Frame;
 use crate::pos::crossprod_sign;
-use crate::pos::Pos;
+use crate::prelude::*;
 use rand::{rngs::ThreadRng, Rng};
 
 pub struct Scene {

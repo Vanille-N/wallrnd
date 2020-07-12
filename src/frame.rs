@@ -1,4 +1,4 @@
-use crate::pos::Pos;
+use crate::prelude::*;
 
 #[derive(Clone, Copy)]
 pub struct Frame {

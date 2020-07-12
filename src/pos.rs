@@ -1,4 +1,4 @@
-use crate::frame::Frame;
+use crate::prelude::*;
 use rand::{rngs::ThreadRng, Rng};
 use std::cmp::{Eq, PartialEq};
 use std::f64::consts::PI;
