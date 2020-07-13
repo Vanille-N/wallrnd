@@ -77,8 +77,7 @@ pub struct ConfigPatterns {
 
 #[derive(Deserialize, Debug)]
 pub struct ConfigEntry {
-    pub start: Option<String>,
-    pub end: Option<String>,
+    pub span: Option<String>,
     pub weight: Option<usize>,
     pub themes: Option<Vec<String>>,
     pub shapes: Option<Vec<String>>,
@@ -548,16 +547,17 @@ fn choose_theme_shapes(
         Some(v) => {
             let mut valid = Chooser::new(vec![]);
             for e in v {
-                let start = e
-                    .start
+                let markers = e.span.as_ref().unwrap_or(&"-".to_string()).split("-").map(String::from).collect::<Vec<_>>();
+                let start = markers
+                    .get(0)
                     .as_ref()
-                    .unwrap_or(&String::from("0"))
+                    .unwrap_or(&&String::from("0"))
                     .parse::<usize>()
                     .unwrap_or(0);
-                let end = e
-                    .end
+                let end = markers
+                    .get(1)
                     .as_ref()
-                    .unwrap_or(&String::from("2400"))
+                    .unwrap_or(&&String::from("2400"))
                     .parse::<usize>()
                     .unwrap_or(2400);
                 if start <= time && time <= end {
