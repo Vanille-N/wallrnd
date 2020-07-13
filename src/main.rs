@@ -9,6 +9,12 @@ use wallrnd::scene::Scene;
 
 fn main() {
     let args = env::args().collect::<Vec<_>>();
+    if let Some("-help") = args.get(1).map(String::as_str) {
+        println!("usage: wallrnd path/to/image.svg path/to/configuration.toml");
+        std::process::exit(0);
+    }
+
+    // Read command line arguments other than -help
     let dest = if args.len() > 1 {
         args[1].clone()
     } else {
@@ -20,6 +26,8 @@ fn main() {
     } else {
         String::from("")
     };
+
+    // Get local time and convert to app-specific format: HHMM
     let time = {
         let now = Local::now();
         let h = now.hour();
@@ -42,6 +50,7 @@ fn main() {
     let scene = Scene::new(&cfg, &mut rng);
     let stroke = Color(0, 0, 0).to_string();
 
+    // Generate document
     let mut document = Document::new().set("viewBox", cfg.frame.into_tuple());
     for (pos, elem) in cfg.make_tiling(&mut rng) {
         let fill = scene.color(pos, &mut rng);
