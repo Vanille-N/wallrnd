@@ -1,6 +1,6 @@
 [global]
 deviation = 30 # How much the color varies within a shape. 0 for uniform shapes.
-weight = 30 # How far from the theme are the colors. 0 for theme-specified-only colors.
+weight = 25 # How far from the theme are the colors. 0 for theme-only colors, 100 for fully random.
 size = 15.0 # How big are tiles.
 width = 1366 # Screen dimension
 height = 768 # Screen dimension
@@ -181,6 +181,23 @@ dusk = [["mediumslateblue", 30], ["hotpink", 20], ["darkorange", 20]]
 #    cstr_or_ccir_and_any_tiling = ["crossed-stripes", "concentric-circles"]
 #    ftri_and_del = ["free-triangle", "delaunay"]
 #    all = []
+#
+# All names:
+# Tilings
+#   "H" / "hex." / "hexagons"
+#   "T" / "tri." / "triangles"
+#   "H&T" / "hex.&tri." / "hexagons&squares"
+#   "S&T" / "squ.&tri." / "squares&triangles"
+#   "D" / "del." / "delaunay"
+# Patterns
+#   "FC" / "f-cir." / "free-circles"
+#   "FT" / "f-tri." / "free-triangles"
+#   "FR" / "f-str." / "free-stripes"
+#   "FP" / "f-spi." / "free-spirals"
+#   "CC" / "c-cir." / "concentric-circles"
+#   "PS" / "p-str." / "parallel-stripes"
+#   "CS" / "c-str." / "crossed-stripes"
+#   "PW" / "p-wav." / "parallel-waves"
 all = []
 
 [data.patterns]
