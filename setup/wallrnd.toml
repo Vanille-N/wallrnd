@@ -193,67 +193,61 @@ size_squ_and_tri = 15.0
 nb_del = 3000
 
 [[entry]]
-themes = ["rust"]
-begin = "0700"
-end = "1200"
-shapes = ["all"]
-
-[[entry]]
-themes = ["ocean"]
-begin = "1200"
-end = "1800"
-shapes = ["all"]
-
-[[entry]]
-themes = ["sky"]
-begin = "1100"
-end = "1500"
-shapes = ["all"]
-
-[[entry]]
 themes = ["night"]
-begin = "0000"
-end = "0600"
-shapes = ["all"]
-
-[[entry]]
-themes = ["forest"]
-begin = "1300"
-end = "1830"
-shapes = ["all"]
-
-[[entry]]
-themes = ["blood"]
-begin = "1500"
-end = "1900"
-shapes = ["all"]
-
-[[entry]]
-themes = ["fire"]
-begin = "1100"
-end = "1400"
-shapes = ["all"]
-
-[[entry]]
-themes = ["spring"]
-begin = "0800"
-end = "1300"
-shapes = ["all"]
-
-[[entry]]
-themes = ["shadow"]
-begin = "1900"
-end = "2400"
+span = "0000-0559"
 shapes = ["all"]
 
 [[entry]]
 themes = ["dawn"]
-begin = "0500"
-end = "0800"
+span = "0600-0729"
+shapes = ["all"]
+
+[[entry]]
+themes = ["spring"]
+span = "0730-0859"
+shapes = ["all"]
+
+[[entry]]
+themes = ["sky"]
+span = "0900-1029"
+shapes = ["all"]
+
+[[entry]]
+themes = ["rust"]
+span = "1030-1119"
+shapes = ["all"]
+
+[[entry]]
+themes = ["fire"]
+span = "1200-1329"
+shapes = ["all"]
+
+[[entry]]
+themes = ["forest"]
+span = "1330-1459"
+shapes = ["all"]
+
+[[entry]]
+themes = ["ocean"]
+span = "1500-1629"
+shapes = ["all"]
+
+[[entry]]
+themes = ["blood"]
+span = "1630-1759"
 shapes = ["all"]
 
 [[entry]]
 themes = ["dusk"]
-begin = "1830"
-end = "2100"
+span = "1800-1929"
+shapes = ["all"]
+
+[[entry]]
+themes = ["shadow"]
+span = "1930-2059"
+shapes = ["all"]
+
+[[entry]]
+themes = ["night"]
+span = "2100-2359"
 shapes = ["all"]
