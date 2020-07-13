@@ -11,9 +11,9 @@ pub mod tesselate;
 
 pub mod prelude {
     use super::*;
-    pub use pos::{Pos, radians};
-    pub use cfg::{Tiling, Pattern};
-    pub use color::Color;
+    pub use cfg::{Pattern, Tiling};
     pub use chooser::Chooser;
+    pub use color::Color;
     pub use frame::Frame;
+    pub use pos::{radians, Pos};
 }

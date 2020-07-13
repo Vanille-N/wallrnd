@@ -42,7 +42,7 @@ Portability of this script is outside of the scope of this project (the image ge
 
 ### Recommended setup (executable `wallrnd`)
 
-* `cargo build --release` to create the `wallrnd` executable
+* `cargo build --release` (1.44 stable) to create the `wallrnd` executable
 
 * Put `wallrnd` and `setup/wallrnd.toml` in a directory `$DIR`
 
@@ -84,11 +84,19 @@ Be warned that performance is a lot worse and that this version is far less conf
 
 ### Examples
 
-As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**\*. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
+As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**<a name="return-methodology">[\*](#methodology)</a>. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
 
-<img src=samples/image-1.svg width=500> <img src=samples/image-2.svg width=500><br><br>
-<img src=samples/image-3.svg width=500> <img src=samples/image-4.svg width=500><br><br>
-<img src=samples/image-5.svg width=500> <img src=samples/image-6.svg width=500><br><br>
+![](samples/image-1.svg)
+
+![](samples/image-2.svg)
+
+![](samples/image-3.svg)
+
+![](samples/image-4.svg)
+
+![](samples/image-5.svg)
+
+![](samples/image-6.svg)
 
 
-\* To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.
+<a name="methodology">[\*](#return-methodology)</a> To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.

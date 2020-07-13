@@ -223,11 +223,10 @@ size_squ_and_tri = 15.0
 nb_delaunay = 3000
 
 [[entry]]
-themes = ["night"] # List of possible themes
-span = "0000-0559" # Time frame of availability for this entry
+themes = ["night"] # List of possible themes linked to this entry
+span = "0000-0559" # Time frame of availability for this entry as "HHMM-HHMM" (begin-end)
 shapes = ["all"] # Named shape configuration
-# Not used here: `weight = W` gives certain entries different ponderations
-# when several of them overlap on a single time frame.
+# Not used here: `weight = W` gives certain entries different ponderations when several of them overlap on a single time frame.
 
 [[entry]]
 themes = ["dawn"]

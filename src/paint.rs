@@ -1,6 +1,6 @@
 use crate::cfg::SceneCfg;
-use crate::scene::*;
 use crate::prelude::*;
+use crate::scene::*;
 use rand::{rngs::ThreadRng, Rng};
 
 pub fn create_free_circles(rng: &mut ThreadRng, cfg: &SceneCfg) -> Vec<Disc> {

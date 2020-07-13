@@ -1,7 +1,7 @@
 use crate::paint::*;
+use crate::prelude::*;
 use crate::scene::*;
 use crate::tesselate::*;
-use crate::prelude::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use svg::node::element::Path;
 

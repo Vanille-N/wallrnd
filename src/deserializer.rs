@@ -1,9 +1,9 @@
 use crate::cfg::SceneCfg;
 use crate::prelude::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom};
+use serde_derive::Deserialize;
 use std::collections::HashMap;
 use std::convert::TryInto;
-use serde_derive::Deserialize;
 use toml::{map::Map, Value};
 
 /// All config information
@@ -246,8 +246,12 @@ impl MetaConfig {
             }) = &self.data
             {
                 match pattern {
-                    Pattern::FreeCircles => nb_pattern = p.nb_free_circles.unwrap_or(NB_FREE_CIRCLES) as i32,
-                    Pattern::FreeTriangles => nb_pattern = p.nb_free_triangles.unwrap_or(NB_FREE_TRIANGLES) as i32,
+                    Pattern::FreeCircles => {
+                        nb_pattern = p.nb_free_circles.unwrap_or(NB_FREE_CIRCLES) as i32
+                    }
+                    Pattern::FreeTriangles => {
+                        nb_pattern = p.nb_free_triangles.unwrap_or(NB_FREE_TRIANGLES) as i32
+                    }
                     Pattern::FreeStripes => {
                         nb_pattern = p.nb_free_stripes.unwrap_or(NB_FREE_STRIPES) as i32;
                         width_pattern = p.width_stripe.unwrap_or(WIDTH_STRIPE) as f64;
@@ -256,7 +260,9 @@ impl MetaConfig {
                         nb_pattern = p.nb_free_spirals.unwrap_or(NB_FREE_SPIRALS) as i32;
                         width_pattern = p.width_spiral.unwrap_or(WIDTH_SPIRAL);
                     }
-                    Pattern::ConcentricCircles => nb_pattern = p.nb_concentric_circles.unwrap_or(NB_CONCENTRIC_CIRCLES) as i32,
+                    Pattern::ConcentricCircles => {
+                        nb_pattern = p.nb_concentric_circles.unwrap_or(NB_CONCENTRIC_CIRCLES) as i32
+                    }
                     Pattern::ParallelStripes => {
                         nb_pattern = p.nb_parallel_stripes.unwrap_or(NB_PARALLEL_STRIPES) as i32;
                         var_stripes = p.var_parallel_stripes.unwrap_or(VAR_PARALLEL_STRIPES) as i32;
@@ -568,7 +574,13 @@ fn choose_theme_shapes(
         Some(v) => {
             let mut valid = Chooser::new(vec![]);
             for e in v {
-                let markers = e.span.as_ref().unwrap_or(&"-".to_string()).split("-").map(String::from).collect::<Vec<_>>();
+                let markers = e
+                    .span
+                    .as_ref()
+                    .unwrap_or(&"-".to_string())
+                    .split("-")
+                    .map(String::from)
+                    .collect::<Vec<_>>();
                 let start = markers
                     .get(0)
                     .as_ref()
