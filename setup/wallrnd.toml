@@ -1,5 +1,5 @@
 [global]
-deviation = 30 # How much the color varies within a shape. 0 for uniform shapes.
+deviation = 40 # How much the color varies within a shape. 0 for uniform shapes.
 weight = 25 # How far from the theme are the colors. 0 for theme-only colors, 100 for fully random.
 size = 15.0 # How big are tiles.
 width = 1366 # Screen dimension
