@@ -1,11 +1,14 @@
 [global]
-deviation = 30
-weight = 30
-size = 15.0
-width = 1366
-height = 768
+deviation = 30 # How much the color varies within a shape. 0 for uniform shapes.
+weight = 30 # How far from the theme are the colors. 0 for theme-specified-only colors.
+size = 15.0 # How big are tiles.
+width = 1366 # Screen dimension
+height = 768 # Screen dimension
 
 [colors]
+# List of named colors
+# Either [r, g, b] (dec.) or #RRGGBB (hex.), both 0-255
+# List of colors here: all SVG named colors
 black = "#000000"
 navy = "#000080"
 darkblue = "#00008B"
@@ -155,6 +158,10 @@ ivory = "#FFFFF0"
 white = "#FFFFFF"
 
 [themes]
+# A theme is either:
+# - A single color (previously named or newly defined); e.g. theme1 = "white"
+# - A list of weighted colors (named or not); e.g. theme2 = [["white", 20], ["black", 10]]
+# You may include a previously created theme inside another; e.g. theme3 = [theme2, ["grey", 20]]
 rust = [["coral", 50], ["orange", 40], ["springgreen", 10]]
 ocean = [["navy", 60], ["indigo", 30], ["mediumaquamarine", 30]]
 sky = [["aqua", 50], ["gold", 30], ["skyblue", 50]]
@@ -168,6 +175,12 @@ dawn = [["goldenrod", 10], ["aqua", 30], ["magenta", 50]]
 dusk = [["mediumslateblue", 30], ["hotpink", 20], ["darkorange", 20]]
 
 [shapes]
+# Both tilings and patterns
+# Empty list means all available
+# Examples:
+#    cstr_or_ccir_and_any_tiling = ["crossed-stripes", "concentric-circles"]
+#    ftri_and_del = ["free-triangle", "delaunay"]
+#    all = []
 all = []
 
 [data.patterns]
@@ -179,23 +192,25 @@ nb_concentric_circles = 13
 nb_crossed_stripes = 10
 nb_free_spirals = 3
 nb_parallel_waves = 10
-var_parallel_stripes = 15
+var_parallel_stripes = 15 # Variability of the orientation
 var_crossed_stripes = 15
-width_spiral = 0.3
+width_spiral = 0.3 # As a proportion of the window height
 width_stripe = 0.1
 width_wave = 0.7
 
 [data.tilings]
-size_hex = 12.0
+size_hex = 12.0 # In absolute size
 size_tri = 15.0
 size_hex_and_tri = 13.0
 size_squ_and_tri = 15.0
 nb_delaunay = 3000
 
 [[entry]]
-themes = ["night"]
-span = "0000-0559"
-shapes = ["all"]
+themes = ["night"] # List of possible themes
+span = "0000-0559" # Time frame of availability for this entry
+shapes = ["all"] # Named shape configuration
+# Not used here: `weight = W` gives certain entries different ponderations
+# when several of them overlap on a single time frame.
 
 [[entry]]
 themes = ["dawn"]
