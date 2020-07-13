@@ -6,6 +6,7 @@ use std::convert::TryInto;
 use serde_derive::Deserialize;
 use toml::{map::Map, Value};
 
+/// All config information
 #[derive(Deserialize, Default)]
 pub struct MetaConfig {
     pub global: Option<ConfigGlobal>,
@@ -16,6 +17,7 @@ pub struct MetaConfig {
     pub entry: Option<Vec<ConfigEntry>>,
 }
 
+/// Global options
 #[derive(Deserialize, Default)]
 pub struct ConfigGlobal {
     pub deviation: Option<usize>,
@@ -25,56 +27,63 @@ pub struct ConfigGlobal {
     pub height: Option<usize>,
 }
 
+/// Color list
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigColors {
     #[serde(flatten)]
     pub list: Map<String, Value>,
 }
 
+/// Theme list
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigThemes {
     #[serde(flatten)]
     pub list: Map<String, Value>,
 }
 
+/// Shapes combination list
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigShapes {
     #[serde(flatten)]
     pub list: Map<String, Value>,
 }
 
+/// Group together pattern options and tiling options
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigData {
     pub patterns: Option<ConfigPatterns>,
     pub tilings: Option<ConfigTilings>,
 }
 
+/// Tiling options
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigTilings {
     pub size_hex: Option<f64>,
     pub size_tri: Option<f64>,
     pub size_hex_and_tri: Option<f64>,
     pub size_squ_and_tri: Option<f64>,
-    pub nb_del: Option<usize>,
+    pub nb_delaunay: Option<usize>,
 }
 
+/// Pattern options
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigPatterns {
-    pub nb_f_cir: Option<usize>,
-    pub nb_f_spi: Option<usize>,
-    pub nb_f_str: Option<usize>,
-    pub nb_c_str: Option<usize>,
-    pub nb_p_str: Option<usize>,
-    pub nb_c_cir: Option<usize>,
-    pub nb_f_tri: Option<usize>,
-    pub nb_p_wav: Option<usize>,
-    pub var_p_str: Option<usize>,
-    pub var_c_str: Option<usize>,
-    pub width_spi: Option<f64>,
-    pub width_str: Option<f64>,
-    pub width_wav: Option<f64>,
+    pub nb_free_circles: Option<usize>,
+    pub nb_free_spirals: Option<usize>,
+    pub nb_free_stripes: Option<usize>,
+    pub nb_crossed_stripes: Option<usize>,
+    pub nb_parallel_stripes: Option<usize>,
+    pub nb_concentric_circles: Option<usize>,
+    pub nb_free_triangles: Option<usize>,
+    pub nb_parallel_waves: Option<usize>,
+    pub var_parallel_stripes: Option<usize>,
+    pub var_crossed_stripes: Option<usize>,
+    pub width_spiral: Option<f64>,
+    pub width_stripe: Option<f64>,
+    pub width_wave: Option<f64>,
 }
 
+/// Entry for a single theme/time combination
 #[derive(Deserialize, Debug)]
 pub struct ConfigEntry {
     pub span: Option<String>,
@@ -84,6 +93,8 @@ pub struct ConfigEntry {
 }
 
 impl MetaConfig {
+    /// Parse from TOML.
+    /// Heavy lifting done by external crates
     pub fn from_string(src: String) -> Self {
         toml::from_str(src.as_str()).unwrap_or_else(|e| {
             println!("No valid config file found, picking default settings");
@@ -92,7 +103,9 @@ impl MetaConfig {
         })
     }
 
+    /// Choose options at random according to configuration
     pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize) -> SceneCfg {
+        // Read default/overriden global options
         let (deviation, weight, size, width, height) = {
             let (deviation, weight, size, width, height);
             match self.global {
@@ -170,6 +183,7 @@ impl MetaConfig {
             (deviation, weight, size, width, height)
         };
 
+        // Get list of named colors
         let colors = {
             let mut colors = HashMap::new();
             if let Some(ConfigColors { list }) = self.colors {
@@ -185,6 +199,7 @@ impl MetaConfig {
             colors
         };
 
+        // Get list of named themes
         let mut themes = {
             let mut themes = HashMap::new();
             if let Some(ConfigThemes { list }) = self.themes {
@@ -200,6 +215,7 @@ impl MetaConfig {
             themes
         };
 
+        // List of allowed shape combinations
         let shapes = {
             let mut shapes = HashMap::new();
             if let Some(ConfigShapes { list }) = self.shapes {
@@ -220,6 +236,7 @@ impl MetaConfig {
             ),
         };
 
+        // Get pattern-specific information according to picked shapes
         let (nb_pattern, var_stripes, width_pattern) = {
             let nb_pattern;
             let (mut var_stripes, mut width_pattern) = (0, 0.0);
@@ -229,54 +246,54 @@ impl MetaConfig {
             }) = &self.data
             {
                 match pattern {
-                    Pattern::FreeCircles => nb_pattern = p.nb_f_cir.unwrap_or(NBFCIR) as i32,
-                    Pattern::FreeTriangles => nb_pattern = p.nb_f_tri.unwrap_or(NBFTRI) as i32,
+                    Pattern::FreeCircles => nb_pattern = p.nb_free_circles.unwrap_or(NB_FREE_CIRCLES) as i32,
+                    Pattern::FreeTriangles => nb_pattern = p.nb_free_triangles.unwrap_or(NB_FREE_TRIANGLES) as i32,
                     Pattern::FreeStripes => {
-                        nb_pattern = p.nb_f_str.unwrap_or(NBFSTR) as i32;
-                        width_pattern = p.width_str.unwrap_or(WSTR) as f64;
+                        nb_pattern = p.nb_free_stripes.unwrap_or(NB_FREE_STRIPES) as i32;
+                        width_pattern = p.width_stripe.unwrap_or(WIDTH_STRIPE) as f64;
                     }
                     Pattern::FreeSpirals => {
-                        nb_pattern = p.nb_f_spi.unwrap_or(NBFSPI) as i32;
-                        width_pattern = p.width_spi.unwrap_or(WSPI);
+                        nb_pattern = p.nb_free_spirals.unwrap_or(NB_FREE_SPIRALS) as i32;
+                        width_pattern = p.width_spiral.unwrap_or(WIDTH_SPIRAL);
                     }
-                    Pattern::ConcentricCircles => nb_pattern = p.nb_c_cir.unwrap_or(NBCCIR) as i32,
+                    Pattern::ConcentricCircles => nb_pattern = p.nb_concentric_circles.unwrap_or(NB_CONCENTRIC_CIRCLES) as i32,
                     Pattern::ParallelStripes => {
-                        nb_pattern = p.nb_p_str.unwrap_or(NBPSTR) as i32;
-                        var_stripes = p.var_p_str.unwrap_or(VARPSTR) as i32;
+                        nb_pattern = p.nb_parallel_stripes.unwrap_or(NB_PARALLEL_STRIPES) as i32;
+                        var_stripes = p.var_parallel_stripes.unwrap_or(VAR_PARALLEL_STRIPES) as i32;
                     }
                     Pattern::CrossedStripes => {
-                        nb_pattern = p.nb_c_str.unwrap_or(NBCSTR) as i32;
-                        var_stripes = p.var_c_str.unwrap_or(VARCSTR) as i32;
+                        nb_pattern = p.nb_crossed_stripes.unwrap_or(NB_CROSSED_STRIPES) as i32;
+                        var_stripes = p.var_crossed_stripes.unwrap_or(VAR_CROSSED_STRIPES) as i32;
                     }
                     Pattern::ParallelWaves => {
-                        nb_pattern = p.nb_p_wav.unwrap_or(NBPWAV) as i32;
-                        width_pattern = p.width_wav.unwrap_or(WWAV);
+                        nb_pattern = p.nb_parallel_waves.unwrap_or(NB_PARALLEL_WAVES) as i32;
+                        width_pattern = p.width_wave.unwrap_or(WIDTH_WAVE);
                     }
                 }
             } else {
                 match pattern {
-                    Pattern::FreeCircles => nb_pattern = NBFCIR as i32,
-                    Pattern::FreeTriangles => nb_pattern = NBFTRI as i32,
+                    Pattern::FreeCircles => nb_pattern = NB_FREE_CIRCLES as i32,
+                    Pattern::FreeTriangles => nb_pattern = NB_FREE_TRIANGLES as i32,
                     Pattern::FreeStripes => {
-                        nb_pattern = NBFSTR as i32;
-                        width_pattern = WSTR;
+                        nb_pattern = NB_FREE_STRIPES as i32;
+                        width_pattern = WIDTH_STRIPE;
                     }
                     Pattern::FreeSpirals => {
-                        nb_pattern = NBFSPI as i32;
-                        width_pattern = WSPI;
+                        nb_pattern = NB_FREE_SPIRALS as i32;
+                        width_pattern = WIDTH_SPIRAL;
                     }
-                    Pattern::ConcentricCircles => nb_pattern = NBCCIR as i32,
+                    Pattern::ConcentricCircles => nb_pattern = NB_CONCENTRIC_CIRCLES as i32,
                     Pattern::ParallelStripes => {
-                        nb_pattern = NBPSTR as i32;
-                        var_stripes = VARPSTR as i32;
+                        nb_pattern = NB_PARALLEL_STRIPES as i32;
+                        var_stripes = VAR_PARALLEL_STRIPES as i32;
                     }
                     Pattern::CrossedStripes => {
-                        nb_pattern = NBCSTR as i32;
-                        var_stripes = VARCSTR as i32;
+                        nb_pattern = NB_CROSSED_STRIPES as i32;
+                        var_stripes = VAR_CROSSED_STRIPES as i32;
                     }
                     Pattern::ParallelWaves => {
-                        nb_pattern = NBPWAV as i32;
-                        width_pattern = WWAV;
+                        nb_pattern = NB_PARALLEL_WAVES as i32;
+                        width_pattern = WIDTH_WAVE;
                     }
                 }
             }
@@ -302,6 +319,7 @@ impl MetaConfig {
             }
         }
 
+        // Get tiling-specific options according to picked shapes
         let (size_tiling, nb_delaunay) = {
             if let Some(ConfigData {
                 patterns: _,
@@ -313,7 +331,7 @@ impl MetaConfig {
                     Tiling::Triangles => (t.size_tri.unwrap_or(size), 0),
                     Tiling::HexagonsAndTriangles => (t.size_hex_and_tri.unwrap_or(size), 0),
                     Tiling::SquaresAndTriangles => (t.size_squ_and_tri.unwrap_or(size), 0),
-                    Tiling::Delaunay => (0.0, t.nb_del.unwrap_or(NBDEL) as i32),
+                    Tiling::Delaunay => (0.0, t.nb_delaunay.unwrap_or(NB_DELAUNAY) as i32),
                 }
             } else {
                 match tiling {
@@ -321,7 +339,7 @@ impl MetaConfig {
                     Tiling::Triangles => (size, 0),
                     Tiling::HexagonsAndTriangles => (size, 0),
                     Tiling::SquaresAndTriangles => (size, 0),
-                    Tiling::Delaunay => (0.0, NBDEL as i32),
+                    Tiling::Delaunay => (0.0, NB_DELAUNAY as i32),
                 }
             }
         };
@@ -354,6 +372,7 @@ impl MetaConfig {
     }
 }
 
+/// Parse a color code: decimal (0-255) or hex (00-FF)
 fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color, String> {
     match val {
         Value::String(s) => {
@@ -365,7 +384,7 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
                 let g = i32::from_str_radix(&s[3..5], 16);
                 let b = i32::from_str_radix(&s[5..7], 16);
                 match (r, g, b) {
-                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r as i32, g as i32, b as i32)),
+                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r * 100 / 255 as i32, g * 100 / 255 as i32, b * 100 / 255 as i32)),
                     _ => Err(format!(
                         "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
                         s
@@ -440,6 +459,7 @@ Provide one of:
     }
 }
 
+/// Read group of colors as a theme
 fn theme_from_value(
     v: &Value,
     colors: &HashMap<String, Color>,
@@ -518,6 +538,7 @@ fn shapes_from_value(
     (patterns, tilings)
 }
 
+/// Read shape from one of its names
 fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Chooser<Pattern>) {
     match &s[..] {
         "H" | "hex." | "hexagons" => tilings.push(Tiling::Hexagons, w),
@@ -593,17 +614,17 @@ const WEIGHT: i32 = 40;
 const SIZE: f64 = 15.;
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 600;
-const NBFCIR: usize = 10;
-const NBFTRI: usize = 15;
-const NBFSTR: usize = 7;
-const NBPSTR: usize = 15;
-const NBCCIR: usize = 5;
-const NBCSTR: usize = 10;
-const NBFSPI: usize = 3;
-const NBPWAV: usize = 15;
-const VARPSTR: usize = 15;
-const VARCSTR: usize = 10;
-const WSPI: f64 = 0.3;
-const WSTR: f64 = 0.1;
-const WWAV: f64 = 0.3;
-const NBDEL: usize = 1000;
+const NB_FREE_CIRCLES: usize = 10;
+const NB_FREE_TRIANGLES: usize = 15;
+const NB_FREE_STRIPES: usize = 7;
+const NB_PARALLEL_STRIPES: usize = 15;
+const NB_CONCENTRIC_CIRCLES: usize = 5;
+const NB_CROSSED_STRIPES: usize = 10;
+const NB_FREE_SPIRALS: usize = 3;
+const NB_PARALLEL_WAVES: usize = 15;
+const VAR_PARALLEL_STRIPES: usize = 15;
+const VAR_CROSSED_STRIPES: usize = 10;
+const WIDTH_SPIRAL: f64 = 0.3;
+const WIDTH_STRIPE: f64 = 0.1;
+const WIDTH_WAVE: f64 = 0.3;
+const NB_DELAUNAY: usize = 1000;

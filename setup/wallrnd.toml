@@ -171,26 +171,26 @@ dusk = [["mediumslateblue", 30], ["hotpink", 20], ["darkorange", 20]]
 all = []
 
 [data.patterns]
-nb_f_tri = 15
-nb_f_cir = 10
-nb_f_str = 7
-nb_p_str = 15
-nb_c_cir = 13
-nb_c_str = 10
-nb_f_spi = 3
-nb_p_wav = 10
-var_p_str = 15
-var_c_str = 15
-width_spi = 0.3
-width_str = 0.1
-width_wav = 0.7
+nb_free_triangles = 15
+nb_free_circles = 10
+nb_free_stripes = 7
+nb_parallel_stripes = 15
+nb_concentric_circles = 13
+nb_crossed_stripes = 10
+nb_free_spirals = 3
+nb_parallel_waves = 10
+var_parallel_stripes = 15
+var_crossed_stripes = 15
+width_spiral = 0.3
+width_stripe = 0.1
+width_wave = 0.7
 
 [data.tilings]
 size_hex = 12.0
 size_tri = 15.0
 size_hex_and_tri = 13.0
 size_squ_and_tri = 15.0
-nb_del = 3000
+nb_delaunay = 3000
 
 [[entry]]
 themes = ["night"]
