@@ -15,6 +15,8 @@ macro_rules! set {
     }
 }
 
+/// Tile the plane with a pattern that can be mapped to a 2D grid.
+/// This criterion applies to all tilings used here except Delaunay triangulation.
 fn periodic_grid_tiling<F>(f: &Frame, gen: F, idir: Pos, jdir: Pos) -> Vec<(Pos, Path)>
 where
     F: Fn(Pos) -> Vec<(Pos, Path)>,
@@ -127,6 +129,8 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     )
 }
 
+/// External crate does the heavy lifting and is an order of magnitude faster than the previously implemented Boyer-Watson algorithm.
+/// Only downside is that it requires conversions between position types.
 fn fast_triangulate(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
     let points = pts
         .iter()

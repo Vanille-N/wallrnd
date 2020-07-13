@@ -13,6 +13,7 @@ impl Pos {
         (self.0, self.1)
     }
 
+    // Nearest 100'th of unit
     pub fn round(self) -> (i32, i32) {
         (
             (self.0 * 100.).round() as i32,

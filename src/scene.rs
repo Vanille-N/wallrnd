@@ -16,6 +16,7 @@ impl Scene {
         }
     }
 
+    /// Get color of a position depending on objects that were hit
     pub fn color(&self, p: Pos, rng: &mut ThreadRng) -> Color {
         for i in &self.items {
             if let Some(c) = i.contains(p, rng) {
@@ -26,6 +27,7 @@ impl Scene {
     }
 }
 
+/// Trait for anything that can contain a 2D point
 pub trait Contains {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color>;
 }

@@ -2,6 +2,7 @@ use crate::prelude::*;
 use svg::node::element::path::Data;
 use svg::node::element::Path;
 
+/// A generic shape that can be placed at any position according to a given center
 pub struct Movable(Vec<Pos>);
 
 impl Movable {
