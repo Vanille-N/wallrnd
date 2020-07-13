@@ -4,10 +4,12 @@ use rand::{rngs::ThreadRng, Rng};
 pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);
 
 impl<T: Copy> Chooser<T> {
+    /// Empty Chooser
     pub fn default() -> Self {
         Self(1, Vec::new())
     }
 
+    /// Create Chooser from weighted items
     pub fn new(mut v: Vec<(T, usize)>) -> Self {
         let mut sum = 0;
         for (_, w) in &mut v {
@@ -21,6 +23,7 @@ impl<T: Copy> Chooser<T> {
         }
     }
 
+    /// Pick a random item (weighted)
     pub fn choose(&self, rng: &mut ThreadRng) -> Option<T> {
         let choice = rng.gen_range(0, self.0);
         if self.1.is_empty() {
@@ -49,6 +52,7 @@ impl<T: Copy> Chooser<T> {
         }
     }
 
+    /// Get items with their weights as a copy
     pub fn extract(&self) -> Vec<(T, usize)> {
         let mut cpy = self.1.clone();
         let n = cpy.len();
@@ -58,11 +62,13 @@ impl<T: Copy> Chooser<T> {
         cpy
     }
 
+    /// Add new item
     pub fn push(&mut self, item: T, w: usize) {
         self.0 += w;
         self.1.push((item, self.0));
     }
 
+    /// Add vector of new items
     pub fn append(&mut self, items: Vec<(T, usize)>) {
         for (item, w) in items {
             self.push(item, w);
