@@ -384,7 +384,7 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
                 let g = i32::from_str_radix(&s[3..5], 16);
                 let b = i32::from_str_radix(&s[5..7], 16);
                 match (r, g, b) {
-                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r * 100 / 255 as i32, g * 100 / 255 as i32, b * 100 / 255 as i32)),
+                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r as i32, g as i32, b as i32)),
                     _ => Err(format!(
                         "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
                         s
