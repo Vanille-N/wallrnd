@@ -5,6 +5,7 @@ use crate::prelude::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 use svg::node::element::Path;
 
+/// General information on a scene
 pub struct SceneCfg {
     pub theme: Chooser<Color>,
     pub weight: i32,
@@ -19,6 +20,8 @@ pub struct SceneCfg {
     pub width_pattern: f64,
 }
 
+/// A trait to box scene items and make them generic.
+/// Spares us from a few lines of repeated code.
 trait Dynamic<C>
 where
     C: Contains + 'static,
@@ -38,6 +41,8 @@ where
 }
 
 impl SceneCfg {
+    /// Select a random color for a scene item.
+    /// The actual color will depend on the Chooser<Color> with which it is mixed.
     pub fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
         ColorItem {
             shade: Color::random(rng),
@@ -47,6 +52,7 @@ impl SceneCfg {
         }
     }
 
+    /// Match pattern to function that generates it
     pub fn create_items(&self, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
         match self.pattern {
             Pattern::FreeCircles => create_free_circles(rng, &self).dynamic(),
@@ -60,6 +66,7 @@ impl SceneCfg {
         }
     }
 
+    /// Math tiling to function that generates it
     pub fn make_tiling(&self, rng: &mut ThreadRng) -> Vec<(Pos, Path)> {
         match self.tiling {
             Tiling::Hexagons => tile_hexagons(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
@@ -77,6 +84,7 @@ impl SceneCfg {
     }
 }
 
+/// Available patterns, open to additions
 #[derive(Debug, Clone, Copy)]
 pub enum Pattern {
     FreeCircles,
@@ -90,6 +98,7 @@ pub enum Pattern {
 }
 
 impl Pattern {
+    /// Pick a random pattern (fallback if no other pattern choosing method is specified)
     pub fn choose(rng: &mut ThreadRng) -> Self {
         use Pattern::*;
         *vec![
@@ -107,6 +116,7 @@ impl Pattern {
     }
 }
 
+///Available tilings, open to additions
 #[derive(Debug, Clone, Copy)]
 pub enum Tiling {
     Hexagons,
@@ -117,6 +127,7 @@ pub enum Tiling {
 }
 
 impl Tiling {
+    /// Pick a random tiling (fallback if no other tiling choosing method is specified)
     pub fn choose(rng: &mut ThreadRng) -> Self {
         use Tiling::*;
         *vec![
