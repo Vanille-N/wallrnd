@@ -108,6 +108,7 @@ pub struct ConfigEntry {
     pub weight: Option<usize>,
     pub themes: Option<Vec<String>>,
     pub shapes: Option<Vec<String>>,
+    pub line_color: Option<String>,
 }
 
 impl MetaConfig {
@@ -244,7 +245,7 @@ impl MetaConfig {
             shapes
         };
 
-        let (theme, shape) = choose_theme_shapes(rng, &self.entry, time);
+        let (theme, shape, line_color_override) = choose_theme_shapes(rng, &self.entry, time);
 
         let (tiling, pattern) = match shapes.get(&shape) {
             None => (Tiling::choose(rng), Pattern::choose(rng)),
@@ -368,7 +369,7 @@ impl MetaConfig {
             }
         };
 
-        let (line_width, line_color) = {
+        let (line_width, line_color_default) = {
             if let Some(lines) = self.lines {
                 lines.get_settings(tiling, &colors)
             } else {
@@ -395,7 +396,7 @@ impl MetaConfig {
             },
             tiling,
             line_width,
-            line_color,
+            line_color: color_from_value(&Value::String(line_color_override.to_string()), &colors).unwrap_or_else(|_| color_from_value(&Value::String(line_color_default.to_string()), &colors).unwrap_or(Color(0, 0, 0))),
             pattern,
             nb_pattern,
             var_stripes,
@@ -596,9 +597,9 @@ fn choose_theme_shapes(
     rng: &mut ThreadRng,
     entry: &Option<Vec<ConfigEntry>>,
     time: usize,
-) -> (String, String) {
+) -> (String, String, String) {
     match entry {
-        None => (String::from(""), String::from("")),
+        None => (String::from(""), String::from(""), String::from("")),
         Some(v) => {
             let mut valid = Chooser::new(vec![]);
             for e in v {
@@ -626,7 +627,7 @@ fn choose_theme_shapes(
                 }
             }
             match valid.choose(rng) {
-                None => (String::from(""), String::from("")),
+                None => (String::from(""), String::from(""), String::from("")),
                 Some(chosen_entry) => {
                     let chosen_theme = match &chosen_entry.themes {
                         None => String::from(""),
@@ -642,7 +643,8 @@ fn choose_theme_shapes(
                             .map(String::from)
                             .unwrap_or_else(|| String::from("")),
                     };
-                    (chosen_theme, chosen_shapes)
+                    let line_color = chosen_entry.line_color.as_ref().map(|s| s.to_string()).unwrap_or_else(|| String::from(""));
+                    (chosen_theme, chosen_shapes, line_color)
                 }
             }
         }
