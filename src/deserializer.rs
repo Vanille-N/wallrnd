@@ -414,7 +414,7 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
             if let Some(color) = dict.get(s.as_str()) {
                 return Ok(*color);
             }
-            if &s[0..1] == "#" && s.len() == 7 {
+            if s.len() == 7 && &s[0..1] == "#"  {
                 let r = i32::from_str_radix(&s[1..3], 16);
                 let g = i32::from_str_radix(&s[3..5], 16);
                 let b = i32::from_str_radix(&s[5..7], 16);
