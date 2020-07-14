@@ -1,9 +1,17 @@
 [global]
 deviation = 40 # How much the color varies within a shape. 0 for uniform shapes.
 weight = 25 # How far from the theme are the colors. 0 for theme-only colors, 100 for fully random.
-size = 15.0 # How big are tiles.
+size = 15.0 # How big are tiles. Can be overriden for each tiling
 width = 1366 # Screen dimension
 height = 768 # Screen dimension
+
+[lines]
+# Set line appearance
+width = 1.0
+color = "#000000" # Supports named colors as well
+# Tiling-specific overrides
+del_width = 0.0
+del_color = "#000000"
 
 [colors]
 # List of named colors
@@ -226,7 +234,11 @@ nb_delaunay = 3000
 themes = ["night"] # List of possible themes linked to this entry
 span = "0000-0559" # Time frame of availability for this entry as "HHMM-HHMM" (begin-end)
 shapes = ["all"] # Named shape configuration
-# Not used here: `weight = W` gives certain entries different ponderations when several of them overlap on a single time frame.
+# Not used here:
+# `weight = W`
+#    gives certain entries different ponderations when several of them overlap on a single time frame.
+# `line_color = C`
+#    override line settings
 
 [[entry]]
 themes = ["dawn"]
