@@ -368,6 +368,14 @@ impl MetaConfig {
             }
         };
 
+        let (line_width, line_color) = {
+            if let Some(lines) = self.lines {
+                lines.get_settings(tiling, &colors)
+            } else {
+                (LINE_WIDTH, LINE_COLOR)
+            }
+        };
+
         SceneCfg {
             deviation,
             weight,
@@ -641,6 +649,28 @@ fn choose_theme_shapes(
     }
 }
 
+impl ConfigLines {
+    fn get_settings(&self, tiling: Tiling, colors: &HashMap<String, Color>) -> (f64, Color) {
+        let (w, c) = match tiling {
+            Tiling::Hexagons => (self.hex_width, &self.hex_color),
+            Tiling::Triangles => (self.tri_width, &self.tri_color),
+            Tiling::HexagonsAndTriangles => (self.hex_and_tri_width, &self.hex_and_tri_color),
+            Tiling::SquaresAndTriangles => (self.squ_and_tri_width, &self.squ_and_tri_color),
+            Tiling::Delaunay => (self.del_width, &self.del_color),
+        };
+        (
+            w.unwrap_or_else(|| self.width.unwrap_or(LINE_WIDTH)),
+            match c {
+                Some(c) => color_from_value(&Value::String(c.to_string()), colors).ok(),
+                None => None,
+            }.unwrap_or_else(|| match &self.color {
+                Some(color) => color_from_value(&Value::String(color.to_string()), colors).ok(),
+                None => None,
+            }.unwrap_or(LINE_COLOR))
+        )
+    }
+}
+
 const DEVIATION: i32 = 20;
 const WEIGHT: i32 = 40;
 const SIZE: f64 = 15.;
@@ -660,3 +690,5 @@ const WIDTH_SPIRAL: f64 = 0.3;
 const WIDTH_STRIPE: f64 = 0.1;
 const WIDTH_WAVE: f64 = 0.3;
 const NB_DELAUNAY: usize = 1000;
+const LINE_WIDTH: f64 = 1.0;
+const LINE_COLOR: Color = Color(0, 0, 0);
