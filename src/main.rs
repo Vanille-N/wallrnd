@@ -48,15 +48,19 @@ fn main() {
     let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng, time);
 
     let scene = Scene::new(&cfg, &mut rng);
-    let stroke = Color(0, 0, 0).to_string();
+    let stroke = cfg.line_color.to_string();
+    let stroke_width = cfg.line_width;
+    let stroke_like_fill = stroke_width < 0.0000001;
+
 
     // Generate document
     let mut document = Document::new().set("viewBox", cfg.frame.into_tuple());
     for (pos, elem) in cfg.make_tiling(&mut rng) {
-        let fill = scene.color(pos, &mut rng);
+        let fill = scene.color(pos, &mut rng).to_string();
         document = document.add(
-            elem.set("fill", fill.to_string())
-                .set("stroke", &stroke[..]),
+            elem.set("fill", &fill[..])
+                .set("stroke", if stroke_like_fill { &fill[..] } else { &stroke[..] })
+                .set("stroke-width", stroke_width),
         );
     }
 
