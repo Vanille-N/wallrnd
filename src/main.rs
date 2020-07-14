@@ -3,7 +3,6 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use svg::Document;
-use wallrnd::color::Color;
 use wallrnd::deserializer::MetaConfig;
 use wallrnd::scene::Scene;
 
