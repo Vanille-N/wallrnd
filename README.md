@@ -82,6 +82,9 @@ Be warned that performance is a lot worse and that this version is far less conf
 
 * [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
 
+#### Apps
+* [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
+
 ### Examples
 
 As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**<a name="return-methodology">[\*](#methodology)</a>. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
