@@ -18,6 +18,8 @@ pub struct SceneCfg {
     pub size_tiling: f64,
     pub nb_delaunay: i32,
     pub width_pattern: f64,
+    pub line_width: f64,
+    pub line_color: Color,
 }
 
 /// A trait to box scene items and make them generic.

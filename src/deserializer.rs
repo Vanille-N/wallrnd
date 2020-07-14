@@ -10,6 +10,7 @@ use toml::{map::Map, Value};
 #[derive(Deserialize, Default)]
 pub struct MetaConfig {
     pub global: Option<ConfigGlobal>,
+    pub lines: Option<ConfigLines>,
     pub colors: Option<ConfigColors>,
     pub themes: Option<ConfigThemes>,
     pub shapes: Option<ConfigShapes>,
@@ -25,6 +26,23 @@ pub struct ConfigGlobal {
     pub size: Option<f64>,
     pub width: Option<usize>,
     pub height: Option<usize>,
+}
+
+/// Lines appearance
+#[derive(Deserialize, Default)]
+pub struct ConfigLines {
+    pub width: Option<f64>,
+    pub color: Option<String>,
+    pub del_width: Option<f64>,
+    pub del_color: Option<String>,
+    pub hex_width: Option<f64>,
+    pub hex_color: Option<String>,
+    pub tri_width: Option<f64>,
+    pub tri_color: Option<String>,
+    pub hex_and_tri_width: Option<f64>,
+    pub hex_and_tri_color: Option<String>,
+    pub squ_and_tri_width: Option<f64>,
+    pub squ_and_tri_color: Option<String>,
 }
 
 /// Color list
@@ -368,6 +386,8 @@ impl MetaConfig {
                 h: height,
             },
             tiling,
+            line_width,
+            line_color,
             pattern,
             nb_pattern,
             var_stripes,
