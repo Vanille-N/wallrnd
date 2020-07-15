@@ -1,4 +1,4 @@
-<link rel="shortcut icon" type="image/png" href="profile.ico?">
+<link rel="shortcut icon" type="image/png" href="favicon.ico?">
 
 <div class="css-slideshow">
     <figure>
