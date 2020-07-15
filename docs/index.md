@@ -56,3 +56,20 @@ A configuration file is provided under `/setup/wallrnd.toml`.
 To generate wallpapers at regular intervals, you can create a new cronjob that calls `wallrnd`. Examples of this are available in `/setup`.
 
 ---
+
+# Alternative tools
+
+#### Online
+
+* [Random Wallpaper Generator!](http://bjmiller.net/canvas/wallpaper/)
+
+* [Background Generator](https://bggenerator.com/)
+
+#### Scripts
+
+* [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
+
+#### Apps
+* [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
+
+Do you know of another similar tool ? You can suggest it [here](https://github.com/Vanille-N/wallrnd/issues)
