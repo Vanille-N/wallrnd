@@ -1,17 +1,52 @@
-#cf {
-  position:relative;
-  height:281px;
-  width:450px;
+/* Credits for the crossfade to https://gist.github.com/A973C/7068921*/
+body{
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
+}
+.css-slideshow{
+  position: relative;
+  max-width: 850px;
+  height: 500px;
+  margin: 5em auto .5em auto;
+}
+.css-slideshow figure{
+  margin: 0;
+  max-width: 850px;
+  height: 500px;
+  background: #000;
+  position: absolute;
+}
+.css-slideshow img{
+  box-shadow: 0 0 2px #666;
+}
+.css-slideshow figcaption{
+  position: absolute;
+  top: 0;
+  color: #fff;
+  background: rgba(0,0,0, .8);
+  font-size: 1.5em;
+  padding: 8px 12px;
+  opacity: 0;
+  transition: opacity .5s;
+}
+.css-slideshow:hover figure figcaption{
+  transition: opacity .5s;
+  opacity: 1;
+}
+.css-slideshow-attr{
+  max-width: 495px;
+  text-align: right;
+  font-size: .7em;
+  font-style: italic;
   margin:0 auto;
 }
+.css-slideshow-attr a{
+  color: #666;
+}
+.css-slideshow figure{
+  opacity:0;
+}
 
-#cf img {
-  position:absolute;
-  left:0;
-  -webkit-transition: opacity 1s ease-in-out;
-  -moz-transition: opacity 1s ease-in-out;
-  -o-transition: opacity 1s ease-in-out;
-  transition: opacity 1s ease-in-out;
 }
 
 #cf img.top:hover {
