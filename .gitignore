@@ -2,6 +2,6 @@
 *.svg
 *.png
 Cargo.lock
-!samples/*
+!docs/samples/*
 TODO
 .sass-cache
