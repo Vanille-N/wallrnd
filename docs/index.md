@@ -39,3 +39,20 @@
     <p style="float: left;"><a href="https://www.github.com/Vanille-N/wallrnd"><img src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" width="64"></a></p>
     <p>The full source code is hosted on GitHub, and so is this website. Contributions in any form (pull requests, feature requests, bug reports, etc...) are welcome.</p>
 </div>
+<br>
+
+---
+
+# How to install
+
+Clone the repository and `cd` inside.
+
+Use `cargo build --release` (1.44 stable) to create the `wallrnd` executable
+
+Run `wallrnd path/to/image.svg path/to/configuration.toml` to create a new wallpaper.
+
+A configuration file is provided under `/setup/wallrnd.toml`.
+
+To generate wallpapers at regular intervals, you can create a new cronjob that calls `wallrnd`. Examples of this are available in `/setup`.
+
+---
