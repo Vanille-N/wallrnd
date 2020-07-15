@@ -49,7 +49,7 @@ fn main() {
     let scene = Scene::new(&cfg, &mut rng);
     let stroke = cfg.line_color.to_string();
     let stroke_width = cfg.line_width;
-    let stroke_like_fill = stroke_width < 0.0000001;
+    let stroke_like_fill = stroke_width < 0.0001;
 
 
     // Generate document
