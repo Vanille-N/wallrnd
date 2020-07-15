@@ -28,4 +28,14 @@
   </div>
 <p class="css-slideshow-attr"><a href="http://www.w3.org/html/logo/" target="_top">All images are generated as SVG</a></p>
 
+---
+
+<div>
+    <p style="float: left;"><a href="https://www.rust-lang.org"><img src="https://www.rust-lang.org/logos/rust-logo-64x64.png"></a></p>
+    <p>This project is written in pure Rust and aims to provide a cross-platform utility for generating random abstract wallpapers. It is fast and memory-efficient enough to be able to run in the background at regular intervals</p>
+</div>
+<br>
+<div>
+    <p style="float: left;"><a href="https://www.github.com/Vanille-N/wallrnd"><img src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" width="64"></a></p>
+    <p>The full source code is hosted on GitHub, and so is this website. Contributions in any form (pull requests, feature requests, bug reports, etc...) are welcome.</p>
 </div>
