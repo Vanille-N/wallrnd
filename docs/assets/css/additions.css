@@ -47,8 +47,43 @@ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", He
   opacity:0;
 }
 
+/* >>>>>>>>>> BEGIN CROSSFADE GENERATION */
+figure:nth-child(1) {
+    animation: xfade 30s 25s infinite;
+}
+figure:nth-child(2) {
+    animation: xfade 30s 20s infinite;
+}
+figure:nth-child(3) {
+    animation: xfade 30s 15s infinite;
+}
+figure:nth-child(4) {
+    animation: xfade 30s 10s infinite;
+}
+figure:nth-child(5) {
+    animation: xfade 30s 5s infinite;
+}
+figure:nth-child(6) {
+    animation: xfade 30s 0s infinite;
 }
 
-#cf img.top:hover {
-  opacity:0;
+
+@keyframes xfade {
+  0%{
+    opacity: 1;
+  }
+  16.666666666666668%{
+    opacity: 1;
+  }
+  25.0%{
+    opacity: 0;
+  }
+  98%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
 }
+
+/* >>>>>>>>>> END CROSSFADE GENERATION */
