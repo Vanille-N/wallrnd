@@ -31,13 +31,25 @@
 ---
 
 <div>
-    <p style="float: left;"><a href="https://www.rust-lang.org"><img src="https://www.rust-lang.org/logos/rust-logo-64x64.png"></a></p>
-    <p>This project is written in pure Rust and aims to provide a cross-platform utility for generating random abstract wallpapers. It is fast and memory-efficient enough to be able to run in the background at regular intervals</p>
+    <p style="float: left; padding: 10px">
+        <a href="https://www.rust-lang.org">
+            <img src="https://www.rust-lang.org/logos/rust-logo-64x64.png">
+        </a>
+    </p>
+    <p>
+        This project is written in pure Rust and aims to provide a cross-platform utility for generating random abstract wallpapers. It is fast and memory-efficient enough to be able to run in the background at regular intervals
+    </p>
 </div>
 <br>
 <div>
-    <p style="float: left;"><a href="https://www.github.com/Vanille-N/wallrnd"><img src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" width="64"></a></p>
-    <p>The full source code is hosted on GitHub, and so is this website. Contributions in any form (pull requests, feature requests, bug reports, etc...) are welcome.</p>
+    <p style="float: left; padding: 10px">
+        <a href="https://www.github.com/Vanille-N/wallrnd">
+            <img src="https://aws1.discourse-cdn.com/github/original/2X/d/d41676c9bf9fbaa8edbe76ef34744f38089d0474.svg" width="64">
+        </a>
+    </p>
+    <p>
+        The full source code is hosted on GitHub, and so is this website. Contributions in any form (pull requests, feature requests, bug reports, etc...) are welcome.
+    </p>
 </div>
 <br>
 
