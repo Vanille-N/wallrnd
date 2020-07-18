@@ -13,9 +13,6 @@ Direct dependencies
 `serde_derive` [![](http://meritbadge.herokuapp.com/serde_derive)](https://crates.io/crates/serde_derive)
 [![API](https://docs.rs/serde_derive/badge.svg)](https://docs.rs/serde_derive)
 
-`svg` [![](http://meritbadge.herokuapp.com/svg)](https://crates.io/crates/svg)
-[![API](https://docs.rs/svg/badge.svg)](https://docs.rs/svg)
-
 `rand` [![](http://meritbadge.herokuapp.com/rand)](https://crates.io/crates/rand)
 [![API](https://docs.rs/rand/badge.svg)](https://docs.rs/rand)
 
