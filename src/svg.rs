@@ -3,17 +3,17 @@ use std::fmt;
 use std::io::Write;
 
 pub struct Path {
-    stroke_width: f64,
-    stroke_color: Color,
-    fill_color: Color,
-    data: Data,
+    pub stroke_width: f64,
+    pub stroke_color: Color,
+    pub fill_color: Color,
+    pub data: Data,
 }
 
-pub struct Data(Vec<Pos>);
+pub struct Data(pub Vec<Pos>);
 
 pub struct Document {
-    frame: Frame,
-    items: Vec<Path>,
+    pub frame: Frame,
+    pub items: Vec<Path>,
 }
 
 impl Data {
