@@ -3,7 +3,7 @@ use crate::prelude::*;
 use crate::scene::*;
 use crate::tesselate::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
-use svg::node::element::Path;
+use crate::svg::*;
 
 /// General information on a scene
 pub struct SceneCfg {

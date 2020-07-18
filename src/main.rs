@@ -2,9 +2,9 @@ use chrono::{Local, Timelike};
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
-use svg::Document;
 use wallrnd::deserializer::MetaConfig;
 use wallrnd::scene::Scene;
+use wallrnd::svg::*;
 
 fn main() {
     let args = env::args().collect::<Vec<_>>();
@@ -47,21 +47,21 @@ fn main() {
     let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng, time);
 
     let scene = Scene::new(&cfg, &mut rng);
-    let stroke = cfg.line_color.to_string();
+    let stroke = cfg.line_color;
     let stroke_width = cfg.line_width;
     let stroke_like_fill = stroke_width < 0.0001;
 
 
     // Generate document
-    let mut document = Document::new().set("viewBox", cfg.frame.into_tuple());
+    let mut document = Document::new(cfg.frame);
     for (pos, elem) in cfg.make_tiling(&mut rng) {
-        let fill = scene.color(pos, &mut rng).to_string();
-        document = document.add(
-            elem.set("fill", &fill[..])
-                .set("stroke", if stroke_like_fill { &fill[..] } else { &stroke[..] })
-                .set("stroke-width", stroke_width),
+        let fill = scene.color(pos, &mut rng);
+        document.add(
+            elem.with_fill_color(fill)
+                .with_stroke_color(if stroke_like_fill { fill } else { stroke })
+                .with_stroke_width(stroke_width),
         );
     }
 
-    svg::save(dest, &document).unwrap();
+    document.save(dest).unwrap();
 }

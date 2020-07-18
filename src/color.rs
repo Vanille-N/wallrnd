@@ -1,4 +1,5 @@
 use rand::{rngs::ThreadRng, Rng};
+use std::fmt;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color(pub i32, pub i32, pub i32);
@@ -39,9 +40,9 @@ impl Color {
 }
 
 /// SVG color format: `rgb(<r>,<g>,<b>)`
-impl ToString for Color {
-    fn to_string(&self) -> String {
+impl fmt::Display for Color {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let c = self.validate();
-        format!("rgb({},{},{})", c.0, c.1, c.2)
+        write!(f, "rgb({},{},{})", c.0, c.1, c.2)
     }
 }

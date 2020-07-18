@@ -3,7 +3,7 @@ use crate::shape::*;
 use delaunator as del;
 use rand::rngs::ThreadRng;
 use std::collections::HashSet;
-use svg::node::element::{path::Data, Path};
+use crate::svg::*;
 
 macro_rules! set {
     { $( $elem:expr ),* } => {
@@ -160,14 +160,11 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path
         .map(|(a, b, c)| {
             (
                 (a + b + c) * 0.33,
-                Path::new().set("stroke-width", 1).set(
-                    "d",
-                    Data::new()
-                        .move_to(a.into_tuple())
-                        .line_to(b.into_tuple())
-                        .line_to(c.into_tuple())
-                        .close(),
-                ),
+                Path::new(
+                    Data::new(a)
+                        .with_line_to(b)
+                        .with_line_to(c)
+                )
             )
         })
         .collect::<Vec<_>>()
