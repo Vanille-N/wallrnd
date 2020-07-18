@@ -1,5 +1,6 @@
 use crate::prelude::*;
 use std::fmt;
+use std::io::Write;
 
 pub struct Path {
     stroke_width: f64,
@@ -68,9 +69,9 @@ impl Document {
         self.items.push(path);
     }
 
-    pub fn save(&self, dest: String) -> Result<(), ()> {
-        println!("{}", &self);
-        Ok(())
+    pub fn save(&self, dest: String) -> std::io::Result<()> {
+        let mut buffer = std::fs::File::create(dest)?;
+        buffer.write_all(&format!("{}", &self).into_bytes())
     }
 }
 
