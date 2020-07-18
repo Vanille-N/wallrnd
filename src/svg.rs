@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use std::fmt;
 
 pub struct Path {
     stroke_width: f64,
@@ -73,3 +74,33 @@ impl Document {
     }
 }
 
+impl fmt::Display for Path {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "<path d=\"{}\" fill=\"{}\" stroke=\"{}\" stroke-width=\"{}\" />", self.data, self.fill_color, self.stroke_color, self.stroke_width)
+    }
+}
+
+impl fmt::Display for Data {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if !self.0.is_empty() {
+            let Pos(x, y) = self.0[0];
+            write!(f, "M{},{} ", x, y)?;
+        }
+        for Pos(x, y) in self.0.iter().skip(1) {
+            write!(f, "L{},{} ", x, y)?;
+        }
+        write!(f, "z")
+    }
+}
+
+impl fmt::Display for Document {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let (x1, y1, x2, y2) = self.frame.into_tuple();
+        let src = String::from("http://www.w3.org/2000/svg");
+        writeln!(f, "<svg viewBox=\"{} {} {} {}\" xmlns=\"{}\">", x1, y1, x2, y2, src)?;
+        for p in self.items.iter() {
+            writeln!(f, "{}", p)?;
+        }
+        write!(f, "</svg>")
+    }
+}
