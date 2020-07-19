@@ -36,7 +36,6 @@ fn main() {
     let stroke_width = cfg.line_width;
     let stroke_like_fill = stroke_width < 0.0001;
 
-
     // Generate document
     let mut document = Document::new(cfg.frame);
     for (pos, elem) in cfg.make_tiling(&mut rng) {
@@ -70,9 +69,32 @@ fn read_command_line_arguments() -> Args {
             Some("--help") => args.help = true,
             Some("--log") => args.log = true,
             Some("--verbose") => args.verbose = true,
-            Some("--time") => args.time = Some(it.next().unwrap_or_else(|| panic!("Option --time should be followed by a timestamp.")).parse().unwrap_or_else(|e| panic!("Failed to parse time: {}", e))),
-            Some("--image") => args.image = it.next().unwrap_or_else(|| panic!("Option --image should be followed by a destination file")).to_string(),
-            Some("--config") => args.config = it.next().unwrap_or_else(|| panic!("Option --config should be followed by a source file")).to_string(),
+            Some("--time") => {
+                args.time = Some(
+                    it.next()
+                        .unwrap_or_else(|| {
+                            panic!("Option --time should be followed by a timestamp.")
+                        })
+                        .parse()
+                        .unwrap_or_else(|e| panic!("Failed to parse time: {}", e)),
+                )
+            }
+            Some("--image") => {
+                args.image = it
+                    .next()
+                    .unwrap_or_else(|| {
+                        panic!("Option --image should be followed by a destination file")
+                    })
+                    .to_string()
+            }
+            Some("--config") => {
+                args.config = it
+                    .next()
+                    .unwrap_or_else(|| {
+                        panic!("Option --config should be followed by a source file")
+                    })
+                    .to_string()
+            }
             Some(o) => panic!("Unknown option {}", o),
         }
     }

@@ -1,9 +1,9 @@
 use crate::prelude::*;
 use crate::shape::*;
+use crate::svg::*;
 use delaunator as del;
 use rand::rngs::ThreadRng;
 use std::collections::HashSet;
-use crate::svg::*;
 
 macro_rules! set {
     { $( $elem:expr ),* } => {
@@ -160,11 +160,7 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path
         .map(|(a, b, c)| {
             (
                 (a + b + c) * 0.33,
-                Path::new(
-                    Data::new(a)
-                        .with_line_to(b)
-                        .with_line_to(c)
-                )
+                Path::new(Data::new(a).with_line_to(b).with_line_to(c)),
             )
         })
         .collect::<Vec<_>>()

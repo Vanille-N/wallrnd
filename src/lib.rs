@@ -7,8 +7,8 @@ pub mod paint;
 pub mod pos;
 pub mod scene;
 pub mod shape;
-pub mod tesselate;
 pub mod svg;
+pub mod tesselate;
 
 pub mod prelude {
     use super::*;

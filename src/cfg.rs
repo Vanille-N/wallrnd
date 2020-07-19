@@ -1,9 +1,9 @@
 use crate::paint::*;
 use crate::prelude::*;
 use crate::scene::*;
+use crate::svg::*;
 use crate::tesselate::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
-use crate::svg::*;
 
 /// General information on a scene
 pub struct SceneCfg {

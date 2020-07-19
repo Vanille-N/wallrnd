@@ -396,7 +396,11 @@ impl MetaConfig {
             },
             tiling,
             line_width,
-            line_color: color_from_value(&Value::String(line_color_override.to_string()), &colors).unwrap_or_else(|_| color_from_value(&Value::String(line_color_default.to_string()), &colors).unwrap_or(Color(0, 0, 0))),
+            line_color: color_from_value(&Value::String(line_color_override.to_string()), &colors)
+                .unwrap_or_else(|_| {
+                    color_from_value(&Value::String(line_color_default.to_string()), &colors)
+                        .unwrap_or(Color(0, 0, 0))
+                }),
             pattern,
             nb_pattern,
             var_stripes,
@@ -414,7 +418,7 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
             if let Some(color) = dict.get(s.as_str()) {
                 return Ok(*color);
             }
-            if s.len() == 7 && &s[0..1] == "#"  {
+            if s.len() == 7 && &s[0..1] == "#" {
                 let r = i32::from_str_radix(&s[1..3], 16);
                 let g = i32::from_str_radix(&s[3..5], 16);
                 let b = i32::from_str_radix(&s[5..7], 16);
@@ -643,7 +647,11 @@ fn choose_theme_shapes(
                             .map(String::from)
                             .unwrap_or_else(|| String::from("")),
                     };
-                    let line_color = chosen_entry.line_color.as_ref().map(|s| s.to_string()).unwrap_or_else(|| String::from(""));
+                    let line_color = chosen_entry
+                        .line_color
+                        .as_ref()
+                        .map(|s| s.to_string())
+                        .unwrap_or_else(|| String::from(""));
                     (chosen_theme, chosen_shapes, line_color)
                 }
             }
@@ -665,10 +673,14 @@ impl ConfigLines {
             match c {
                 Some(c) => color_from_value(&Value::String(c.to_string()), colors).ok(),
                 None => None,
-            }.unwrap_or_else(|| match &self.color {
-                Some(color) => color_from_value(&Value::String(color.to_string()), colors).ok(),
-                None => None,
-            }.unwrap_or(LINE_COLOR))
+            }
+            .unwrap_or_else(|| {
+                match &self.color {
+                    Some(color) => color_from_value(&Value::String(color.to_string()), colors).ok(),
+                    None => None,
+                }
+                .unwrap_or(LINE_COLOR)
+            }),
         )
     }
 }
