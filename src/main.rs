@@ -58,3 +58,20 @@ struct Args {
     image: String,
     config: String,
 }
+
+fn read_command_line_arguments() -> Args {
+    let mut args = Args::default();
+    let mut it = env::args().collect::<Vec<_>>().into_iter().skip(1);
+    loop {
+        match it.next().as_deref() {
+            None => return args,
+            Some("--help") => args.help = true,
+            Some("--log") => args.log = true,
+            Some("--verbose") => args.verbose = true,
+            Some("--time") => args.time = Some(it.next().unwrap_or_else(|| panic!("Option --time should be followed by a timestamp.")).parse().unwrap_or_else(|e| panic!("Failed to parse time: {}", e))),
+            Some("--image") => args.image = it.next().unwrap_or_else(|| panic!("Option --image should be followed by a destination file")).to_string(),
+            Some("--config") => args.config = it.next().unwrap_or_else(|| panic!("Option --config should be followed by a source file")).to_string(),
+            Some(o) => panic!("Unknown option {}", o),
+        }
+    }
+}
