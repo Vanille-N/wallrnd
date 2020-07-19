@@ -7,24 +7,7 @@ use wallrnd::scene::Scene;
 use wallrnd::svg::*;
 
 fn main() {
-    let args = env::args().collect::<Vec<_>>();
-    if let Some("-help") = args.get(1).map(String::as_str) {
-        println!("usage: wallrnd path/to/image.svg path/to/configuration.toml");
-        std::process::exit(0);
-    }
-
-    // Read command line arguments other than -help
-    let dest = if args.len() > 1 {
-        args[1].clone()
-    } else {
-        println!("No destination specified, saving to /tmp/wallpaper-random.svg");
-        String::from("/tmp/wallpaper-random.svg")
-    };
-    let fname = if args.len() > 2 {
-        args[2].clone()
-    } else {
-        String::from("")
-    };
+    let args = read_command_line_arguments();
 
     // Get local time and convert to app-specific format: HHMM
     let time = {
