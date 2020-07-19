@@ -10,12 +10,14 @@ fn main() {
     let args = read_command_line_arguments();
 
     // Get local time and convert to app-specific format: HHMM
-    let time = {
+    let time = args.time.unwrap_or_else(|| {
         let now = Local::now();
         let h = now.hour();
         let m = now.minute();
         (h * 100 + m) as usize
-    };
+    });
+    let dest = args.image;
+    let fname = args.config;
 
     let mut rng = rand::thread_rng();
     let cfg_file = File::open(fname);
