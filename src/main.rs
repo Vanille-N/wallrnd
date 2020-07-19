@@ -48,3 +48,13 @@ fn main() {
 
     document.save(dest).unwrap();
 }
+
+#[derive(Default)]
+struct Args {
+    help: bool,
+    log: bool,
+    verbose: bool,
+    time: Option<usize>,
+    image: String,
+    config: String,
+}
