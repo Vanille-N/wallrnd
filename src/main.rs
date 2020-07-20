@@ -41,7 +41,7 @@ fn main() {
     } else if verbose {
         println!("Settings file not found");
     }
-    let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng, time);
+    let cfg = MetaConfig::from_string(cfg_contents, verbose).pick_cfg(&mut rng, time, verbose);
 
     let scene = Scene::new(&cfg, &mut rng);
     let stroke = cfg.line_color;

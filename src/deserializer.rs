@@ -114,22 +114,26 @@ pub struct ConfigEntry {
 impl MetaConfig {
     /// Parse from TOML.
     /// Heavy lifting done by external crates
-    pub fn from_string(src: String) -> Self {
+    pub fn from_string(src: String, verbose: bool) -> Self {
         toml::from_str(src.as_str()).unwrap_or_else(|e| {
-            println!("No valid config file found, picking default settings");
-            println!("Message: {}", e);
+            if verbose {
+                println!("No valid config file found, picking default settings");
+                println!("Message: {}", e);
+            }
             MetaConfig::default()
         })
     }
 
     /// Choose options at random according to configuration
-    pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize) -> SceneCfg {
+    pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize, verbose: bool) -> SceneCfg {
         // Read default/overriden global options
         let (deviation, weight, size, width, height) = {
             let (deviation, weight, size, width, height);
             match self.global {
                 None => {
-                    println!("Default global");
+                    if verbose {
+                        println!("Default global");
+                    }
                     deviation = DEVIATION;
                     weight = WEIGHT;
                     size = SIZE;
