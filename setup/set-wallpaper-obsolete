@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+# Set the output image of `wallrnd` as wallpaper
+# Tested on Ubuntu 20.04 (Focal Fossa)
+
+# Disable when running on battery
+ac_adapter=$(acpi -a | cut -d' ' -f3 | cut -d- -f1)
+
+if [ "$ac_adapter" = "off" ]; then
+    exit 100
+fi
+
+# Setup environment to allow the cronjob to change wallpaper
+user=$(whoami)
+
+fl=$(find /proc -maxdepth 2 -user $user -name environ -print -quit)
+while [ -z $(grep -z DBUS_SESSION_BUS_ADDRESS "$fl" | cut -d= -f2- | tr -d '\000' ) ]
+do
+  fl=$(find /proc -maxdepth 2 -user $user -name environ -newer "$fl" -print -quit)
+done
+
+export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS "$fl" | cut -d= -f2-)
+
+# Generate image
+DIR="/path/to/executable"
+IMG="/tmp/wallpaper-random.svg"
+nice -n 20 -- $DIR/wallrnd $IMG $DIR/wallrnd.toml
+
+# Set as wallpaper
+nice -n 20 -- dconf write "/org/gnome/desktop/background/picture-uri" "'file://${IMG}'"
