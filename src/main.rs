@@ -52,7 +52,7 @@ fn main() {
         );
     }
 
-    document.save(dest).unwrap_or_else(|e| println!("No valid destination specified"));
+    document.save(dest).unwrap_or_else(|_| println!("No valid destination specified"));
 }
 
 #[derive(Default)]
