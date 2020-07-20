@@ -136,5 +136,10 @@ OPTIONS
 
     --config C
         Location of the configuration file. If absent or invalid, default parameters are used.
+
+EXAMPLES
+    wallrnd --image /tmp/random-wallpaper.svg --config ~/.config/wallrnd.toml
+
+    wallrnd --verbose --log --time 1000 --image ./test.svg
 ");
 }
