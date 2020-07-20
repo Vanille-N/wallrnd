@@ -13,6 +13,7 @@ fn main() {
         print_help();
         std::process::exit(0);
     }
+    let verbose = args.verbose;
 
     // Get local time and convert to app-specific format: HHMM
     let time = args.time.unwrap_or_else(|| {
@@ -20,12 +21,11 @@ fn main() {
         let h = now.hour();
         let m = now.minute();
         let current = (h * 100 + m) as usize;
-        if args.verbose {
+        if verbose {
             println!("Using current time: {}", current);
         }
         current
     });
-    let verbose = args.verbose;
     let dest = args.image;
     let fname = args.config;
 
