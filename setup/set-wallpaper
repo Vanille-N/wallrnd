@@ -24,7 +24,7 @@ export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS "$fl" | cut -
 # Generate image
 DIR="/path/to/executable"
 IMG="/tmp/wallpaper-random.svg"
-nice -n 20 -- $DIR/wallrnd $IMG $DIR/wallrnd.toml
+nice -n 20 -- $DIR/wallrnd --image $IMG --config $DIR/wallrnd.toml
 
 # Set as wallpaper
 nice -n 20 -- dconf write "/org/gnome/desktop/background/picture-uri" "'file://${IMG}'"
