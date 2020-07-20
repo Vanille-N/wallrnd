@@ -19,8 +19,13 @@ fn main() {
         let now = Local::now();
         let h = now.hour();
         let m = now.minute();
-        (h * 100 + m) as usize
+        let current = (h * 100 + m) as usize;
+        if args.verbose {
+            println!("Using current time: {}", current);
+        }
+        current
     });
+    let verbose = args.verbose;
     let dest = args.image;
     let fname = args.config;
 
@@ -29,9 +34,11 @@ fn main() {
     let mut cfg_contents = String::new();
     if let Ok(mut f) = cfg_file {
         if let Err(e) = f.read_to_string(&mut cfg_contents) {
-            println!("{}; Switching to default settings.", e);
+            if verbose {
+                println!("{}; Switching to default settings.", e);
+            }
         }
-    } else {
+    } else if verbose {
         println!("Settings file not found");
     }
     let cfg = MetaConfig::from_string(cfg_contents).pick_cfg(&mut rng, time);
@@ -52,7 +59,11 @@ fn main() {
         );
     }
 
-    document.save(dest).unwrap_or_else(|_| println!("No valid destination specified"));
+    document.save(dest).unwrap_or_else(|_| {
+        if verbose {
+            println!("No valid destination specified");
+        }
+    });
 }
 
 #[derive(Default)]
