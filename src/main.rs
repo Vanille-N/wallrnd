@@ -104,3 +104,37 @@ fn read_command_line_arguments() -> Args {
         }
     }
 }
+
+fn print_help() {
+    print!("WALLRND
+
+NAME
+    wallrnd
+    github.com/Vanille-N/wallrnd
+
+SYNOPSIS
+    wallrnd [OPTIONS]
+
+DESCRIPTION
+    wallrnd - A highly configurable generator of abstract random wallpapers
+
+OPTIONS
+    --help
+        Print this help and exit
+
+    --log
+        Save generation information for image replication
+
+    --verbose
+        Display information (useful for checking the validity of the configuration file)
+
+    --time T
+        Generate image as if the current time was T (format HHMM). If ommited, current time is used.
+
+    --image I
+        Destination of the generated file. If absent or invalid, program aborts.
+
+    --config C
+        Location of the configuration file. If absent or invalid, default parameters are used.
+");
+}
