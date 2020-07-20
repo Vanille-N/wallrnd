@@ -143,31 +143,41 @@ impl MetaConfig {
                 Some(g) => {
                     match g.deviation {
                         None => {
-                            println!("Default global.deviation");
+                            if verbose {
+                                println!("Default global.deviation");
+                            }
                             deviation = DEVIATION;
                         }
                         Some(d) => {
                             deviation = d.try_into().unwrap_or_else(|_| {
-                                println!("Unreadable global.deviation");
+                                if verbose {
+                                    println!("Unreadable global.deviation");
+                                }
                                 DEVIATION
                             })
                         }
                     }
                     match g.weight {
                         None => {
-                            println!("Default global.weight");
+                            if verbose {
+                                println!("Default global.weight");
+                            }
                             weight = WEIGHT;
                         }
                         Some(w) => {
                             weight = w.try_into().unwrap_or_else(|_| {
-                                println!("Unreadable global.weight");
+                                if verbose {
+                                    println!("Unreadable global.weight");
+                                }
                                 WEIGHT
                             })
                         }
                     }
                     match g.size {
                         None => {
-                            println!("Default global.size");
+                            if verbose {
+                                println!("Default global.size");
+                            }
                             size = SIZE;
                         }
                         Some(s) => {
@@ -176,7 +186,9 @@ impl MetaConfig {
                     }
                     match g.width {
                         None => {
-                            println!("Default global.width");
+                            if verbose {
+                                println!("Default global.width");
+                            }
                             width = WIDTH;
                         }
                         Some(w) => {
@@ -185,7 +197,9 @@ impl MetaConfig {
                     }
                     match g.height {
                         None => {
-                            println!("Default global.height");
+                            if verbose {
+                                println!("Default global.height");
+                            }
                             height = HEIGHT;
                         }
                         Some(s) => {
@@ -206,7 +220,11 @@ impl MetaConfig {
                         Ok(c) => {
                             colors.insert(name.clone(), c);
                         }
-                        Err(s) => println!("{}", s),
+                        Err(s) => {
+                            if verbose {
+                                println!("{}", s);
+                            }
+                        }
                     }
                 }
             }
@@ -222,7 +240,11 @@ impl MetaConfig {
                         Ok(th) => {
                             themes.insert(name.clone(), th);
                         }
-                        Err(s) => println!("{}", s),
+                        Err(s) => {
+                            if verbose {
+                                println!("{}", s);
+                            }
+                        }
                     }
                 }
             }
