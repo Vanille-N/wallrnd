@@ -387,7 +387,7 @@ impl MetaConfig {
             },
             tiling,
             line_width,
-            line_color: color_from_value(&Value::String(line_color_override.to_string()), &colors)
+            line_color: color_from_value(&Value::String(line_color_override), &colors)
                 .unwrap_or_else(|_| {
                     color_from_value(&Value::String(line_color_default.to_string()), &colors)
                         .unwrap_or(Color(0, 0, 0))
@@ -602,7 +602,7 @@ fn choose_theme_shapes(
                     .span
                     .as_ref()
                     .unwrap_or(&"-".to_string())
-                    .split("-")
+                    .split('-')
                     .map(String::from)
                     .collect::<Vec<_>>();
                 let start = markers
