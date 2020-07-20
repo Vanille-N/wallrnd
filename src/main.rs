@@ -9,6 +9,11 @@ use wallrnd::svg::*;
 fn main() {
     let args = read_command_line_arguments();
 
+    if args.help {
+        print_help();
+        std::process::exit(0);
+    }
+
     // Get local time and convert to app-specific format: HHMM
     let time = args.time.unwrap_or_else(|| {
         let now = Local::now();
@@ -47,7 +52,7 @@ fn main() {
         );
     }
 
-    document.save(dest).unwrap();
+    document.save(dest).unwrap_or_else(|e| println!("No valid destination specified"));
 }
 
 #[derive(Default)]
