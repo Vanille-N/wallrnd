@@ -37,6 +37,13 @@ Portability of this script is outside of the scope of this project (the image ge
 
 ---
 
+```diff
+- Warning: Breaking change
+- Since the addition of command line options, your launch script may be broken for the latest version
+- You can either download a version of wallrnd earlier than Jul 15, 2020, or see the new format
+- in setup/set-wallpaper (previous script moved to setup/set-wallpaper-obsolete)
+```
+
 ### Recommended setup (executable `wallrnd`)
 
 * `cargo build --release` (1.44 stable) to create the `wallrnd` executable
