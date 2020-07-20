@@ -167,10 +167,7 @@ impl MetaConfig {
                             size = SIZE;
                         }
                         Some(s) => {
-                            size = s.try_into().unwrap_or_else(|_| {
-                                println!("Unreadable global.size");
-                                SIZE
-                            })
+                            size = s;
                         }
                     }
                     match g.width {
@@ -179,10 +176,7 @@ impl MetaConfig {
                             width = WIDTH;
                         }
                         Some(w) => {
-                            width = w.try_into().unwrap_or_else(|_| {
-                                println!("Unreadable global.width");
-                                WIDTH
-                            })
+                            width = w;
                         }
                     }
                     match g.height {
@@ -191,10 +185,7 @@ impl MetaConfig {
                             height = HEIGHT;
                         }
                         Some(s) => {
-                            height = s.try_into().unwrap_or_else(|_| {
-                                println!("Unreadable global.height");
-                                HEIGHT
-                            })
+                            height = s;
                         }
                     }
                 }
