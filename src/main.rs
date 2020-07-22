@@ -178,6 +178,7 @@ fn make_config_file(fname: &str) {
         println!("Error creating configuration: {}", e);
         std::process::exit(2);
     });
+    let sample_cfg = include_str!("../setup/wallrnd.toml");
     buffer.write_all(&sample_cfg.to_string().into_bytes()).unwrap_or_else(|e| {
         println!("Error writing configuration: {}", e);
         std::process::exit(3);
