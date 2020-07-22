@@ -483,7 +483,6 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
 fn theme_item_from_value(
     val: &Value,
     dict: &HashMap<String, Color>,
-) -> Result<(Color, usize), String> {
     match val {
         Value::String(_) => {
             match color_from_value(&val, dict) {
@@ -501,20 +500,41 @@ fn theme_item_from_value(
                         }
                     },
                     _ => Err(format!("{} is not a valid theme item.
+) -> (Color, usize, isize) {
 Provide one of:
     - a named color (\"blue\")
     - a hex code (\"#0000FF\")
     - an rgb tuple ([0, 0, 255])
     - or any of the above along with an integer ponderation ([<COLOR>, 100])", &val)),
+    match val {
+        Value::String(s) => {
+            let mut c = Color(0, 0, 0);
+            let mut w = 1;
+            let mut var = -1;
+            for item in s.split(' ') {
+                if item.is_empty() {
+                    continue;
                 }
-            } else {
-                match color_from_value(&val, dict) {
-                    Ok(c) => Ok((c, 1)),
-                    Err(e) => Err(format!("{} or provide a named color.", e)),
+                if &item[0..1] == "x" {
+                    w = item[1..].parse().unwrap_or_else(|_| {
+                        println!("Not a valid weight: {}", &item[1..]);
+                        1
+                    });
+                } else if &item[0..1] == "~" {
+                    var = item[1..].parse::<usize>().map(|x| x as isize).unwrap_or_else(|_| {
+                        println!("Not a valid variability: {}", &item[1..]);
+                        -1
+                    });
+                } else {
+                    match color_from_value(&Value::String(item.to_string()), dict) {
+                        Ok(color) => c = color,
+                        Err(e) => {warn_invalid(e);},
+                    }
                 }
             }
-        }
-        _ => Err(format!("{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\" or provide a named color", val)),
+            (c, w, var)
+        },
+        val => {warn_invalid(val.to_string()); (Color(0, 0, 0), 1, -1)},
     }
 }
 
