@@ -49,7 +49,7 @@ impl SceneCfg {
         let (c, v) = self.theme.choose(rng).unwrap_or((Color(0, 0, 0), -1));
         ColorItem {
             shade: Color::random(rng),
-            deviation: if v < 0 { self.deviation} else { v as i32 },
+            deviation: if v < 0 { self.deviation } else { v as i32 },
             weight: self.weight,
             theme: c,
         }

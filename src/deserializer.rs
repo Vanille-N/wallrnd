@@ -356,7 +356,7 @@ impl MetaConfig {
                             *colors
                                 .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
                                 .unwrap(),
-                            -1
+                            -1,
                         ),
                         1,
                     )]),
@@ -480,19 +480,19 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
     }
 }
 
-fn theme_item_from_value(
-    val: &Value,
-    dict: &HashMap<String, Color>,
-) -> (Color, usize, isize) {
+fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>) -> (Color, usize, isize) {
     let warn_invalid = |x| {
-        println!("Invalid item ({:?})
+        println!(
+            "Invalid item ({:?})
 Provide one of:
 - a named color (\"blue\")
 - a hex code (\"#0000FF\")
 - any of the above along with an integer ponderation (\"<COLOR> xWEIGHT\")
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
-Note that the format [<R>, <G>, <B>] is not accepted here", x);
-};
+Note that the format [<R>, <G>, <B>] is not accepted here",
+            x
+        );
+    };
     match val {
         Value::String(s) => {
             let mut c = Color(0, 0, 0);
@@ -508,20 +508,28 @@ Note that the format [<R>, <G>, <B>] is not accepted here", x);
                         1
                     });
                 } else if &item[0..1] == "~" {
-                    var = item[1..].parse::<usize>().map(|x| x as isize).unwrap_or_else(|_| {
-                        println!("Not a valid variability: {}", &item[1..]);
-                        -1
-                    });
+                    var = item[1..]
+                        .parse::<usize>()
+                        .map(|x| x as isize)
+                        .unwrap_or_else(|_| {
+                            println!("Not a valid variability: {}", &item[1..]);
+                            -1
+                        });
                 } else {
                     match color_from_value(&Value::String(item.to_string()), dict) {
                         Ok(color) => c = color,
-                        Err(e) => {warn_invalid(e);},
+                        Err(e) => {
+                            warn_invalid(e);
+                        }
                     }
                 }
             }
             (c, w, var)
-        },
-        val => {warn_invalid(val.to_string()); (Color(0, 0, 0), 1, -1)},
+        }
+        val => {
+            warn_invalid(val.to_string());
+            (Color(0, 0, 0), 1, -1)
+        }
     }
 }
 
@@ -546,7 +554,7 @@ fn theme_from_value(
                         continue;
                     }
                 }
-                let (color, weight, var) =  theme_item_from_value(x, colors);
+                let (color, weight, var) = theme_item_from_value(x, colors);
                 items.push(((color, var), weight));
             }
             Ok(Chooser::new(items))

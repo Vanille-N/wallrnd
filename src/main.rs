@@ -95,9 +95,7 @@ fn read_command_line_arguments() -> Args {
             Some("--init") => {
                 args.init = it
                     .next()
-                    .unwrap_or_else(|| {
-                        panic!("Option --init should be followed by a source file")
-                    })
+                    .unwrap_or_else(|| panic!("Option --init should be followed by a source file"))
                     .to_string()
             }
             Some("--time") => {
@@ -141,8 +139,10 @@ fn make_config_file(fname: &str) {
         std::process::exit(2);
     });
     let sample_cfg = include_str!("../setup/wallrnd.toml");
-    buffer.write_all(&sample_cfg.to_string().into_bytes()).unwrap_or_else(|e| {
-        println!("Error writing configuration: {}", e);
-        std::process::exit(3);
-    });
+    buffer
+        .write_all(&sample_cfg.to_string().into_bytes())
+        .unwrap_or_else(|e| {
+            println!("Error writing configuration: {}", e);
+            std::process::exit(3);
+        });
 }
