@@ -48,6 +48,17 @@ Portability of this script is outside of the scope of this project (the image ge
 + wallrnd --image /path/to/image.svg --config /path/to/config.toml
 ```
 
+```diff
+! Warning: Breaking change
+! Format for themes weight has changed to be more versatile
+! Old format:
+-     theme = [["<C1>", <W1>], ["<C2>", <W2>], ...]
+! New format:
++     theme = ["<C1> x<W1>", "<C2> x<W2>", ...]
+! To update your configuration file, run
+@     perl -pi -e 's/\[\"([a-zA-Z0-9_]*)\", *([0-9]+)\]/\"$1 x$2\"/g' setup/wallrnd.toml
+```
+
 ### Recommended setup (executable `wallrnd`)
 
 * `cargo build --release` (1.44 stable) to create the `wallrnd` executable
