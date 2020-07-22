@@ -166,10 +166,8 @@ ivory = "#FFFFF0"
 white = "#FFFFFF"
 
 [themes]
-# A theme is either:
-# - A single color (previously named or newly defined); e.g. theme1 = "white"
-# - A list of weighted colors (named or not); e.g. theme2 = ["white x20", "black x10"]
-# You may include a previously created theme inside another; e.g. theme3 = ["theme2", "grey x20"]
+# A theme is a list of weighted colors (named or not); e.g. theme1 = ["white x20 ~10", "black x10"]
+# You may include a previously created theme inside another; e.g. theme2 = ["theme2", "grey x20"]
 rust = ["coral x50", "orange x40", "springgreen x10"]
 ocean = ["navy x60", "indigo x30", "mediumaquamarine x30"]
 sky = ["aqua x50", "gold x30", "skyblue x50"]
