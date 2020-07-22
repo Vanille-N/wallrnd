@@ -7,7 +7,7 @@ use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
 
 /// General information on a scene
 pub struct SceneCfg {
-    pub theme: Chooser<Color>,
+    pub theme: Chooser<(Color, isize)>,
     pub weight: i32,
     pub deviation: i32,
     pub frame: Frame,
@@ -46,11 +46,12 @@ impl SceneCfg {
     /// Select a random color for a scene item.
     /// The actual color will depend on the Chooser<Color> with which it is mixed.
     pub fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
+        let (c, v) = self.theme.choose(rng).unwrap_or((Color(0, 0, 0), -1));
         ColorItem {
             shade: Color::random(rng),
-            deviation: self.deviation,
+            deviation: if v < 0 { self.deviation} else { v as i32 },
             weight: self.weight,
-            theme: self.theme.choose(rng).unwrap_or(Color(0, 0, 0)),
+            theme: c,
         }
     }
 
