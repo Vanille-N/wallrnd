@@ -346,15 +346,18 @@ impl MetaConfig {
             if colors.is_empty() {
                 themes.insert(
                     String::from("-default-"),
-                    Chooser::new(vec![(Color::random(rng), 1)]),
+                    Chooser::new(vec![((Color::random(rng), -1), 1)]),
                 );
             } else {
                 themes.insert(
                     String::from("-default-"),
                     Chooser::new(vec![(
-                        *colors
-                            .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
-                            .unwrap(),
+                        (
+                            *colors
+                                .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
+                                .unwrap(),
+                            -1
+                        ),
                         1,
                     )]),
                 );
