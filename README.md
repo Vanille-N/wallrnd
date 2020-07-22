@@ -38,10 +38,14 @@ Portability of this script is outside of the scope of this project (the image ge
 ---
 
 ```diff
-- Warning: Breaking change
-- Since the addition of command line options, your launch script may be broken for the latest version
-- You can either download a version of wallrnd earlier than Jul 15, 2020, or see the new format
-- in setup/set-wallpaper (previous script moved to setup/set-wallpaper-obsolete)
+~ Warning: Breaking change
+~ Since the addition of command line options, your launch script may be broken for the latest version
+~ You can either download a version of wallrnd earlier than Jul 15, 2020, or see the new format
+~ in setup/set-wallpaper (previous script moved to setup/set-wallpaper-obsolete)
+~ To update your script, all you need is to replace
+- wallrnd /path/to/image.svg /path/to/config.toml
+~ with
++ wallrnd --image /path/to/image --config /path/to/config.toml
 ```
 
 ### Recommended setup (executable `wallrnd`)
