@@ -61,7 +61,7 @@ Clone the repository and `cd` inside.
 
 Use `cargo build --release` (1.44 stable) to create the `wallrnd` executable
 
-Run `wallrnd path/to/image.svg path/to/configuration.toml` to create a new wallpaper.
+Run `wallrnd --image path/to/image.svg --config path/to/configuration.toml` to create a new wallpaper.
 
 A configuration file is provided under `/setup/wallrnd.toml`.
 
