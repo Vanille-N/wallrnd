@@ -15,9 +15,11 @@ impl Color {
 
     /// Random noise
     pub fn variate(mut self, rng: &mut ThreadRng, amount: i32) -> Self {
-        self.0 += rng.gen_range(-amount, amount);
-        self.1 += rng.gen_range(-amount, amount);
-        self.2 += rng.gen_range(-amount, amount);
+        if amount > 0 {
+            self.0 += rng.gen_range(-amount, amount);
+            self.1 += rng.gen_range(-amount, amount);
+            self.2 += rng.gen_range(-amount, amount);
+        }
         self
     }
 
