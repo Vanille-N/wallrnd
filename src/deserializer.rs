@@ -522,11 +522,8 @@ Provide one of:
 fn theme_from_value(
     v: &Value,
     colors: &HashMap<String, Color>,
-    themes: &HashMap<String, Chooser<Color>>,
-) -> Result<Chooser<Color>, String> {
-    if let Ok(i) = theme_item_from_value(v, colors) {
-        return Ok(Chooser::new(vec![i]));
-    }
+    themes: &HashMap<String, Chooser<(Color, isize)>>,
+) -> Result<Chooser<(Color, isize)>, String> {
     let mut items = Vec::new();
     if let Value::String(s) = v {
         if let Some(th) = themes.get(s) {
@@ -542,10 +539,8 @@ fn theme_from_value(
                         continue;
                     }
                 }
-                match theme_item_from_value(x, colors) {
-                    Ok(i) => items.push(i),
-                    Err(e) => println!("{}", e),
-                }
+                let (color, weight, var) =  theme_item_from_value(x, colors);
+                items.push(((color, var), weight));
             }
             Ok(Chooser::new(items))
         }
