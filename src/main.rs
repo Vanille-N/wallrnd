@@ -172,3 +172,14 @@ EXAMPLES
     wallrnd --verbose --log --time 1000 --image ./test.svg
 ");
 }
+
+fn make_config_file(fname: &str) {
+    let mut buffer = std::fs::File::create(fname).unwrap_or_else(|e| {
+        println!("Error creating configuration: {}", e);
+        std::process::exit(2);
+    });
+    buffer.write_all(&sample_cfg.to_string().into_bytes()).unwrap_or_else(|e| {
+        println!("Error writing configuration: {}", e);
+        std::process::exit(3);
+    });
+}
