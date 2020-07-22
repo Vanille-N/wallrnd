@@ -483,29 +483,16 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
 fn theme_item_from_value(
     val: &Value,
     dict: &HashMap<String, Color>,
-    match val {
-        Value::String(_) => {
-            match color_from_value(&val, dict) {
-                Ok(c) => Ok((c, 1)),
-                Err(e) => Err(format!("{} or provide a named color.", e)),
-            }
-        },
-        Value::Array(arr) => {
-            if arr.len() == 2 {
-                match &arr[0..2] {
-                    [x, Value::Integer(w)] if *w >= 0 => {
-                        match color_from_value(x, dict) {
-                            Ok(c) => Ok((c, *w as usize)),
-                            Err(e) => Err(format!("{} or provide a named color.", e)),
-                        }
-                    },
-                    _ => Err(format!("{} is not a valid theme item.
 ) -> (Color, usize, isize) {
+    let warn_invalid = |x| {
+        println!("Invalid item ({:?})
 Provide one of:
-    - a named color (\"blue\")
-    - a hex code (\"#0000FF\")
-    - an rgb tuple ([0, 0, 255])
-    - or any of the above along with an integer ponderation ([<COLOR>, 100])", &val)),
+- a named color (\"blue\")
+- a hex code (\"#0000FF\")
+- any of the above along with an integer ponderation (\"<COLOR> xWEIGHT\")
+- any of the above along with a variability override (\"<COLOR> ~VAR\")
+Note that the format [<R>, <G>, <B>] is not accepted here", x);
+};
     match val {
         Value::String(s) => {
             let mut c = Color(0, 0, 0);
