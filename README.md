@@ -45,7 +45,7 @@ Portability of this script is outside of the scope of this project (the image ge
 ! To update your script, all you need is to replace
 - wallrnd /path/to/image.svg /path/to/config.toml
 ! with
-+ wallrnd --image /path/to/image --config /path/to/config.toml
++ wallrnd --image /path/to/image.svg --config /path/to/config.toml
 ```
 
 ### Recommended setup (executable `wallrnd`)

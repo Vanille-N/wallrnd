@@ -15,6 +15,11 @@ fn main() {
     }
     let verbose = args.verbose;
 
+    if args.init != "" {
+        make_config_file(&args.init[..]);
+        std::process::exit(0);
+    }
+
     // Get local time and convert to app-specific format: HHMM
     let time = args.time.unwrap_or_else(|| {
         let now = Local::now();
@@ -62,6 +67,7 @@ fn main() {
     document.save(dest).unwrap_or_else(|_| {
         if verbose {
             println!("No valid destination specified");
+            std::process::exit(1);
         }
     });
 }
@@ -74,6 +80,7 @@ struct Args {
     time: Option<usize>,
     image: String,
     config: String,
+    init: String,
 }
 
 fn read_command_line_arguments() -> Args {
@@ -85,6 +92,14 @@ fn read_command_line_arguments() -> Args {
             Some("--help") => args.help = true,
             Some("--log") => args.log = true,
             Some("--verbose") => args.verbose = true,
+            Some("--init") => {
+                args.init = it
+                    .next()
+                    .unwrap_or_else(|| {
+                        panic!("Option --init should be followed by a source file")
+                    })
+                    .to_string()
+            }
             Some("--time") => {
                 args.time = Some(
                     it.next()
@@ -147,6 +162,9 @@ OPTIONS
 
     --config C
         Location of the configuration file. If absent or invalid, default parameters are used.
+
+    --init C
+        Create a default configuration in file C and exit.
 
 EXAMPLES
     wallrnd --image /tmp/random-wallpaper.svg --config ~/.config/wallrnd.toml
