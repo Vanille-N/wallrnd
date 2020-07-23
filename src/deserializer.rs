@@ -247,7 +247,7 @@ impl MetaConfig {
             let mut themes = HashMap::new();
             if let Some(ConfigThemes { list }) = self.themes {
                 for name in list.keys() {
-                    match theme_from_value(&list[name], &colors, &themes) {
+                    match theme_from_value(&list[name], &colors, &themes, verbose) {
                         Ok(th) => {
                             if verbose.details {
                                 println!("Added new theme to list: '{}'", &name);
@@ -522,10 +522,11 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
     }
 }
 
-fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>) -> (Color, usize, isize, isize) {
+fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>, verbose: Verbosity) -> (Color, usize, isize, isize) {
     let warn_invalid = |x| {
-        println!(
-            "Invalid item ({:?})
+        if verbose.warn {
+            println!(
+                "Invalid item ({:?})
 Provide one of:
 - a named color (\"blue\")
 - a hex code (\"#0000FF\")
@@ -533,8 +534,9 @@ Provide one of:
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
 - any of the above along with a weight override (\"<COLOR> !WEIGHT\")
 Note that the format [<R>, <G>, <B>] is not accepted here",
-            x
-        );
+                x
+            );
+        }
     };
     match val {
         Value::String(s) => {
@@ -590,6 +592,7 @@ fn theme_from_value(
     v: &Value,
     colors: &HashMap<String, Color>,
     themes: &HashMap<String, Chooser<(Color, isize, isize)>>,
+    verbose: Verbosity,
 ) -> Result<Chooser<(Color, isize, isize)>, String> {
     let mut items = Vec::new();
     if let Value::String(s) = v {
@@ -606,7 +609,7 @@ fn theme_from_value(
                         continue;
                     }
                 }
-                let (color, ponderation, var, weight) = theme_item_from_value(x, colors);
+                let (color, ponderation, var, weight) = theme_item_from_value(x, colors, verbose);
                 items.push(((color, var, weight), ponderation));
             }
             Ok(Chooser::new(items))
