@@ -208,6 +208,14 @@ impl MetaConfig {
                     }
                 }
             }
+            if verbose.details {
+                println!("Global settings:
+    Deviation   (color)    {}
+    Weight      (color)    {}
+    Size        (tiles)    {}
+    Width       (image)    {}
+    Height      (image)    {}", deviation, weight, size, width, height);
+            }
             (deviation, weight, size, width, height)
         };
 
@@ -218,6 +226,9 @@ impl MetaConfig {
                 for name in list.keys() {
                     match color_from_value(&list[name], &colors) {
                         Ok(c) => {
+                            if verbose.details {
+                                println!("Added new color to list: '{} = {}'", &name, &c);
+                            }
                             colors.insert(name.clone(), c);
                         }
                         Err(s) => {
@@ -238,6 +249,9 @@ impl MetaConfig {
                 for name in list.keys() {
                     match theme_from_value(&list[name], &colors, &themes) {
                         Ok(th) => {
+                            if verbose.details {
+                                println!("Added new theme to list: '{}'", &name);
+                            }
                             themes.insert(name.clone(), th);
                         }
                         Err(s) => {
@@ -256,6 +270,9 @@ impl MetaConfig {
             let mut shapes = HashMap::new();
             if let Some(ConfigShapes { list }) = self.shapes {
                 for name in list.keys() {
+                    if verbose.details {
+                        println!("Added new shapes to list: '{}'", &name);
+                    }
                     shapes.insert(name.clone(), shapes_from_value(&list[name], &shapes));
                 }
             }
@@ -263,6 +280,9 @@ impl MetaConfig {
         };
 
         let (theme, shape, line_color_override) = choose_theme_shapes(rng, &self.entry, time);
+        if verbose.info {
+            println!("Chosen theme: '{}'", &theme);
+        }
 
         let (tiling, pattern) = match shapes.get(&shape) {
             None => (Tiling::choose(rng), Pattern::choose(rng)),
@@ -271,6 +291,9 @@ impl MetaConfig {
                 t.0.choose(rng).unwrap_or_else(|| Pattern::choose(rng)),
             ),
         };
+        if verbose.info {
+            println!("Pattern '{:?}' and tiling '{:?}' chosen from shapes '{}'", pattern, tiling, shape);
+        }
 
         // Get pattern-specific information according to picked shapes
         let (nb_pattern, var_stripes, width_pattern) = {
@@ -339,11 +362,22 @@ impl MetaConfig {
                     }
                 }
             }
+            if verbose.details {
+                println!("Number of patterns: {}
+Variability of stripes orientation: {}
+Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
+            }
             (nb_pattern, var_stripes, width_pattern)
         };
 
         if themes.is_empty() {
+            if verbose.warn {
+                println!("No themes available. Populating with random theme");
+            }
             if colors.is_empty() {
+                if verbose.warn {
+                    println!("No colors available. Populating with random color");
+                }
                 themes.insert(
                     String::from("-default-"),
                     Chooser::new(vec![((Color::random(rng), -1), 1)]),
@@ -388,7 +422,10 @@ impl MetaConfig {
                 }
             }
         };
-
+        if verbose.details {
+            println!("Tiling size: {}
+Delaunay triangles count: {}", size_tiling, nb_delaunay);
+}
         let (line_width, line_color_default) = {
             if let Some(lines) = self.lines {
                 lines.get_settings(tiling, &colors)
@@ -396,6 +433,10 @@ impl MetaConfig {
                 (LINE_WIDTH, LINE_COLOR)
             }
         };
+        if verbose.details {
+            println!("Line width: {}
+Line color: {}", line_width, line_color_default);
+}
 
         SceneCfg {
             deviation,
