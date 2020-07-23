@@ -255,7 +255,7 @@ shapes = ["all"]
 
 [[entry]]
 themes = ["rust"]
-span = "1030-1119"
+span = "1030-1159"
 shapes = ["all"]
 
 [[entry]]
