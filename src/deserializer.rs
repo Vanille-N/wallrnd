@@ -556,6 +556,14 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                             println!("Not a valid variability: {}", &item[1..]);
                             -1
                         });
+                } else if &item[0..1] == "!" {
+                    w = item[1..]
+                        .parse::<usize>()
+                        .map(|x| x as isize)
+                        .unwrap_or_else(|_| {
+                            println!("Not a valid weight: {}", &item[1..]);
+                            -1
+                        });
                 } else {
                     match color_from_value(&Value::String(item.to_string()), dict) {
                         Ok(color) => c = color,
