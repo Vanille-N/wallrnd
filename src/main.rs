@@ -5,6 +5,7 @@ use std::io::prelude::*;
 use wallrnd::deserializer::MetaConfig;
 use wallrnd::scene::Scene;
 use wallrnd::svg::*;
+use wallrnd::prelude::*;
 
 fn main() {
     let args = read_command_line_arguments();
@@ -26,7 +27,7 @@ fn main() {
         let h = now.hour();
         let m = now.minute();
         let current = (h * 100 + m) as usize;
-        if verbose {
+        if verbose.info {
             println!("Using current time: {}", current);
         }
         current
@@ -39,11 +40,11 @@ fn main() {
     let mut cfg_contents = String::new();
     if let Ok(mut f) = cfg_file {
         if let Err(e) = f.read_to_string(&mut cfg_contents) {
-            if verbose {
+            if verbose.warn {
                 println!("{}; Switching to default settings.", e);
             }
         }
-    } else if verbose {
+    } else if verbose.warn {
         println!("Settings file not found");
     }
     let cfg = MetaConfig::from_string(cfg_contents, verbose).pick_cfg(&mut rng, time, verbose);
@@ -65,7 +66,7 @@ fn main() {
     }
 
     document.save(dest).unwrap_or_else(|_| {
-        if verbose {
+        if verbose.warn {
             println!("No valid destination specified");
             std::process::exit(1);
         }
@@ -76,7 +77,7 @@ fn main() {
 struct Args {
     help: bool,
     log: bool,
-    verbose: bool,
+    verbose: Verbosity,
     time: Option<usize>,
     image: String,
     config: String,
@@ -91,7 +92,12 @@ fn read_command_line_arguments() -> Args {
             None => return args,
             Some("--help") => args.help = true,
             Some("--log") => args.log = true,
-            Some("--verbose") => args.verbose = true,
+            Some("--verbose") => args.verbose = Verbosity::from(&it.next().unwrap_or_else(|| panic!("Option --verbose should be followed by a verbosity descriptor: '^[PDIWA]*$',
+P: Progress
+D: Details
+I: Info
+W: Warnings
+A: All"))[..]),
             Some("--init") => {
                 args.init = it
                     .next()

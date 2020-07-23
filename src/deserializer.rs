@@ -114,9 +114,9 @@ pub struct ConfigEntry {
 impl MetaConfig {
     /// Parse from TOML.
     /// Heavy lifting done by external crates
-    pub fn from_string(src: String, verbose: bool) -> Self {
+    pub fn from_string(src: String, verbose: Verbosity) -> Self {
         toml::from_str(src.as_str()).unwrap_or_else(|e| {
-            if verbose {
+            if verbose.warn {
                 println!("No valid config file found, picking default settings");
                 println!("Message: {}", e);
             }
@@ -125,13 +125,13 @@ impl MetaConfig {
     }
 
     /// Choose options at random according to configuration
-    pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize, verbose: bool) -> SceneCfg {
+    pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize, verbose: Verbosity) -> SceneCfg {
         // Read default/overriden global options
         let (deviation, weight, size, width, height) = {
             let (deviation, weight, size, width, height);
             match self.global {
                 None => {
-                    if verbose {
+                    if verbose.info {
                         println!("Default global");
                     }
                     deviation = DEVIATION;
@@ -143,14 +143,14 @@ impl MetaConfig {
                 Some(g) => {
                     match g.deviation {
                         None => {
-                            if verbose {
+                            if verbose.info {
                                 println!("Default global.deviation");
                             }
                             deviation = DEVIATION;
                         }
                         Some(d) => {
                             deviation = d.try_into().unwrap_or_else(|_| {
-                                if verbose {
+                                if verbose.warn {
                                     println!("Unreadable global.deviation");
                                 }
                                 DEVIATION
@@ -159,14 +159,14 @@ impl MetaConfig {
                     }
                     match g.weight {
                         None => {
-                            if verbose {
+                            if verbose.info {
                                 println!("Default global.weight");
                             }
                             weight = WEIGHT;
                         }
                         Some(w) => {
                             weight = w.try_into().unwrap_or_else(|_| {
-                                if verbose {
+                                if verbose.warn {
                                     println!("Unreadable global.weight");
                                 }
                                 WEIGHT
@@ -175,7 +175,7 @@ impl MetaConfig {
                     }
                     match g.size {
                         None => {
-                            if verbose {
+                            if verbose.info {
                                 println!("Default global.size");
                             }
                             size = SIZE;
@@ -186,7 +186,7 @@ impl MetaConfig {
                     }
                     match g.width {
                         None => {
-                            if verbose {
+                            if verbose.info {
                                 println!("Default global.width");
                             }
                             width = WIDTH;
@@ -197,7 +197,7 @@ impl MetaConfig {
                     }
                     match g.height {
                         None => {
-                            if verbose {
+                            if verbose.info {
                                 println!("Default global.height");
                             }
                             height = HEIGHT;
@@ -221,7 +221,7 @@ impl MetaConfig {
                             colors.insert(name.clone(), c);
                         }
                         Err(s) => {
-                            if verbose {
+                            if verbose.warn {
                                 println!("{}", s);
                             }
                         }
@@ -241,7 +241,7 @@ impl MetaConfig {
                             themes.insert(name.clone(), th);
                         }
                         Err(s) => {
-                            if verbose {
+                            if verbose.warn {
                                 println!("{}", s);
                             }
                         }
