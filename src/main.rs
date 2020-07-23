@@ -171,7 +171,7 @@ fn make_config_file(fname: &str) {
         println!("Error creating configuration: {}", e);
         std::process::exit(2);
     });
-    let sample_cfg = include_str!("../setup/wallrnd.toml");
+    let sample_cfg = include_str!("../assets/default.toml");
     buffer
         .write_all(&sample_cfg.to_string().into_bytes())
         .unwrap_or_else(|e| {
