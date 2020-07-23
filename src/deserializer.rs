@@ -380,7 +380,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                 }
                 themes.insert(
                     String::from("-default-"),
-                    Chooser::new(vec![((Color::random(rng), -1), 1)]),
+                    Chooser::new(vec![((Color::random(rng), -1, -1), 1)]),
                 );
             } else {
                 themes.insert(
@@ -390,6 +390,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                             *colors
                                 .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
                                 .unwrap(),
+                            -1,
                             -1,
                         ),
                         1,
@@ -521,15 +522,16 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
     }
 }
 
-fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>) -> (Color, usize, isize) {
+fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>) -> (Color, usize, isize, isize) {
     let warn_invalid = |x| {
         println!(
             "Invalid item ({:?})
 Provide one of:
 - a named color (\"blue\")
 - a hex code (\"#0000FF\")
-- any of the above along with an integer ponderation (\"<COLOR> xWEIGHT\")
+- any of the above along with an integer ponderation (\"<COLOR> xPONDERATION\")
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
+- any of the above along with a weight override (\"<COLOR> !WEIGHT\")
 Note that the format [<R>, <G>, <B>] is not accepted here",
             x
         );
@@ -537,15 +539,16 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
     match val {
         Value::String(s) => {
             let mut c = Color(0, 0, 0);
-            let mut w = 1;
+            let mut p = 1;
             let mut var = -1;
+            let mut w = -1;
             for item in s.split(' ') {
                 if item.is_empty() {
                     continue;
                 }
                 if &item[0..1] == "x" {
-                    w = item[1..].parse().unwrap_or_else(|_| {
-                        println!("Not a valid weight: {}", &item[1..]);
+                    p = item[1..].parse().unwrap_or_else(|_| {
+                        println!("Not a valid ponderation: {}", &item[1..]);
                         1
                     });
                 } else if &item[0..1] == "~" {
@@ -573,11 +576,11 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                 }
             }
-            (c, w, var)
+            (c, p, var, w)
         }
         val => {
             warn_invalid(val.to_string());
-            (Color(0, 0, 0), 1, -1)
+            (Color(0, 0, 0), 1, -1, -1)
         }
     }
 }
@@ -586,8 +589,8 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
 fn theme_from_value(
     v: &Value,
     colors: &HashMap<String, Color>,
-    themes: &HashMap<String, Chooser<(Color, isize)>>,
-) -> Result<Chooser<(Color, isize)>, String> {
+    themes: &HashMap<String, Chooser<(Color, isize, isize)>>,
+) -> Result<Chooser<(Color, isize, isize)>, String> {
     let mut items = Vec::new();
     if let Value::String(s) = v {
         if let Some(th) = themes.get(s) {
@@ -603,8 +606,8 @@ fn theme_from_value(
                         continue;
                     }
                 }
-                let (color, weight, var) = theme_item_from_value(x, colors);
-                items.push(((color, var), weight));
+                let (color, ponderation, var, weight) = theme_item_from_value(x, colors);
+                items.push(((color, var, weight), ponderation));
             }
             Ok(Chooser::new(items))
         }
