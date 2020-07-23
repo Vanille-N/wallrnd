@@ -15,7 +15,7 @@ OPTIONS
 
     --log               Save generation information for image replication
 
-    --verbose           Display more debug information
+    --verbose V         Display more debug information. See verbosity description below.
 
     --time T            Generate image as if the current time was T (format HHMM)
 
@@ -27,5 +27,24 @@ OPTIONS
 
 EXAMPLES
     wallrnd --image /tmp/random-wallpaper.svg --config ~/.config/wallrnd.toml
-    wallrnd --verbose --log --time 1000 --image ./test.svg
+    wallrnd --verbose IP --log --time 1000 --image ./test.svg
     wallrnd --init default.toml
+
+
+VERBOSITY
+    By default, wallrnd is silent.
+    It is possible to adjust verbosity level with flags.
+
+    'I': Info
+        Display basic information (theme, shapes, ...)
+    'P': Progress
+        Inform on the current actions
+    'D': Details
+        Very verbose, prints full scene layout and list of colors
+    'W': Warnings
+        Alert recoverable errors (invalid configuration file, badly formatted color, ...)
+
+    Any combination of these flags is valid except for no flags
+    ('--verbose' option expects at least one flag)
+
+    'A' (All) is an alias for 'IPDW'
