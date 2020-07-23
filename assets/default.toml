@@ -1,0 +1,294 @@
+[global]
+deviation = 40 # How much the color varies within a shape. 0 for uniform shapes.
+weight = 25 # How far from the theme are the colors. 0 for theme-only colors, 100 for fully random.
+size = 15.0 # How big are tiles. Can be overriden for each tiling
+width = 1366 # Screen dimension
+height = 768 # Screen dimension
+
+[lines]
+# Set line appearance
+width = 1.0
+color = "#000000" # Supports named colors as well
+# Tiling-specific overrides
+del_width = 0.0
+del_color = "#000000"
+
+[colors]
+# List of named colors
+# Either [r, g, b] (dec.) or #RRGGBB (hex.), both 0-255
+# List of colors here: all SVG named colors
+black = "#000000"
+navy = "#000080"
+darkblue = "#00008B"
+mediumblue = "#0000CD"
+blue = "#0000FF"
+darkgreen = "#006400"
+green = "#008000"
+teal = "#008080"
+darkcyan = "#008B8B"
+deepskyblue = "#00BFFF"
+darkturquoise = "#00CED1"
+mediumspringgreen = "#00FA9A"
+lime = "#00FF00"
+springgreen = "#00FF7F"
+cyan = "#00FFFF"
+aqua = "#00FFFF"
+midnightblue = "#191970"
+dodgerblue = "#1E90FF"
+lightseagreen = "#20B2AA"
+forestgreen = "#228B22"
+seagreen = "#2E8B57"
+darkslategray = "#2F4F4F"
+darkslategrey = "#2F4F4F"
+limegreen = "#32CD32"
+mediumseagreen = "#3CB371"
+turquoise = "#40E0D0"
+royalblue = "#4169E1"
+steelblue = "#4682B4"
+darkslateblue = "#483D8B"
+mediumturquoise = "#48D1CC"
+indigo = "#4B0082"
+darkolivegreen = "#556B2F"
+cadetblue = "#5F9EA0"
+cornflowerblue = "#6495ED"
+mediumaquamarine = "#66CDAA"
+dimgrey = "#696969"
+dimgray = "#696969"
+slateblue = "#6A5ACD"
+olivedrab = "#6B8E23"
+slategrey = "#708090"
+slategray = "#708090"
+lightslategray = "#778899"
+lightslategrey = "#778899"
+mediumslateblue = "#7B68EE"
+lawngreen = "#7CFC00"
+chartreuse = "#7FFF00"
+aquamarine = "#7FFFD4"
+maroon = "#800000"
+purple = "#800080"
+olive = "#808000"
+gray = "#808080"
+grey = "#808080"
+skyblue = "#87CEEB"
+lightskyblue = "#87CEFA"
+blueviolet = "#8A2BE2"
+darkred = "#8B0000"
+darkmagenta = "#8B008B"
+saddlebrown = "#8B4513"
+darkseagreen = "#8FBC8F"
+lightgreen = "#90EE90"
+mediumpurple = "#9370DB"
+darkviolet = "#9400D3"
+palegreen = "#98FB98"
+darkorchid = "#9932CC"
+yellowgreen = "#9ACD32"
+sienna = "#A0522D"
+brown = "#A52A2A"
+darkgray = "#A9A9A9"
+darkgrey = "#A9A9A9"
+lightblue = "#ADD8E6"
+greenyellow = "#ADFF2F"
+paleturquoise = "#AFEEEE"
+lightsteelblue = "#B0C4DE"
+powderblue = "#B0E0E6"
+firebrick = "#B22222"
+darkgoldenrod = "#B8860B"
+mediumorchid = "#BA55D3"
+rosybrown = "#BC8F8F"
+darkkhaki = "#BDB76B"
+silver = "#C0C0C0"
+mediumvioletred = "#C71585"
+indianred = "#CD5C5C"
+peru = "#CD853F"
+chocolate = "#D2691E"
+tan = "#D2B48C"
+lightgray = "#D3D3D3"
+lightgrey = "#D3D3D3"
+thistle = "#D8BFD8"
+orchid = "#DA70D6"
+goldenrod = "#DAA520"
+palevioletred = "#DB7093"
+crimson = "#DC143C"
+gainsboro = "#DCDCDC"
+plum = "#DDA0DD"
+burlywood = "#DEB887"
+lightcyan = "#E0FFFF"
+lavender = "#E6E6FA"
+darksalmon = "#E9967A"
+violet = "#EE82EE"
+palegoldenrod = "#EEE8AA"
+lightcoral = "#F08080"
+khaki = "#F0E68C"
+aliceblue = "#F0F8FF"
+honeydew = "#F0FFF0"
+azure = "#F0FFFF"
+sandybrown = "#F4A460"
+wheat = "#F5DEB3"
+beige = "#F5F5DC"
+whitesmoke = "#F5F5F5"
+mintcream = "#F5FFFA"
+ghostwhite = "#F8F8FF"
+salmon = "#FA8072"
+antiquewhite = "#FAEBD7"
+linen = "#FAF0E6"
+lightgoldenrodyellow = "#FAFAD2"
+oldlace = "#FDF5E6"
+red = "#FF0000"
+fuchsia = "#FF00FF"
+magenta = "#FF00FF"
+deeppink = "#FF1493"
+orangered = "#FF4500"
+tomato = "#FF6347"
+hotpink = "#FF69B4"
+coral = "#FF7F50"
+darkorange = "#FF8C00"
+lightsalmon = "#FFA07A"
+orange = "#FFA500"
+lightpink = "#FFB6C1"
+pink = "#FFC0CB"
+gold = "#FFD700"
+peachpuff = "#FFDAB9"
+navajowhite = "#FFDEAD"
+moccasin = "#FFE4B5"
+bisque = "#FFE4C4"
+mistyrose = "#FFE4E1"
+blanchedalmond = "#FFEBCD"
+papayawhip = "#FFEFD5"
+lavenderblush = "#FFF0F5"
+seashell = "#FFF5EE"
+cornsilk = "#FFF8DC"
+lemonchiffon = "#FFFACD"
+floralwhite = "#FFFAF0"
+snow = "#FFFAFA"
+yellow = "#FFFF00"
+lightyellow = "#FFFFE0"
+ivory = "#FFFFF0"
+white = "#FFFFFF"
+
+[themes]
+# A theme is a list of weighted colors (named or not); e.g. theme1 = ["white x20 ~10", "black x10"]
+# You may include a previously created theme inside another; e.g. theme2 = ["theme2", "grey x20"]
+rust = ["coral x50", "orange x40", "springgreen x10"]
+ocean = ["navy x60", "indigo x30", "mediumaquamarine x30"]
+sky = ["aqua x50", "gold x30", "skyblue x50"]
+night = ["midnightblue x40", "black x30", "slategray x10"]
+forest = ["palegreen x30", "forestgreen x30", "linen x20"]
+blood = ["maroon x30", "crimson x10", "salmon x20"]
+fire = ["yellow x20", "orangered x30", "darkred x10", "red x20"]
+spring = ["lawngreen x30", "gold x10", "aqua x10", "magenta x10"]
+shadow = ["indigo x30", "black x10", "purple x20"]
+dawn = ["goldenrod x10", "aqua x30", "magenta x50"]
+dusk = ["mediumslateblue x30", "hotpink x20", "darkorange x20"]
+
+[shapes]
+# Both tilings and patterns
+# Empty list means all available
+# Examples:
+#    cstr_or_ccir_and_any_tiling = ["crossed-stripes", "concentric-circles"]
+#    ftri_and_del = ["free-triangle", "delaunay"]
+#    all = []
+#
+# All names:
+# Tilings
+#   "H" / "hex." / "hexagons"
+#   "T" / "tri." / "triangles"
+#   "H&T" / "hex.&tri." / "hexagons&squares"
+#   "S&T" / "squ.&tri." / "squares&triangles"
+#   "D" / "del." / "delaunay"
+# Patterns
+#   "FC" / "f-cir." / "free-circles"
+#   "FT" / "f-tri." / "free-triangles"
+#   "FR" / "f-str." / "free-stripes"
+#   "FP" / "f-spi." / "free-spirals"
+#   "CC" / "c-cir." / "concentric-circles"
+#   "PS" / "p-str." / "parallel-stripes"
+#   "CS" / "c-str." / "crossed-stripes"
+#   "PW" / "p-wav." / "parallel-waves"
+all = []
+
+[data.patterns]
+nb_free_triangles = 15
+nb_free_circles = 10
+nb_free_stripes = 7
+nb_parallel_stripes = 15
+nb_concentric_circles = 13
+nb_crossed_stripes = 10
+nb_free_spirals = 3
+nb_parallel_waves = 10
+var_parallel_stripes = 15 # Variability of the orientation
+var_crossed_stripes = 15
+width_spiral = 0.3 # As a proportion of the window height
+width_stripe = 0.1
+width_wave = 0.7
+
+[data.tilings]
+size_hex = 12.0 # In absolute size
+size_tri = 15.0
+size_hex_and_tri = 13.0
+size_squ_and_tri = 15.0
+nb_delaunay = 3000
+
+[[entry]]
+themes = ["night"] # List of possible themes linked to this entry
+span = "0000-0559" # Time frame of availability for this entry as "HHMM-HHMM" (begin-end)
+shapes = ["all"] # Named shape configuration
+# Not used here:
+# `weight = W`
+#    gives certain entries different ponderations when several of them overlap on a single time frame.
+# `line_color = C`
+#    override line settings
+
+[[entry]]
+themes = ["dawn"]
+span = "0600-0729"
+shapes = ["all"]
+
+[[entry]]
+themes = ["spring"]
+span = "0730-0859"
+shapes = ["all"]
+
+[[entry]]
+themes = ["sky"]
+span = "0900-1029"
+shapes = ["all"]
+
+[[entry]]
+themes = ["rust"]
+span = "1030-1159"
+shapes = ["all"]
+
+[[entry]]
+themes = ["fire"]
+span = "1200-1329"
+shapes = ["all"]
+
+[[entry]]
+themes = ["forest"]
+span = "1330-1459"
+shapes = ["all"]
+
+[[entry]]
+themes = ["ocean"]
+span = "1500-1629"
+shapes = ["all"]
+
+[[entry]]
+themes = ["blood"]
+span = "1630-1759"
+shapes = ["all"]
+
+[[entry]]
+themes = ["dusk"]
+span = "1800-1929"
+shapes = ["all"]
+
+[[entry]]
+themes = ["shadow"]
+span = "1930-2059"
+shapes = ["all"]
+
+[[entry]]
+themes = ["night"]
+span = "2100-2359"
+shapes = ["all"]
