@@ -67,7 +67,7 @@ fn main() {
     if verbose.prog {
         println!("Building scene");
     }
-    let scene = Scene::new(&cfg, &mut rng);
+    let scene = Scene::new(&cfg, &mut rng, verbose);
     let stroke = cfg.line_color;
     let stroke_width = cfg.line_width;
     let stroke_like_fill = stroke_width < 0.0001;
