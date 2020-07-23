@@ -9,10 +9,10 @@ pub struct Scene {
 }
 
 impl Scene {
-    pub fn new(cfg: &SceneCfg, rng: &mut ThreadRng) -> Self {
+    pub fn new(cfg: &SceneCfg, rng: &mut ThreadRng, verbose: Verbosity) -> Self {
         Self {
             bg: cfg.choose_color(rng),
-            items: cfg.create_items(rng),
+            items: cfg.create_items(rng, verbose),
         }
     }
 
@@ -32,6 +32,7 @@ pub trait Contains {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color>;
 }
 
+#[derive(Debug)]
 pub struct ColorItem {
     pub shade: Color,
     pub deviation: i32,
@@ -47,6 +48,7 @@ impl ColorItem {
     }
 }
 
+#[derive(Debug)]
 pub struct Disc {
     pub center: Pos,
     pub radius: f64,
@@ -75,6 +77,7 @@ impl Contains for Disc {
     }
 }
 
+#[derive(Debug)]
 pub struct HalfPlane {
     pub limit: Pos,
     pub reference: Pos,
@@ -102,6 +105,7 @@ impl Contains for HalfPlane {
     }
 }
 
+#[derive(Debug)]
 pub struct Triangle {
     pub a: Pos,
     pub b: Pos,
@@ -138,6 +142,7 @@ impl Contains for Triangle {
     }
 }
 
+#[derive(Debug)]
 pub struct Spiral {
     pub center: Pos,
     pub width: f64,
@@ -167,6 +172,7 @@ impl Contains for Spiral {
     }
 }
 
+#[derive(Debug)]
 pub struct Stripe {
     limit: Pos,
     reference: Pos,
@@ -197,6 +203,7 @@ impl Contains for Stripe {
     }
 }
 
+#[derive(Debug)]
 pub struct Wave {
     limit: Pos,
     reference: Pos,
