@@ -56,7 +56,7 @@ Portability of this script is outside of the scope of this project (the image ge
 ! New format:
 +     theme = ["<C1> x<W1>", "<C2> x<W2>", ...]
 ! To update your configuration file, run
-@     perl -pi -e 's/\[\"([a-zA-Z0-9_]*)\", *([0-9]+)\]/\"$1 x$2\"/g' setup/wallrnd.toml
+@     perl -pi -e 's/\[\"([a-zA-Z0-9_]*)\", *([0-9]+)\]/\"$1 x$2\"/g' setup/wallrnd.toml    @
 ```
 
 ### Recommended setup (executable `wallrnd`)
