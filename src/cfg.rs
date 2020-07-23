@@ -56,16 +56,16 @@ impl SceneCfg {
     }
 
     /// Match pattern to function that generates it
-    pub fn create_items(&self, rng: &mut ThreadRng) -> Vec<Box<dyn Contains>> {
+    pub fn create_items(&self, rng: &mut ThreadRng, verbose: Verbosity) -> Vec<Box<dyn Contains>> {
         match self.pattern {
-            Pattern::FreeCircles => create_free_circles(rng, &self).dynamic(),
-            Pattern::FreeTriangles => create_free_triangles(rng, &self).dynamic(),
-            Pattern::FreeStripes => create_free_stripes(rng, &self).dynamic(),
-            Pattern::FreeSpirals => create_free_spirals(rng, &self).dynamic(),
-            Pattern::ConcentricCircles => create_concentric_circles(rng, &self).dynamic(),
-            Pattern::ParallelStripes => create_parallel_stripes(rng, &self).dynamic(),
-            Pattern::CrossedStripes => create_crossed_stripes(rng, &self).dynamic(),
-            Pattern::ParallelWaves => create_waves(rng, &self).dynamic(),
+            Pattern::FreeCircles => create_free_circles(rng, &self, verbose).dynamic(),
+            Pattern::FreeTriangles => create_free_triangles(rng, &self, verbose).dynamic(),
+            Pattern::FreeStripes => create_free_stripes(rng, &self, verbose).dynamic(),
+            Pattern::FreeSpirals => create_free_spirals(rng, &self, verbose).dynamic(),
+            Pattern::ConcentricCircles => create_concentric_circles(rng, &self, verbose).dynamic(),
+            Pattern::ParallelStripes => create_parallel_stripes(rng, &self, verbose).dynamic(),
+            Pattern::CrossedStripes => create_crossed_stripes(rng, &self, verbose).dynamic(),
+            Pattern::ParallelWaves => create_waves(rng, &self, verbose).dynamic(),
         }
     }
 
