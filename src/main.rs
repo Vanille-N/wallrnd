@@ -112,9 +112,9 @@ fn main() {
 #[derive(Default)]
 struct Args {
     help: bool,
-    log: bool,
     verbose: Verbosity,
     time: Option<usize>,
+    log: String,
     image: String,
     config: String,
     init: String,
@@ -127,7 +127,14 @@ fn read_command_line_arguments() -> Args {
         match it.next().as_deref() {
             None => return args,
             Some("--help") => args.help = true,
-            Some("--log") => args.log = true,
+            Some("--log") => {
+                args.log = it
+                    .next()
+                    .unwrap_or_else(|| {
+                        panic!("Option --log should be followed by a destination file")
+                    })
+                    .to_string()
+            }
             Some("--verbose") => args.verbose = Verbosity::from(&it.next().unwrap_or_else(|| panic!("Option --verbose should be followed by a verbosity descriptor: '^[PDIWA]*$',
 P: Progress
 D: Details
