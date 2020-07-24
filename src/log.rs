@@ -1,6 +1,8 @@
 use crate::prelude::*;
 use crate::scene::*;
 use std::fmt;
+use std::io::Write;
+
 pub struct Logger<'a> {
     pub frame: Frame,
     pub bg: &'a ColorItem,
@@ -77,3 +79,9 @@ impl<'a> fmt::Display for Logger<'a> {
     }
 }
 
+impl Logger<'_> {
+    pub fn save(&self, dest: &str) -> std::io::Result<()> {
+        let mut buffer = std::fs::File::create(dest)?;
+        buffer.write_all(&format!("{}", &self).into_bytes())
+    }
+}
