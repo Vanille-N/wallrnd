@@ -4,8 +4,8 @@ use crate::prelude::*;
 use rand::{rngs::ThreadRng, Rng};
 
 pub struct Scene {
-    bg: ColorItem,
-    items: Vec<Box<dyn Contains>>,
+    pub bg: ColorItem,
+    pub items: Vec<Box<dyn Contains>>,
 }
 
 impl Scene {
@@ -28,7 +28,7 @@ impl Scene {
 }
 
 /// Trait for anything that can contain a 2D point
-pub trait Contains {
+pub trait Contains: std::fmt::Display {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color>;
 }
 
@@ -174,9 +174,9 @@ impl Contains for Spiral {
 
 #[derive(Debug)]
 pub struct Stripe {
-    limit: Pos,
-    reference: Pos,
-    color: ColorItem,
+    pub limit: Pos,
+    pub reference: Pos,
+    pub color: ColorItem,
 }
 
 impl Stripe {
@@ -205,11 +205,11 @@ impl Contains for Stripe {
 
 #[derive(Debug)]
 pub struct Wave {
-    limit: Pos,
-    reference: Pos,
-    amplitude: f64,
-    frequency: f64,
-    color: ColorItem,
+    pub limit: Pos,
+    pub reference: Pos,
+    pub amplitude: f64,
+    pub frequency: f64,
+    pub color: ColorItem,
 }
 
 impl Wave {
