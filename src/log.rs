@@ -50,3 +50,17 @@ impl fmt::Display for Spiral {
         write!(f, "{}", self.color)
     }
 }
+
+impl fmt::Display for Stripe {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Stripe {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(f, "{}", self.color)
+    }
+}
+
+impl fmt::Display for Wave {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Wave {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(f, "{}", self.color)
+    }
+}
