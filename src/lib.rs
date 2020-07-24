@@ -9,6 +9,7 @@ pub mod scene;
 pub mod shape;
 pub mod svg;
 pub mod tesselate;
+pub mod log;
 
 pub mod prelude {
     use super::*;

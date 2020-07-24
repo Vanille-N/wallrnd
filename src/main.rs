@@ -79,6 +79,11 @@ fn main() {
             objects: &scene.items,
             frame: cfg.frame,
         };
+        logger.save(&args.log).unwrap_or_else(|_| {
+            if verbose.warn {
+                println!("No valid destination specified");
+            }
+        });
     }
 
     // Generate document
