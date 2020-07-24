@@ -6,6 +6,7 @@ use wallrnd::deserializer::MetaConfig;
 use wallrnd::scene::Scene;
 use wallrnd::svg::*;
 use wallrnd::prelude::*;
+use wallrnd::log::Logger;
 
 fn main() {
     let args = read_command_line_arguments();
@@ -71,6 +72,14 @@ fn main() {
     let stroke = cfg.line_color;
     let stroke_width = cfg.line_width;
     let stroke_like_fill = stroke_width < 0.0001;
+
+    if args.log != "" {
+        let logger = Logger {
+            bg: &scene.bg,
+            objects: &scene.items,
+            frame: cfg.frame,
+        };
+    }
 
     // Generate document
     if verbose.prog {
