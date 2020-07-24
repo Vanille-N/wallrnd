@@ -20,3 +20,33 @@ impl fmt::Display for ColorItem {
         write!(f, "{} {}", self.deviation, self.weight)
     }
 }
+
+impl fmt::Display for Disc {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Disc {} {} {} ", self.center.0, self.center.1, self.radius)?;
+        write!(f, "{}", self.color)
+    }
+}
+
+impl fmt::Display for HalfPlane {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "HalfPlane {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(f, "{}", self.color)
+    }
+}
+
+impl fmt::Display for Triangle {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Triangle {} {} ", self.a.0, self.a.1)?;
+        write!(f, "{} {} ", self.b.0, self.b.1)?;
+        write!(f, "{} {} ", self.c.0, self.c.1)?;
+        write!(f, "{}", self.color)
+    }
+}
+
+impl fmt::Display for Spiral {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Spiral {} {} {} ", self.center.0, self.center.1, self.width)?;
+        write!(f, "{}", self.color)
+    }
+}
