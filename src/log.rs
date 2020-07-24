@@ -64,3 +64,16 @@ impl fmt::Display for Wave {
         write!(f, "{}", self.color)
     }
 }
+
+impl<'a> fmt::Display for Logger<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} ", self.frame)?;
+        write!(f, "{} ", self.bg)?;
+        write!(f, "{} ", self.objects.len())?;
+        for o in self.objects {
+            write!(f, "{} ", o)?;
+        }
+        Ok(())
+    }
+}
+
