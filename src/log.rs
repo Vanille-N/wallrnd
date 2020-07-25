@@ -130,10 +130,10 @@ impl Restore for Logger {
 
 impl Restore for Frame {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        let x = items.next().unwrap().parse::<usize>().unwrap();
-        let y = items.next().unwrap().parse::<usize>().unwrap();
-        let w = items.next().unwrap().parse::<usize>().unwrap();
-        let h = items.next().unwrap().parse::<usize>().unwrap();
+        let x = usize::restore(items);
+        let y = usize::restore(items);
+        let w = usize::restore(items);
+        let h = usize::restore(items);
         assert_eq!(items.next().unwrap(), "#");
         Self { x, y, w, h }
     }
@@ -143,7 +143,7 @@ impl Restore for ColorItem {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let mut v = Vec::new();
         for _ in 0..8 {
-            v.push(items.next().unwrap().parse::<usize>().unwrap() as i32);
+            v.push(usize::restore(items) as i32);
         }
         assert_eq!(items.next().unwrap(), "#");
         Self {
@@ -157,9 +157,9 @@ impl Restore for ColorItem {
 
 impl Restore for Disc {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        let x = items.next().unwrap().parse::<f64>().unwrap();
-        let y = items.next().unwrap().parse::<f64>().unwrap();
-        let r = items.next().unwrap().parse::<f64>().unwrap();
+        let x = f64::restore(items);
+        let y = f64::restore(items);
+        let r = f64::restore(items);
         let c = ColorItem::restore(items);
         assert_eq!(items.next().unwrap(), "#");
         Self { center: Pos(x, y), radius: r, color: c }
