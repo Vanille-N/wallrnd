@@ -142,4 +142,14 @@ impl Restore for ColorItem {
         }
     }
 }
+
+impl Restore for Disc {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let x = items.next().unwrap().parse::<f64>().unwrap();
+        let y = items.next().unwrap().parse::<f64>().unwrap();
+        let r = items.next().unwrap().parse::<f64>().unwrap();
+        let c = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
+        Self { center: Pos(x, y), radius: r, color: c }
+    }
 }
