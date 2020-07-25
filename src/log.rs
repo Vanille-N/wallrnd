@@ -165,41 +165,36 @@ impl Restore for ColorItem {
 
 impl Restore for Disc {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        let x = f64::restore(items);
-        let y = f64::restore(items);
-        let r = f64::restore(items);
-        let c = ColorItem::restore(items);
+        let center = Pos::restore(items);
+        let radius = f64::restore(items);
+        let color = ColorItem::restore(items);
         assert_eq!(items.next().unwrap(), "#");
-        Self { center: Pos(x, y), radius: r, color: c }
+        Self { center, radius, color }
     }
 }
 
 impl Restore for HalfPlane {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        let x1 = f64::restore(items);
-        let y1 = f64::restore(items);
-        let x2 = f64::restore(items);
-        let y2 = f64::restore(items);
-        let c = ColorItem::restore(items);
+        let limit = Pos::restore(items);
+        let reference = Pos::restore(items);
+        let color = ColorItem::restore(items);
         Self {
-            limit: Pos(x1, y1),
-            reference: Pos(x2, y2),
-            color: c,
+            limit,
+            reference,
+            color,
         }
     }
 }
 
 impl Restore for Stripe {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        let x1 = f64::restore(items);
-        let y1 = f64::restore(items);
-        let x2 = f64::restore(items);
-        let y2 = f64::restore(items);
-        let c = ColorItem::restore(items);
+        let limit = Pos::restore(items);
+        let reference = Pos::restore(items);
+        let color = ColorItem::restore(items);
         Self {
-            limit: Pos(x1, y1),
-            reference: Pos(x2, y2),
-            color: c,
+            limit,
+            reference,
+            color,
         }
     }
 }
