@@ -127,4 +127,19 @@ impl Restore for Frame {
     }
 }
 
+impl Restore for ColorItem {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let mut v = Vec::new();
+        for _ in 0..8 {
+            v.push(items.next().unwrap().parse::<usize>().unwrap() as i32);
+        }
+        assert_eq!(items.next().unwrap(), "#");
+        Self {
+            shade: Color(v[0], v[1], v[2]),
+            theme: Color(v[3], v[4], v[5]),
+            deviation: v[6],
+            weight: v[7],
+        }
+    }
+}
 }
