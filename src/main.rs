@@ -63,15 +63,23 @@ fn main() {
     if verbose.prog {
         println!("Choosing random settings according to configuration");
     }
-    let cfg = MetaConfig::from_string(cfg_contents, verbose).pick_cfg(&mut rng, time, verbose);
+    let mut cfg = MetaConfig::from_string(cfg_contents, verbose).pick_cfg(&mut rng, time, verbose);
 
     if verbose.prog {
         println!("Building scene");
     }
-    let scene = Scene::new(&cfg, &mut rng, verbose);
+    let mut scene = Scene::new(&cfg, &mut rng, verbose);
     let stroke = cfg.line_color;
     let stroke_width = cfg.line_width;
     let stroke_like_fill = stroke_width < 0.0001;
+
+    if args.load != "" {
+        let loader = Logger::load(&args.load);
+        let Logger { bg, objects, frame } = loader;
+        scene.bg = bg;
+        scene.items = objects;
+        cfg.frame = frame;
+    }
 
     if args.log != "" {
         let logger = Logger {
