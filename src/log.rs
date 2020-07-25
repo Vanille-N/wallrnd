@@ -116,4 +116,15 @@ impl Restore for Logger {
     }
 }
 
+impl Restore for Frame {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let x = items.next().unwrap().parse::<usize>().unwrap();
+        let y = items.next().unwrap().parse::<usize>().unwrap();
+        let w = items.next().unwrap().parse::<usize>().unwrap();
+        let h = items.next().unwrap().parse::<usize>().unwrap();
+        assert_eq!(items.next().unwrap(), "#");
+        Self { x, y, w, h }
+    }
+}
+
 }
