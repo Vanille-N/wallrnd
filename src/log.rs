@@ -118,6 +118,12 @@ impl Restore for Pos {
     }
 }
 
+impl Restore for Color {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        Self(usize::restore(items) as i32, usize::restore(items) as i32, usize::restore(items) as i32)
+    }
+}
+
 impl Restore for Logger {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let frame = Frame::restore(items);
@@ -149,16 +155,16 @@ impl Restore for Frame {
 
 impl Restore for ColorItem {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        let mut v = Vec::new();
-        for _ in 0..8 {
-            v.push(usize::restore(items) as i32);
-        }
+        let shade = Color::restore(items);
+        let theme = Color::restore(items);
+        let deviation = usize::restore(items) as i32;
+        let weight = usize::restore(items) as i32;
         assert_eq!(items.next().unwrap(), "#");
         Self {
-            shade: Color(v[0], v[1], v[2]),
-            theme: Color(v[3], v[4], v[5]),
-            deviation: v[6],
-            weight: v[7],
+            shade,
+            theme,
+            deviation,
+            weight,
         }
     }
 }
