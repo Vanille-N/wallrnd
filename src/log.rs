@@ -100,6 +100,18 @@ trait Restore {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self;
 }
 
+impl Restore for usize {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        items.next().unwrap().parse::<Self>().unwrap()
+    }
+}
+
+impl Restore for f64 {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        items.next().unwrap().parse::<Self>().unwrap()
+    }
+}
+
 impl Restore for Logger {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let frame = Frame::restore(items);
