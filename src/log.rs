@@ -95,4 +95,25 @@ impl Logger {
         Logger::restore(&mut items)
     }
 }
+
+trait Restore {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self;
+}
+
+impl Restore for Logger {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let frame = Frame::restore(items);
+        let bg = ColorItem::restore(items);
+        let len = items.next().unwrap().parse::<usize>().unwrap();
+        let mut objects = Vec::new();
+        for _ in 0..len {
+            objects.push(Rc::new(match items.next().unwrap() {
+                "Disc" => Disc::restore(items),
+                _ => panic!("Unknown item"),
+            }) as Rc<dyn Contains>);
+        }
+        Self { frame, bg, objects }
+    }
+}
+
 }
