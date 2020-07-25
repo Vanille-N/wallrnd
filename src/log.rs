@@ -65,6 +65,7 @@ impl fmt::Display for Stripe {
 impl fmt::Display for Wave {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Wave {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(f, "{} {} ", self.amplitude, self.frequency)?;
         write!(f, "{} #", self.color)
     }
 }
@@ -184,6 +185,7 @@ impl Restore for HalfPlane {
         let limit = Pos::restore(items);
         let reference = Pos::restore(items);
         let color = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
         Self {
             limit,
             reference,
@@ -197,9 +199,49 @@ impl Restore for Stripe {
         let limit = Pos::restore(items);
         let reference = Pos::restore(items);
         let color = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
         Self {
             limit,
             reference,
+            color,
+        }
+    }
+}
+
+impl Restore for Triangle {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let a = Pos::restore(items);
+        let b = Pos::restore(items);
+        let c = Pos::restore(items);
+        let color = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
+        Self { a, b, c, color }
+    }
+}
+
+impl Restore for Spiral {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let center = Pos::restore(items);
+        let width = f64::restore(items);
+        let color = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
+        Self { center, width, color }
+    }
+}
+
+impl Restore for Wave {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let limit = Pos::restore(items);
+        let reference = Pos::restore(items);
+        let amplitude = f64::restore(items);
+        let frequency = f64::restore(items);
+        let color = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
+        Self {
+            limit,
+            reference,
+            amplitude,
+            frequency,
             color,
         }
     }
