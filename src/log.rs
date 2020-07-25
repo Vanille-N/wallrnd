@@ -112,6 +112,12 @@ impl Restore for f64 {
     }
 }
 
+impl Restore for Pos {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        Self(f64::restore(items), f64::restore(items))
+    }
+}
+
 impl Restore for Logger {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let frame = Frame::restore(items);
