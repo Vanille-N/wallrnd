@@ -136,6 +136,9 @@ impl Restore for Logger {
                 "Disc" => Rc::new(Disc::restore(items)) as Rc<dyn Contains>,
                 "HalfPlane" => Rc::new(HalfPlane::restore(items)) as Rc<dyn Contains>,
                 "Stripe" => Rc::new(Stripe::restore(items)) as Rc<dyn Contains>,
+                "Triangle" => Rc::new(Triangle::restore(items)) as Rc<dyn Contains>,
+                "Spiral" => Rc::new(Spiral::restore(items)) as Rc<dyn Contains>,
+                "Wave" => Rc::new(Wave::restore(items)) as Rc<dyn Contains>,
                 _ => panic!("Unknown item"),
             });
         }
