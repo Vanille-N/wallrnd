@@ -1,8 +1,8 @@
 use crate::prelude::*;
 use crate::scene::*;
 use std::fmt;
-use std::io::Write;
 use std::fs::File;
+use std::io::{Read, Write};
 use std::rc::Rc;
 
 pub struct Logger {
@@ -86,4 +86,13 @@ impl Logger {
         let mut buffer = File::create(dest)?;
         buffer.write_all(&format!("{}", &self).into_bytes())
     }
+
+    pub fn load(src: &str) -> Self {
+        let mut s = String::new();
+        let mut file = File::open(src).unwrap();
+        file.read_to_string(&mut s).unwrap();
+        let mut items = s.split(' ');
+        Logger::restore(&mut items)
+    }
+}
 }
