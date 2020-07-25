@@ -120,6 +120,7 @@ struct Args {
     verbose: Verbosity,
     time: Option<usize>,
     log: String,
+    load: String,
     image: String,
     config: String,
     init: String,
@@ -137,6 +138,14 @@ fn read_command_line_arguments() -> Args {
                     .next()
                     .unwrap_or_else(|| {
                         panic!("Option --log should be followed by a destination file")
+                    })
+                    .to_string()
+            }
+            Some("--load") => {
+                args.load = it
+                    .next()
+                    .unwrap_or_else(|| {
+                        panic!("Option --load should be followed by a source file")
                     })
                     .to_string()
             }
