@@ -75,8 +75,8 @@ fn main() {
 
     if args.log != "" {
         let logger = Logger {
-            bg: &scene.bg,
-            objects: &scene.items,
+            bg: scene.bg.clone(),
+            objects: scene.items.clone(),
             frame: cfg.frame,
         };
         logger.save(&args.log).unwrap_or_else(|_| {

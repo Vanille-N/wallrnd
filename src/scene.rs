@@ -2,10 +2,11 @@ use crate::cfg::SceneCfg;
 use crate::pos::crossprod_sign;
 use crate::prelude::*;
 use rand::{rngs::ThreadRng, Rng};
+use std::rc::Rc;
 
 pub struct Scene {
     pub bg: ColorItem,
-    pub items: Vec<Box<dyn Contains>>,
+    pub items: Vec<Rc<dyn Contains>>,
 }
 
 impl Scene {
@@ -32,7 +33,7 @@ pub trait Contains: std::fmt::Display {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color>;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ColorItem {
     pub shade: Color,
     pub deviation: i32,

@@ -4,6 +4,7 @@ use crate::scene::*;
 use crate::svg::*;
 use crate::tesselate::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom, Rng};
+use std::rc::Rc;
 
 /// General information on a scene
 pub struct SceneCfg {
@@ -28,16 +29,16 @@ trait Dynamic<C>
 where
     C: Contains + 'static,
 {
-    fn dynamic(self) -> Vec<Box<dyn Contains>>;
+    fn dynamic(self) -> Vec<Rc<dyn Contains>>;
 }
 
 impl<C> Dynamic<C> for Vec<C>
 where
     C: Contains + 'static,
 {
-    fn dynamic(self) -> Vec<Box<dyn Contains>> {
+    fn dynamic(self) -> Vec<Rc<dyn Contains>> {
         self.into_iter()
-            .map(|d| Box::new(d) as Box<dyn Contains>)
+            .map(|d| Rc::new(d) as Rc<dyn Contains>)
             .collect::<Vec<_>>()
     }
 }
@@ -56,7 +57,7 @@ impl SceneCfg {
     }
 
     /// Match pattern to function that generates it
-    pub fn create_items(&self, rng: &mut ThreadRng, verbose: Verbosity) -> Vec<Box<dyn Contains>> {
+    pub fn create_items(&self, rng: &mut ThreadRng, verbose: Verbosity) -> Vec<Rc<dyn Contains>> {
         match self.pattern {
             Pattern::FreeCircles => create_free_circles(rng, &self, verbose).dynamic(),
             Pattern::FreeTriangles => create_free_triangles(rng, &self, verbose).dynamic(),

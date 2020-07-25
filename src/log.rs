@@ -2,11 +2,12 @@ use crate::prelude::*;
 use crate::scene::*;
 use std::fmt;
 use std::io::Write;
+use std::rc::Rc;
 
-pub struct Logger<'a> {
+pub struct Logger {
     pub frame: Frame,
-    pub bg: &'a ColorItem,
-    pub objects: &'a [Box<dyn Contains>],
+    pub bg: ColorItem,
+    pub objects: Vec<Rc<dyn Contains>>,
 }
 
 impl fmt::Display for Frame {
@@ -67,19 +68,19 @@ impl fmt::Display for Wave {
     }
 }
 
-impl<'a> fmt::Display for Logger<'a> {
+impl fmt::Display for Logger {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} ", self.frame)?;
         write!(f, "{} ", self.bg)?;
         write!(f, "{} ", self.objects.len())?;
-        for o in self.objects {
+        for o in &self.objects {
             write!(f, "{} ", o)?;
         }
         write!(f, "#")
     }
 }
 
-impl Logger<'_> {
+impl Logger {
     pub fn save(&self, dest: &str) -> std::io::Result<()> {
         let mut buffer = std::fs::File::create(dest)?;
         buffer.write_all(&format!("{}", &self).into_bytes())
