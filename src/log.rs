@@ -2,6 +2,7 @@ use crate::prelude::*;
 use crate::scene::*;
 use std::fmt;
 use std::io::Write;
+use std::fs::File;
 use std::rc::Rc;
 
 pub struct Logger {
@@ -76,13 +77,13 @@ impl fmt::Display for Logger {
         for o in &self.objects {
             write!(f, "{} ", o)?;
         }
-        write!(f, "#")
+        Ok(())
     }
 }
 
 impl Logger {
     pub fn save(&self, dest: &str) -> std::io::Result<()> {
-        let mut buffer = std::fs::File::create(dest)?;
+        let mut buffer = File::create(dest)?;
         buffer.write_all(&format!("{}", &self).into_bytes())
     }
 }
