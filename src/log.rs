@@ -119,10 +119,12 @@ impl Restore for Logger {
         let len = items.next().unwrap().parse::<usize>().unwrap();
         let mut objects = Vec::new();
         for _ in 0..len {
-            objects.push(Rc::new(match items.next().unwrap() {
-                "Disc" => Disc::restore(items),
+            objects.push(match items.next().unwrap() {
+                "Disc" => Rc::new(Disc::restore(items)) as Rc<dyn Contains>,
+                "HalfPlane" => Rc::new(HalfPlane::restore(items)) as Rc<dyn Contains>,
+                "Stripe" => Rc::new(Stripe::restore(items)) as Rc<dyn Contains>,
                 _ => panic!("Unknown item"),
-            }) as Rc<dyn Contains>);
+            });
         }
         Self { frame, bg, objects }
     }
@@ -163,5 +165,35 @@ impl Restore for Disc {
         let c = ColorItem::restore(items);
         assert_eq!(items.next().unwrap(), "#");
         Self { center: Pos(x, y), radius: r, color: c }
+    }
+}
+
+impl Restore for HalfPlane {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let x1 = f64::restore(items);
+        let y1 = f64::restore(items);
+        let x2 = f64::restore(items);
+        let y2 = f64::restore(items);
+        let c = ColorItem::restore(items);
+        Self {
+            limit: Pos(x1, y1),
+            reference: Pos(x2, y2),
+            color: c,
+        }
+    }
+}
+
+impl Restore for Stripe {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let x1 = f64::restore(items);
+        let y1 = f64::restore(items);
+        let x2 = f64::restore(items);
+        let y2 = f64::restore(items);
+        let c = ColorItem::restore(items);
+        Self {
+            limit: Pos(x1, y1),
+            reference: Pos(x2, y2),
+            color: c,
+        }
     }
 }
