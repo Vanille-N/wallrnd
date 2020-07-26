@@ -70,6 +70,14 @@ impl fmt::Display for Wave {
     }
 }
 
+impl fmt::Display for Sawtooth {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Sawtooth {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(f, "{} {} ", self.amplitude, self.frequency)?;
+        write!(f, "{} #", self.color)
+    }
+}
+
 impl fmt::Display for Logger {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} ", self.frame)?;
@@ -139,6 +147,7 @@ impl Restore for Logger {
                 "Triangle" => Rc::new(Triangle::restore(items)) as Rc<dyn Contains>,
                 "Spiral" => Rc::new(Spiral::restore(items)) as Rc<dyn Contains>,
                 "Wave" => Rc::new(Wave::restore(items)) as Rc<dyn Contains>,
+                "Sawtooth" => Rc::new(Sawtooth::restore(items)) as Rc<dyn Contains>,
                 _ => panic!("Unknown item"),
             });
         }
@@ -233,6 +242,24 @@ impl Restore for Spiral {
 }
 
 impl Restore for Wave {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let limit = Pos::restore(items);
+        let reference = Pos::restore(items);
+        let amplitude = f64::restore(items);
+        let frequency = f64::restore(items);
+        let color = ColorItem::restore(items);
+        assert_eq!(items.next().unwrap(), "#");
+        Self {
+            limit,
+            reference,
+            amplitude,
+            frequency,
+            color,
+        }
+    }
+}
+
+impl Restore for Sawtooth {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let limit = Pos::restore(items);
         let reference = Pos::restore(items);
