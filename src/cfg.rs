@@ -67,6 +67,7 @@ impl SceneCfg {
             Pattern::ParallelStripes => create_parallel_stripes(rng, &self, verbose).dynamic(),
             Pattern::CrossedStripes => create_crossed_stripes(rng, &self, verbose).dynamic(),
             Pattern::ParallelWaves => create_waves(rng, &self, verbose).dynamic(),
+            Pattern::ParallelSawteeth => create_sawteeth(rng, &self, verbose).dynamic(),
         }
     }
 
@@ -99,6 +100,7 @@ pub enum Pattern {
     ParallelStripes,
     CrossedStripes,
     ParallelWaves,
+    ParallelSawteeth,
 }
 
 impl Pattern {
@@ -114,6 +116,7 @@ impl Pattern {
             ParallelStripes,
             CrossedStripes,
             ParallelWaves,
+            ParallelSawteeth,
         ]
         .choose(rng)
         .unwrap()
