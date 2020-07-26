@@ -245,3 +245,31 @@ impl Contains for Wave {
         }
     }
 }
+
+#[derive(Debug)]
+pub struct Sawtooth {
+    pub limit: Pos,
+    pub reference: Pos,
+    pub amplitude: f64,
+    pub frequency: f64,
+    pub color: ColorItem,
+}
+
+impl Sawtooth {
+    pub fn random(
+        _rng: &mut ThreadRng,
+        limit: Pos,
+        indic: i32,
+        width: f64,
+        amplitude: f64,
+        color: ColorItem,
+    ) -> Self {
+        Self {
+            limit,
+            reference: limit + Pos::polar(indic, 100.),
+            amplitude,
+            frequency: 0.003 / width,
+            color,
+        }
+    }
+}
