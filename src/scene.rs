@@ -273,3 +273,17 @@ impl Sawtooth {
         }
     }
 }
+
+impl Contains for Sawtooth {
+    fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        let proj = (p - self.limit).project(self.reference - self.limit);
+        let nearpt = p - proj;
+        let phase = (self.limit - nearpt).norm() * self.frequency;
+        if phase.sawtooth() * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit())
+        {
+            Some(self.color.sample(rng))
+        } else {
+            None
+        }
+    }
+}
