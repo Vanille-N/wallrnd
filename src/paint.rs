@@ -180,3 +180,31 @@ pub fn create_waves(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> 
     }
     items
 }
+
+pub fn create_sawteeth(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<Sawtooth> {
+    let mut items = Vec::new();
+    let (a, b, dir) = {
+        let c = cfg.frame.center();
+        let w = cfg.frame.h + cfg.frame.w;
+        let dir = rng.gen_range(0, 360);
+        let d = Pos::polar(dir, w as f64 / 2.);
+        (c + d, c - d, dir)
+    };
+    let amplitude = (b - a).norm() / cfg.nb_pattern as f64 / 2.;
+    for i in 0..cfg.nb_pattern {
+        let c = cfg.choose_color(rng);
+        let p = i as f64 / cfg.nb_pattern as f64;
+        items.push(Sawtooth::random(
+            rng,
+            a * (1. - p) + b * p,
+            180 + dir,
+            cfg.width_pattern / 5.,
+            amplitude,
+            c,
+        ));
+    }
+    if verbose.details {
+        println!("{:#?}", items);
+    }
+    items
+}
