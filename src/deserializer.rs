@@ -94,11 +94,13 @@ pub struct ConfigPatterns {
     pub nb_concentric_circles: Option<usize>,
     pub nb_free_triangles: Option<usize>,
     pub nb_parallel_waves: Option<usize>,
+    pub nb_parallel_sawteeth: Option<usize>,
     pub var_parallel_stripes: Option<usize>,
     pub var_crossed_stripes: Option<usize>,
     pub width_spiral: Option<f64>,
     pub width_stripe: Option<f64>,
     pub width_wave: Option<f64>,
+    pub width_sawtooth: Option<f64>,
 }
 
 /// Entry for a single theme/time combination
@@ -792,11 +794,13 @@ const NB_CONCENTRIC_CIRCLES: usize = 5;
 const NB_CROSSED_STRIPES: usize = 10;
 const NB_FREE_SPIRALS: usize = 3;
 const NB_PARALLEL_WAVES: usize = 15;
+const NB_PARALLEL_SAWTEETH: usize = 15;
 const VAR_PARALLEL_STRIPES: usize = 15;
 const VAR_CROSSED_STRIPES: usize = 10;
 const WIDTH_SPIRAL: f64 = 0.3;
 const WIDTH_STRIPE: f64 = 0.1;
 const WIDTH_WAVE: f64 = 0.3;
+const WIDTH_SAWTOOTH: f64 = 0.3;
 const NB_DELAUNAY: usize = 1000;
 const LINE_WIDTH: f64 = 1.0;
 const LINE_COLOR: Color = Color(0, 0, 0);
