@@ -226,7 +226,7 @@ impl Wave {
             limit,
             reference: limit + Pos::polar(indic, 100.),
             amplitude,
-            frequency: 0.003 / width,
+            frequency: 0.002 / width,
             color,
         }
     }
@@ -268,7 +268,7 @@ impl Sawtooth {
             limit,
             reference: limit + Pos::polar(indic, 100.),
             amplitude,
-            frequency: 0.003 / width,
+            frequency: 0.001 / width,
             color,
         }
     }
@@ -279,7 +279,7 @@ impl Contains for Sawtooth {
         let proj = (p - self.limit).project(self.reference - self.limit);
         let nearpt = p - proj;
         let phase = (self.limit - nearpt).norm() * self.frequency;
-        if phase.sawtooth() * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit())
+        if sawtooth(phase) * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit())
         {
             Some(self.color.sample(rng))
         } else {
