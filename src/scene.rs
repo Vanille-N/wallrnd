@@ -280,10 +280,10 @@ impl Contains for Sawtooth {
             let int = f.floor();
             let frac = f - int;
             match (int as i32).rem_euclid(4) {
-                0 => frac,
-                1 => 1. - frac,
-                2 => -frac,
-                3 => frac - 1.,
+                0 => 1. - frac,
+                1 => -frac,
+                2 => frac - 1.,
+                3 => frac,
                 _ => unreachable!(),
             }
         };
