@@ -334,6 +334,10 @@ impl MetaConfig {
                         nb_pattern = p.nb_parallel_waves.unwrap_or(NB_PARALLEL_WAVES) as i32;
                         width_pattern = p.width_wave.unwrap_or(WIDTH_WAVE);
                     }
+                    Pattern::ParallelSawteeth => {
+                        nb_pattern = p.nb_parallel_sawteeth.unwrap_or(NB_PARALLEL_SAWTEETH) as i32;
+                        width_pattern = p.width_sawtooth.unwrap_or(WIDTH_SAWTOOTH);
+                    }
                 }
             } else {
                 match pattern {
@@ -359,6 +363,10 @@ impl MetaConfig {
                     Pattern::ParallelWaves => {
                         nb_pattern = NB_PARALLEL_WAVES as i32;
                         width_pattern = WIDTH_WAVE;
+                    }
+                    Pattern::ParallelSawteeth => {
+                        nb_pattern = NB_PARALLEL_SAWTEETH as i32;
+                        width_pattern = WIDTH_SAWTOOTH;
                     }
                 }
             }
@@ -678,6 +686,7 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
         "PS" | "p-str." | "parallel-stripes" => patterns.push(Pattern::ParallelStripes, w),
         "CS" | "c-str." | "crossed-stripes" => patterns.push(Pattern::CrossedStripes, w),
         "PW" | "p-wav." | "parallel-waves" => patterns.push(Pattern::ParallelWaves, w),
+        "PT" | "p-saw." | "parallel-sawteeth" => patterns.push(Pattern::ParallelSawteeth, w),
         _ => println!("{} is not recognized as a shape", s),
     }
 }
