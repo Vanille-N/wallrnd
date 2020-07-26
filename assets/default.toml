@@ -204,6 +204,7 @@ dusk = ["mediumslateblue x30", "hotpink x20", "darkorange x20"]
 #   "PS" / "p-str." / "parallel-stripes"
 #   "CS" / "c-str." / "crossed-stripes"
 #   "PW" / "p-wav." / "parallel-waves"
+#   "PT" / "p-saw." / "parallel-sawteeth"
 all = []
 
 [data.patterns]
@@ -215,11 +216,13 @@ nb_concentric_circles = 13
 nb_crossed_stripes = 10
 nb_free_spirals = 3
 nb_parallel_waves = 10
+nb_parallel_sawteeth = 10
 var_parallel_stripes = 15 # Variability of the orientation
 var_crossed_stripes = 15
 width_spiral = 0.3 # As a proportion of the window height
 width_stripe = 0.1
 width_wave = 0.7
+width_sawtooth = 0.3
 
 [data.tilings]
 size_hex = 12.0 # In absolute size
