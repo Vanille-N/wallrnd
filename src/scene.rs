@@ -276,6 +276,17 @@ impl Sawtooth {
 
 impl Contains for Sawtooth {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
+        let sawtooth = |f: f64| {
+            let int = f.floor();
+            let frac = f - int;
+            match (int as i32).rem_euclid(4) {
+                0 => frac,
+                1 => 1. - frac,
+                2 => -frac,
+                3 => frac - 1.,
+                _ => unreachable!(),
+            }
+        };
         let proj = (p - self.limit).project(self.reference - self.limit);
         let nearpt = p - proj;
         let phase = (self.limit - nearpt).norm() * self.frequency;
