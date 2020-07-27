@@ -173,17 +173,17 @@ white = "#FFFFFF"
 [themes]
 # A theme is a list of weighted colors (named or not); e.g. theme1 = ["white x20 ~10", "black x10"]
 # You may include a previously created theme inside another; e.g. theme2 = ["theme2", "grey x20"]
-rust = ["coral x50", "orange x40", "springgreen x10"]
+night = ["midnightblue x40 !20", "black x30 !5 ~10", "slategray x10 ~5 !10"]
+dawn = ["goldenrod x10 !10", "aqua x30", "magenta x50 ~50"]
+spring = ["lawngreen x30 ~60", "gold x10", "aqua x10", "magenta x10 !10 ~40"]
+sky = ["aqua x50", "gold x30 ~50", "skyblue x50"]
+rust = ["coral x40 !20", "orange x30 !20", "springgreen x10 ~50 !0", "silver x20 ~10 !10"]
+fire = ["yellow x20 !10", "orangered x30 ~30", "darkred x10", "red x20 ~30"]
+forest = ["palegreen x30", "forestgreen x30 ~30", "linen x20"]
 ocean = ["navy x60", "indigo x30", "mediumaquamarine x30"]
-sky = ["aqua x50", "gold x30", "skyblue x50"]
-night = ["midnightblue x40", "black x30", "slategray x10"]
-forest = ["palegreen x30", "forestgreen x30", "linen x20"]
 blood = ["maroon x30", "crimson x10", "salmon x20"]
-fire = ["yellow x20", "orangered x30", "darkred x10", "red x20"]
-spring = ["lawngreen x30", "gold x10", "aqua x10", "magenta x10"]
-shadow = ["indigo x30", "black x10", "purple x20"]
-dawn = ["goldenrod x10", "aqua x30", "magenta x50"]
-dusk = ["mediumslateblue x30", "hotpink x20", "darkorange x20"]
+dusk = ["mediumslateblue x30", "hotpink x20 ~30", "darkorange x20 ~30"]
+shadow = ["indigo x30", "black x10 !5 ~5", "purple x20 !5 ~30"]
 
 [shapes]
 # Both tilings and patterns
@@ -227,8 +227,8 @@ var_parallel_stripes = 15 # Variability of the orientation
 var_crossed_stripes = 15
 width_spiral = 0.3 # As a proportion of the window height
 width_stripe = 0.1
-width_wave = 0.7
-width_sawtooth = 0.3
+width_wave = 0.5
+width_sawtooth = 0.5
 
 [data.tilings]
 size_hex = 12.0 # In absolute size
