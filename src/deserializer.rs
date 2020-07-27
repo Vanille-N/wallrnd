@@ -6,6 +6,8 @@ use std::collections::HashMap;
 use std::convert::TryInto;
 use toml::{map::Map, Value};
 
+const BASE_PONDERATION: usize = 10;
+
 /// All config information
 #[derive(Deserialize, Default)]
 pub struct MetaConfig {
@@ -393,7 +395,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                 }
                 themes.insert(
                     String::from("-default-"),
-                    Chooser::new(vec![((Color::random(rng), -1, -1), 1)]),
+                    Chooser::new(vec![((Color::random(rng), -1, -1), BASE_PONDERATION)]),
                 );
             } else {
                 themes.insert(
@@ -406,7 +408,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                             -1,
                             -1,
                         ),
-                        1,
+                        BASE_PONDERATION,
                     )]),
                 );
             }
@@ -556,7 +558,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
     match val {
         Value::String(s) => {
             let mut c = Color(0, 0, 0);
-            let mut p = 1;
+            let mut p = BASE_PONDERATION;
             let mut var = -1;
             let mut w = -1;
             for item in s.split(' ') {
@@ -566,7 +568,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 if &item[0..1] == "x" {
                     p = item[1..].parse().unwrap_or_else(|_| {
                         println!("Not a valid ponderation: {}", &item[1..]);
-                        1
+                        BASE_PONDERATION
                     });
                 } else if &item[0..1] == "~" {
                     var = item[1..]
@@ -597,7 +599,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
         }
         val => {
             warn_invalid(val.to_string());
-            (Color(0, 0, 0), 1, -1, -1)
+            (Color(0, 0, 0), BASE_PONDERATION, -1, -1)
         }
     }
 }
@@ -653,7 +655,7 @@ fn shapes_from_value(
                             tilings.append(t.extract());
                             patterns.append(p.extract());
                         } else {
-                            add_shape(&s[..], 1, &mut tilings, &mut patterns);
+                            add_shape(&s[..], BASE_PONDERATION, &mut tilings, &mut patterns);
                         }
                     }
                     Value::Array(a) => {
@@ -729,7 +731,7 @@ fn choose_theme_shapes(
                     .parse::<usize>()
                     .unwrap_or(2400);
                 if start <= time && time <= end {
-                    valid.push(e, e.weight.unwrap_or(1));
+                    valid.push(e, e.weight.unwrap_or(BASE_PONDERATION));
                 }
             }
             match valid.choose(rng) {
