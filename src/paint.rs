@@ -5,7 +5,7 @@ use rand::{rngs::ThreadRng, Rng};
 
 pub fn create_free_circles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<Disc> {
     let mut items = Vec::new();
-    for i in 0..cfg.nb_pattern {
+    for i in 1..=cfg.nb_pattern {
         let c = cfg.choose_color(rng);
         items.push(Disc::random(
             rng,
@@ -23,7 +23,7 @@ pub fn create_free_circles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosi
 
 pub fn create_free_triangles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<Triangle> {
     let mut items = Vec::new();
-    for i in 0..cfg.nb_pattern {
+    for i in 1..=cfg.nb_pattern {
         let c = cfg.choose_color(rng);
         items.push(Disc::random(
             rng,
@@ -78,7 +78,7 @@ pub fn create_concentric_circles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: V
         .max(center.dist(Pos(0., cfg.frame.w as f64)))
         .max(center.dist(Pos(cfg.frame.h as f64, 0.)))
         .max(center.dist(Pos(cfg.frame.h as f64, cfg.frame.w as f64)));
-    for i in 0..cfg.nb_pattern {
+    for i in 1..=cfg.nb_pattern {
         items.push(Disc {
             center,
             radius: d * i as f64 / cfg.nb_pattern as f64,
@@ -101,7 +101,7 @@ pub fn create_parallel_stripes(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Ver
         let d = Pos::polar(dir, w as f64 / 2.);
         (c + d, c - d, dir)
     };
-    for i in 0..cfg.nb_pattern {
+    for i in 0..=cfg.nb_pattern {
         let c = cfg.choose_color(rng);
         let p = i as f64 / cfg.nb_pattern as f64;
         items.push(HalfPlane::random(
@@ -128,7 +128,7 @@ pub fn create_crossed_stripes(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verb
         let d_orth = Pos::polar(dir + 90, w as f64 / 2.);
         (c + d, c - d, c - d_orth, c + d_orth, dir)
     };
-    for i in 0..cfg.nb_pattern {
+    for i in 0..=cfg.nb_pattern {
         let p = i as f64 / cfg.nb_pattern as f64;
         let c = cfg.choose_color(rng);
         items.push(HalfPlane::random(
@@ -163,7 +163,7 @@ pub fn create_waves(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> 
         (c + d, c - d, dir)
     };
     let amplitude = (b - a).norm() / cfg.nb_pattern as f64 / 2.;
-    for i in 0..cfg.nb_pattern {
+    for i in 0..=cfg.nb_pattern {
         let c = cfg.choose_color(rng);
         let p = i as f64 / cfg.nb_pattern as f64;
         items.push(Wave::random(
@@ -191,7 +191,7 @@ pub fn create_sawteeth(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) 
         (c + d, c - d, dir)
     };
     let amplitude = (b - a).norm() / cfg.nb_pattern as f64 / 2.;
-    for i in 0..cfg.nb_pattern {
+    for i in 0..=cfg.nb_pattern {
         let c = cfg.choose_color(rng);
         let p = i as f64 / cfg.nb_pattern as f64;
         items.push(Sawtooth::random(
