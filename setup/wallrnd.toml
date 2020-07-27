@@ -227,8 +227,8 @@ var_parallel_stripes = 15 # Variability of the orientation
 var_crossed_stripes = 15
 width_spiral = 0.3 # As a proportion of the window height
 width_stripe = 0.1
-width_wave = 0.7
-width_sawtooth = 0.3
+width_wave = 0.5
+width_sawtooth = 0.5
 
 [data.tilings]
 size_hex = 12.0 # In absolute size

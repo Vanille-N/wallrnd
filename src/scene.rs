@@ -226,7 +226,7 @@ impl Wave {
             limit,
             reference: limit + Pos::polar(indic, 100.),
             amplitude,
-            frequency: 0.002 / width,
+            frequency: 0.001 / width,
             color,
         }
     }
@@ -268,7 +268,7 @@ impl Sawtooth {
             limit,
             reference: limit + Pos::polar(indic, 100.),
             amplitude,
-            frequency: 0.001 / width,
+            frequency: 0.0007 / width,
             color,
         }
     }
