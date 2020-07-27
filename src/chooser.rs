@@ -6,7 +6,7 @@ pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);
 impl<T: Copy> Chooser<T> {
     /// Empty Chooser
     pub fn default() -> Self {
-        Self(1, Vec::new())
+        Self(0, Vec::new())
     }
 
     /// Create Chooser from weighted items
@@ -17,7 +17,7 @@ impl<T: Copy> Chooser<T> {
             *w = sum;
         }
         if !v.is_empty() {
-            Self(sum.max(1), v)
+            Self(sum, v)
         } else {
             Self::default()
         }
@@ -25,10 +25,10 @@ impl<T: Copy> Chooser<T> {
 
     /// Pick a random item (weighted)
     pub fn choose(&self, rng: &mut ThreadRng) -> Option<T> {
-        let choice = rng.gen_range(0, self.0);
         if self.1.is_empty() {
             None
         } else {
+            let choice = rng.gen_range(0, self.0);
             Some(self.dichotomy(choice, 0, self.1.len()))
         }
     }
@@ -64,6 +64,9 @@ impl<T: Copy> Chooser<T> {
 
     /// Add new item
     pub fn push(&mut self, item: T, w: usize) {
+        if w == 0 {
+            panic!("In call to Chooser::push, 0 is not a valid ponderation");
+        }
         self.0 += w;
         self.1.push((item, self.0));
     }
