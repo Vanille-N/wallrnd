@@ -39,10 +39,10 @@ impl Movable {
 
     pub fn rhombus(ldiag: f64, sdiag: f64, rot: i32) -> Self {
         Movable(vec![
-            Pos::polar(rot, ldiag/2.),
-            Pos::polar(rot+90, sdiag/2.),
-            Pos::polar(rot+180, ldiag/2.),
-            Pos::polar(rot+270, sdiag/2.),
+            Pos::polar(rot, ldiag),
+            Pos::polar(rot+90, sdiag),
+            Pos::polar(rot+180, ldiag),
+            Pos::polar(rot+270, sdiag),
         ])
     }
 }
