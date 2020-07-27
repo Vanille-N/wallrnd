@@ -129,6 +129,13 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     )
 }
 
+pub fn tile_rhombus(f: &Frame, ldiag: f64, sdiag: f64, rot: i32) -> Vec<(Pos, Path)> {
+    let idir = Pos::polar(rot, ldiag) + Pos::polar(rot+90, sdiag);
+    let jdir = Pos::polar(rot, -ldiag) + Pos::polar(rot+90, sdiag);
+    let m = Movable::rhombus(ldiag, sdiag, rot);
+    periodic_grid_tiling(f, |p| vec![m.render(p)], idir, jdir)
+}
+
 /// External crate does the heavy lifting and is an order of magnitude faster than the previously implemented Boyer-Watson algorithm.
 /// Only downside is that it requires conversions between position types.
 fn fast_triangulate(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
