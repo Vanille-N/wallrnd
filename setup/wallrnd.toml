@@ -10,6 +10,11 @@ height = 768 # Screen dimension
 width = 1.0
 color = "#000000" # Supports named colors as well
 # Tiling-specific overrides
+# Available:
+#   del_width, del_color, rho_width, rho_color,
+#   hex_width, hex_color, tri_width, tri_color,
+#   hex_and_tri_width, hex_and_tri_color,
+#   squ_and_tri_width, squ_and_tri_color,
 del_width = 0.0
 del_color = "#000000"
 
@@ -194,6 +199,7 @@ dusk = ["mediumslateblue x30", "hotpink x20", "darkorange x20"]
 #   "T" / "tri." / "triangles"
 #   "H&T" / "hex.&tri." / "hexagons&squares"
 #   "S&T" / "squ.&tri." / "squares&triangles"
+#   "R" / "rho." / "rhombus"
 #   "D" / "del." / "delaunay"
 # Patterns
 #   "FC" / "f-cir." / "free-circles"
@@ -210,7 +216,7 @@ all = []
 [data.patterns]
 nb_free_triangles = 15
 nb_free_circles = 10
-nb_free_stripes = 7
+nb_free_stripes = 15
 nb_parallel_stripes = 15
 nb_concentric_circles = 13
 nb_crossed_stripes = 10
@@ -229,6 +235,7 @@ size_hex = 12.0 # In absolute size
 size_tri = 15.0
 size_hex_and_tri = 13.0
 size_squ_and_tri = 15.0
+size_rho = 15.0
 nb_delaunay = 3000
 
 [[entry]]
