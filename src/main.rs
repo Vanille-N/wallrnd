@@ -111,9 +111,9 @@ fn main() {
     if verbose.prog {
         println!("Writing image to file");
     }
-    document.save(dest).unwrap_or_else(|_| {
+    document.save(dest).unwrap_or_else(|e| {
         if verbose.warn {
-            println!("No valid destination specified");
+            println!("An error occured: {:?}", e);
         }
         std::process::exit(1);
     });
