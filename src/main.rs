@@ -104,7 +104,7 @@ fn main() {
         document.add(
             elem.with_fill_color(fill)
                 .with_stroke_color(if stroke_like_fill { fill } else { stroke })
-                .with_stroke_width(stroke_width),
+                .with_stroke_width(stroke_width.max(1.0)),
         );
     }
 
