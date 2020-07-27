@@ -39,6 +39,8 @@ pub struct ConfigLines {
     pub hex_color: Option<String>,
     pub tri_width: Option<f64>,
     pub tri_color: Option<String>,
+    pub rho_width: Option<f64>,
+    pub rho_color: Option<String>,
     pub hex_and_tri_width: Option<f64>,
     pub hex_and_tri_color: Option<String>,
     pub squ_and_tri_width: Option<f64>,
@@ -80,6 +82,7 @@ pub struct ConfigTilings {
     pub size_tri: Option<f64>,
     pub size_hex_and_tri: Option<f64>,
     pub size_squ_and_tri: Option<f64>,
+    pub size_rho: Option<f64>,
     pub nb_delaunay: Option<usize>,
 }
 
@@ -421,6 +424,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                     Tiling::Triangles => (t.size_tri.unwrap_or(size), 0),
                     Tiling::HexagonsAndTriangles => (t.size_hex_and_tri.unwrap_or(size), 0),
                     Tiling::SquaresAndTriangles => (t.size_squ_and_tri.unwrap_or(size), 0),
+                    Tiling::Rhombus => (t.size_rho.unwrap_or(size), 0),
                     Tiling::Delaunay => (0.0, t.nb_delaunay.unwrap_or(NB_DELAUNAY) as i32),
                 }
             } else {
@@ -429,6 +433,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                     Tiling::Triangles => (size, 0),
                     Tiling::HexagonsAndTriangles => (size, 0),
                     Tiling::SquaresAndTriangles => (size, 0),
+                    Tiling::Rhombus => (size, 0),
                     Tiling::Delaunay => (0.0, NB_DELAUNAY as i32),
                 }
             }
@@ -679,6 +684,7 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
         "T" | "tri." | "triangles" => tilings.push(Tiling::Triangles, w),
         "H&T" | "hex.&tri." | "hexagons&squares" => tilings.push(Tiling::HexagonsAndTriangles, w),
         "S&T" | "squ.&tri." | "squares&triangles" => tilings.push(Tiling::SquaresAndTriangles, w),
+        "R" | "rho." | "rhombus" => tilings.push(Tiling::Rhombus, w),
         "D" | "del." | "delaunay" => tilings.push(Tiling::Delaunay, w),
         "FC" | "f-cir." | "free-circles" => patterns.push(Pattern::FreeCircles, w),
         "FT" | "f-tri." | "free-triangles" => patterns.push(Pattern::FreeTriangles, w),
@@ -762,6 +768,7 @@ impl ConfigLines {
             Tiling::Triangles => (self.tri_width, &self.tri_color),
             Tiling::HexagonsAndTriangles => (self.hex_and_tri_width, &self.hex_and_tri_color),
             Tiling::SquaresAndTriangles => (self.squ_and_tri_width, &self.squ_and_tri_color),
+            Tiling::Rhombus => (self.rho_width, &self.rho_color),
             Tiling::Delaunay => (self.del_width, &self.del_color),
         };
         (
