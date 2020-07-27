@@ -84,6 +84,9 @@ impl SceneCfg {
             Tiling::SquaresAndTriangles => {
                 tile_hybrid_squares_triangles(&self.frame, self.size_tiling, rng.gen_range(0, 360))
             }
+            Tiling::Rhombus => {
+                tile_rhombus(&self.frame, self.size_tiling, (rng.gen::<f64>() * 0.6 + 0.4)*self.size_tiling, rng.gen_range(0, 360))
+            }
             Tiling::Delaunay => random_delaunay(&self.frame, rng, self.nb_delaunay),
         }
     }
@@ -130,6 +133,7 @@ pub enum Tiling {
     Triangles,
     HexagonsAndTriangles,
     SquaresAndTriangles,
+    Rhombus,
     Delaunay,
 }
 
@@ -142,6 +146,7 @@ impl Tiling {
             Triangles,
             HexagonsAndTriangles,
             SquaresAndTriangles,
+            Rhombus,
             Delaunay,
         ]
         .choose(rng)
