@@ -2,7 +2,8 @@ WALLRND
 
 NAME
     wallrnd
-    github.com/Vanille-N/wallrnd
+      github.com/Vanille-N/wallrnd
+      crates.io/crates/wallrnd
 
 SYNOPSIS
     wallrnd [OPTIONS]
@@ -12,37 +13,26 @@ DESCRIPTION
 
 OPTIONS
     --help              Print this help and exit
-
-    --log               Save generation information for image replication
-
+    --log F             Save generation information for image replication in file F
     --verbose V         Display more debug information. See verbosity description below.
-
     --time T            Generate image as if the current time was T (format HHMM)
-
     --image I           Destination of the generated file. If absent or invalid, program aborts.
-
     --config C          Location of the config file. If absent or invalid, default parameters are used.
-
     --init C            Create a default configuration in file C and exit.
 
 EXAMPLES
     wallrnd --image /tmp/random-wallpaper.svg --config ~/.config/wallrnd.toml
-    wallrnd --verbose IP --log --time 1000 --image ./test.svg
+    wallrnd --verbose IP --log save.txt --time 1000 --image test.svg
     wallrnd --init default.toml
-
 
 VERBOSITY
     By default, wallrnd is silent.
     It is possible to adjust verbosity level with flags.
 
-    'I': Info
-        Display basic information (theme, shapes, ...)
-    'P': Progress
-        Inform on the current actions
-    'D': Details
-        Very verbose, prints full scene layout and list of colors
-    'W': Warnings
-        Alert recoverable errors (invalid configuration file, badly formatted color, ...)
+    'I': Info           Display basic information (theme, shapes, ...)
+    'P': Progress       Inform on the current actions
+    'D': Details        Very verbose, prints full scene layout and list of colors
+    'W': Warnings       Alert recoverable errors (invalid configuration file, badly formatted color, ...)
 
     Any combination of these flags is valid except for no flags
     ('--verbose' option expects at least one flag)
