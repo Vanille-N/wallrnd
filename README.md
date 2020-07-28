@@ -32,7 +32,7 @@ Direct dependencies
 
 This project aims to provide a utility for generating random abstract wallpapers.
 
-It is only intended for **generating** the images (SVG), not actually setting them as a wallpaper.
+Until recently it could only generate the images, not actually set them as wallpapers. This limitation is being addressed.
 
 A bash script to automatically change wallpaper is provided, and has been tested on Ubuntu 20.04 (Focal Fossa).
 Portability of this script is outside of the scope of this project (the image generator however should be portable to any OS), but scripts that work for other shells/distros are welcome.
@@ -66,7 +66,7 @@ Portability of this script is outside of the scope of this project (the image ge
 
 * `cargo install wallrnd`
 
-* Put `setup/wallrnd.toml` in a directory `$DIR`
+* Put `setup/wallrnd.toml` at a location `$CFG`
 
 * Edit accordingly the `set-wallpaper` script, make it executable, and add it to a folder in your `$PATH`
 
@@ -78,13 +78,15 @@ Performance is good enough that running it every 60 seconds is not even noticeab
 
 Thanks to [`nice`](https://en.wikipedia.org/wiki/Nice_(Unix)) giving the program a very low priority, it can run in the background without issue. The script also exits early when running on battery.
 
-### Recommended setup (executable `prototype.py`)
+It will soon be possible to achieve the same without `nice`.
+
+### Recommended setup (executable `prototype/prototype.py`)
 
 `wallrnd` is a more developed product than this, but if you still want to use the prototype it is possible.
 
 Be warned that performance is a lot worse and that this version is far less configurable.
 
-* Edit `set-wallpaper` to your liking, make it executable, and add it to your `$PATH`.
+* Edit `prototype/set-wallpaper` to your liking, make it executable, and add it to your `$PATH`.
 
 * Make a new Crontab entry: `* * * * * set-wallpaper`
 
