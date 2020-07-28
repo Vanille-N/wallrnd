@@ -117,6 +117,18 @@ fn main() {
         }
         std::process::exit(1);
     });
+    if args.set {
+        if verbose.prog {
+            println!("Setting as wallpaper");
+        }
+        wallpaper::set_from_path(&dest).unwrap_or_else(|e| {
+            if verbose.warn {
+                println!("Could not set as wallpaper");
+                println!("Message: {}", e);
+            }
+        });
+    }
+
     if verbose.prog {
         println!("Process exited successfully");
     }
