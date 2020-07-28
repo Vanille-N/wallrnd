@@ -28,6 +28,15 @@ Direct dependencies
 `delaunator` [![](http://meritbadge.herokuapp.com/delaunator)](https://crates.io/crates/delaunator)
 [![API](https://docs.rs/delaunator/badge.svg)](https://docs.rs/delaunator)
 
+`resvg` [![](http://meritbadge.herokuapp.com/resvg)](https://crates.io/crates/resvg)
+[![API](https://docs.rs/resvg/badge.svg)](https://docs.rs/resvg)
+
+`usvg` [![](http://meritbadge.herokuapp.com/usvg)](https://crates.io/crates/usvg)
+[![API](https://docs.rs/usvg/badge.svg)](https://docs.rs/usvg)
+
+`wallpaper` [![](http://meritbadge.herokuapp.com/wallpaper)](https://crates.io/crates/wallpaper)
+[![API](https://docs.rs/wallpaper/badge.svg)](https://docs.rs/wallpaper)
+
 ---
 
 This project aims to provide a utility for generating random abstract wallpapers.
