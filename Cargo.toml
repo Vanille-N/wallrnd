@@ -19,6 +19,7 @@ chrono = "0.4.*"
 delaunator = "0.2.*"
 resvg = "0.11.*"
 usvg = "0.11.*"
+wallpaper = "2.0.1"
 
 [[bin]]
 name = "wallrnd"
