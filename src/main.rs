@@ -125,6 +125,7 @@ fn main() {
 #[derive(Default)]
 struct Args {
     help: bool,
+    set: bool,
     verbose: Verbosity,
     time: Option<usize>,
     log: String,
@@ -195,6 +196,7 @@ A: All"))[..]),
                     })
                     .to_string()
             }
+            Some("--set") => args.set = true,
             Some(o) => panic!("Unknown option {}", o),
         }
     }
