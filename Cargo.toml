@@ -7,8 +7,8 @@ license = "MIT"
 description = "A generator of random abstract wallpapers"
 readme = "README.md"
 repository = "https://github.com/Vanille-N/wallrnd"
-categories = []
 keywords = ["wallpaper", "random", "desktop"]
+categories = ["command-line-utilities", "graphics"]
 
 [dependencies]
 rand = "0.7.*"
