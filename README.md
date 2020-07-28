@@ -104,6 +104,8 @@ Be warned that performance is a lot worse and that this version is far less conf
 
 * [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
 
+* [qryxip/sky-color-wallpaper](https://crates.io/crates/sky-color-wallpaper)
+
 #### Apps
 * [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
 
