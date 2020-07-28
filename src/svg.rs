@@ -69,7 +69,7 @@ impl Document {
         self.items.push(path);
     }
 
-    pub fn save(&self, dest: String) -> io::Result<()> {
+    pub fn save(&self, dest: &str) -> io::Result<()> {
         if dest.ends_with(".svg") {
             let mut buffer = std::fs::File::create(dest)?;
             buffer.write_all(&format!("{}", &self).into_bytes())

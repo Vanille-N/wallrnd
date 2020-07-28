@@ -111,7 +111,7 @@ fn main() {
     if verbose.prog {
         println!("Writing image to file");
     }
-    document.save(dest).unwrap_or_else(|e| {
+    document.save(&dest).unwrap_or_else(|e| {
         if verbose.warn {
             println!("An error occured: {:?}", e);
         }
