@@ -1,0 +1,15 @@
+#!/bin/bash -e
+
+# Set the output image of `wallrnd` as wallpaper
+# Tested on Ubuntu 20.04 (Focal Fossa)
+
+# Disable when running on battery
+ac_adapter=$(acpi -a | cut -d' ' -f3 | cut -d- -f1)
+
+if [ "$ac_adapter" = "off" ]; then
+    exit 100
+fi
+
+IMG=/tmp/wallpaper.png
+CFG=/home/$( whoami )/wallrnd.toml
+nice -n 20 -- wallrnd --image $IMG --config $CFG --set
