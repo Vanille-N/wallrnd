@@ -10,6 +10,17 @@
 ---
 Direct dependencies
 
+| dependency     | crate                              | docs                                  |
+|----------------|------------------------------------|---------------------------------------|
+| `serde`        | [![][serde_cb]][serde_c]           | [![API][serde_db]][serde_d]           |
+| `serde_derive` | [![][derive_cb]][derive_c]         | [![API][derive_db]][derive_d]         |
+| `rand`         | [![][rand_cb]][rand_c]             | [![API][rand_db]][rand_d]             |
+| `toml`         | [![][toml_cb]][toml_c]             | [![API][toml_db]][toml_d]             |
+| `delaunator`   | [![][delaunator_cb]][delaunator_c] | [![API][delaunator_db]][delaunator_d] |
+| `toml`         | [![][toml_cb]][toml_c]             | [![API][toml_db]][toml_d]             |
+| `resvg`        | [![][resvg_cb]][resvg_c]           | [![API][resvg_db]][resvg_d]           |
+| `usvg`         | [![][usvg_cb]][usvg_c]             | [![API][usvg_db]][usvg_d]             |
+| `wallpaper`    | [![][wallpaper_cb]][wallpaper_c]   | [![API][wallpaper_db]][wallpaper_d]   |
 
 ---
 
