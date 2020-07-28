@@ -64,9 +64,9 @@ Portability of this script is outside of the scope of this project (the image ge
 
 ### Recommended setup (executable `wallrnd`)
 
-* `cargo build --release` (1.44 stable) to create the `wallrnd` executable
+* `cargo install wallrnd`
 
-* Put `wallrnd` and `setup/wallrnd.toml` in a directory `$DIR`
+* Put `setup/wallrnd.toml` in a directory `$DIR`
 
 * Edit accordingly the `set-wallpaper` script, make it executable, and add it to a folder in your `$PATH`
 
