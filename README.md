@@ -10,32 +10,6 @@
 ---
 Direct dependencies
 
-`serde` [![](http://meritbadge.herokuapp.com/serde)](https://crates.io/crates/serde)
-[![API](https://docs.rs/serde/badge.svg)](https://docs.rs/serde)
-
-`serde_derive` [![](http://meritbadge.herokuapp.com/serde_derive)](https://crates.io/crates/serde_derive)
-[![API](https://docs.rs/serde_derive/badge.svg)](https://docs.rs/serde_derive)
-
-`rand` [![](http://meritbadge.herokuapp.com/rand)](https://crates.io/crates/rand)
-[![API](https://docs.rs/rand/badge.svg)](https://docs.rs/rand)
-
-`toml` [![](http://meritbadge.herokuapp.com/toml)](https://crates.io/crates/toml)
-[![API](https://docs.rs/toml/badge.svg)](https://docs.rs/toml)
-
-`chrono` [![](http://meritbadge.herokuapp.com/chrono)](https://crates.io/crates/chrono)
-[![API](https://docs.rs/chrono/badge.svg)](https://docs.rs/chrono)
-
-`delaunator` [![](http://meritbadge.herokuapp.com/delaunator)](https://crates.io/crates/delaunator)
-[![API](https://docs.rs/delaunator/badge.svg)](https://docs.rs/delaunator)
-
-`resvg` [![](http://meritbadge.herokuapp.com/resvg)](https://crates.io/crates/resvg)
-[![API](https://docs.rs/resvg/badge.svg)](https://docs.rs/resvg)
-
-`usvg` [![](http://meritbadge.herokuapp.com/usvg)](https://crates.io/crates/usvg)
-[![API](https://docs.rs/usvg/badge.svg)](https://docs.rs/usvg)
-
-`wallpaper` [![](http://meritbadge.herokuapp.com/wallpaper)](https://crates.io/crates/wallpaper)
-[![API](https://docs.rs/wallpaper/badge.svg)](https://docs.rs/wallpaper)
 
 ---
 
@@ -138,3 +112,49 @@ As a random generator of wallpaper ought to provide images of consistent quality
 
 
 <a name="methodology">[\*](#return-methodology)</a> To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.
+
+<!-- Links section -->
+[serde_c]: https://crates.io/crates/serde
+[serde_cb]: https://meritbadge.herokuapp.com/serde
+[serde_d]: https://docs.rs/serde
+[serde_db]: https://docs.rs/serde/badge.svg
+
+[derive_c]: https://crates.io/crates/serde_derive
+[derive_cb]: https://meritbadge.herokuapp.com/serde_derive
+[derive_d]: https://docs.rs/serde_derive
+[derive_db]: https://docs.rs/serde_derive/badge.svg
+
+[rand_c]: https://crates.io/crates/rand
+[rand_cb]: https://meritbadge.herokuapp.com/rand
+[rand_d]: https://docs.rs/rand
+[rand_db]: https://docs.rs/rand/badge.svg
+
+[toml_c]: https://crates.io/crates/toml
+[toml_cb]: https://meritbadge.herokuapp.com/toml
+[toml_d]: https://docs.rs/toml
+[toml_db]: https://docs.rs/toml/badge.svg
+
+[chrono_c]: https://crates.io/crates/chrono
+[chrono_cb]: https://meritbadge.herokuapp.com/chrono
+[chrono_d]: https://docs.rs/chrono
+[chrono_db]: https://docs.rs/chrono/badge.svg
+
+[delaunator_c]: https://crates.io/crates/delaunator
+[delaunator_cb]: https://meritbadge.herokuapp.com/delaunator
+[delaunator_d]: https://docs.rs/delaunator
+[delaunator_db]: https://docs.rs/delaunator/badge.svg
+
+[resvg_c]: https://crates.io/crates/resvg
+[resvg_cb]: https://meritbadge.herokuapp.com/resvg
+[resvg_d]: https://docs.rs/resvg
+[resvg_db]: https://docs.rs/resvg/badge.svg
+
+[usvg_c]: https://crates.io/crates/usvg
+[usvg_cb]: https://meritbadge.herokuapp.com/usvg
+[usvg_d]: https://docs.rs/usvg
+[usvg_db]: https://docs.rs/usvg/badge.svg
+
+[wallpaper_c]: https://crates.io/crates/wallpaper
+[wallpaper_cb]: https://meritbadge.herokuapp.com/wallpaper
+[wallpaper_d]: https://docs.rs/wallpaper
+[wallpaper_db]: https://docs.rs/wallpaper/badge.svg
