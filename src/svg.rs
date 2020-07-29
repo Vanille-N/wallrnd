@@ -70,10 +70,10 @@ impl Document {
     }
 
     pub fn save(&self, dest: &str) -> io::Result<()> {
-        if dest.ends_with(".svg") {
+        if dest.ends_with(".svg") || dest.ends_with(".svg.tmp") {
             let mut buffer = std::fs::File::create(dest)?;
             buffer.write_all(&format!("{}", &self).into_bytes())
-        } else if dest.ends_with(".png") {
+        } else if dest.ends_with(".png") || dest.ends_with(".png.tmp") {
             let svg_data = format!("{}", &self);
             let tree = match usvg::Tree::from_str(&svg_data, &usvg::Options::default()) {
                 Ok(tree) => tree,
