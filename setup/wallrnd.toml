@@ -5,6 +5,7 @@ size = 15.0 # How big are tiles. Can be overriden for each tiling
 # You should set the dimensions TWICE AS BIG as you actual screen
 # resolution if you're going to generate SVG with line width 0.0
 # This will truly hide the lines.
+# Warning: massive performance hit when converting to PNG, SVG is still fine
 width = 2732 # Screen dimension
 height = 1536 # Screen dimension
 
