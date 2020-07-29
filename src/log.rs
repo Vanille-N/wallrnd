@@ -129,7 +129,7 @@ impl Restore for Pos {
 
 impl Restore for Color {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        Self(usize::restore(items) as i32, usize::restore(items) as i32, usize::restore(items) as i32)
+        Self(usize::restore(items), usize::restore(items), usize::restore(items))
     }
 }
 
@@ -170,8 +170,8 @@ impl Restore for ColorItem {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let shade = Color::restore(items);
         let theme = Color::restore(items);
-        let deviation = usize::restore(items) as i32;
-        let weight = usize::restore(items) as i32;
+        let deviation = usize::restore(items);
+        let weight = usize::restore(items);
         assert_eq!(items.next().unwrap(), "#");
         Self {
             shade,

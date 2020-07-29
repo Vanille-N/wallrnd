@@ -314,68 +314,68 @@ impl MetaConfig {
             {
                 match pattern {
                     Pattern::FreeCircles => {
-                        nb_pattern = p.nb_free_circles.unwrap_or(NB_FREE_CIRCLES) as i32
+                        nb_pattern = p.nb_free_circles.unwrap_or(NB_FREE_CIRCLES);
                     }
                     Pattern::FreeTriangles => {
-                        nb_pattern = p.nb_free_triangles.unwrap_or(NB_FREE_TRIANGLES) as i32
+                        nb_pattern = p.nb_free_triangles.unwrap_or(NB_FREE_TRIANGLES);
                     }
                     Pattern::FreeStripes => {
-                        nb_pattern = p.nb_free_stripes.unwrap_or(NB_FREE_STRIPES) as i32;
-                        width_pattern = p.width_stripe.unwrap_or(WIDTH_STRIPE) as f64;
+                        nb_pattern = p.nb_free_stripes.unwrap_or(NB_FREE_STRIPES);
+                        width_pattern = p.width_stripe.unwrap_or(WIDTH_STRIPE);
                     }
                     Pattern::FreeSpirals => {
-                        nb_pattern = p.nb_free_spirals.unwrap_or(NB_FREE_SPIRALS) as i32;
+                        nb_pattern = p.nb_free_spirals.unwrap_or(NB_FREE_SPIRALS);
                         width_pattern = p.width_spiral.unwrap_or(WIDTH_SPIRAL);
                         tightness_spiral = p.tightness_spiral.unwrap_or(TIGHTNESS_SPIRAL);
                     }
                     Pattern::ConcentricCircles => {
-                        nb_pattern = p.nb_concentric_circles.unwrap_or(NB_CONCENTRIC_CIRCLES) as i32
+                        nb_pattern = p.nb_concentric_circles.unwrap_or(NB_CONCENTRIC_CIRCLES);
                     }
                     Pattern::ParallelStripes => {
-                        nb_pattern = p.nb_parallel_stripes.unwrap_or(NB_PARALLEL_STRIPES) as i32;
-                        var_stripes = p.var_parallel_stripes.unwrap_or(VAR_PARALLEL_STRIPES) as i32;
+                        nb_pattern = p.nb_parallel_stripes.unwrap_or(NB_PARALLEL_STRIPES);
+                        var_stripes = p.var_parallel_stripes.unwrap_or(VAR_PARALLEL_STRIPES);
                     }
                     Pattern::CrossedStripes => {
-                        nb_pattern = p.nb_crossed_stripes.unwrap_or(NB_CROSSED_STRIPES) as i32;
-                        var_stripes = p.var_crossed_stripes.unwrap_or(VAR_CROSSED_STRIPES) as i32;
+                        nb_pattern = p.nb_crossed_stripes.unwrap_or(NB_CROSSED_STRIPES);
+                        var_stripes = p.var_crossed_stripes.unwrap_or(VAR_CROSSED_STRIPES);
                     }
                     Pattern::ParallelWaves => {
-                        nb_pattern = p.nb_parallel_waves.unwrap_or(NB_PARALLEL_WAVES) as i32;
+                        nb_pattern = p.nb_parallel_waves.unwrap_or(NB_PARALLEL_WAVES);
                         width_pattern = p.width_wave.unwrap_or(WIDTH_WAVE);
                     }
                     Pattern::ParallelSawteeth => {
-                        nb_pattern = p.nb_parallel_sawteeth.unwrap_or(NB_PARALLEL_SAWTEETH) as i32;
+                        nb_pattern = p.nb_parallel_sawteeth.unwrap_or(NB_PARALLEL_SAWTEETH);
                         width_pattern = p.width_sawtooth.unwrap_or(WIDTH_SAWTOOTH);
                     }
                 }
             } else {
                 match pattern {
-                    Pattern::FreeCircles => nb_pattern = NB_FREE_CIRCLES as i32,
-                    Pattern::FreeTriangles => nb_pattern = NB_FREE_TRIANGLES as i32,
+                    Pattern::FreeCircles => nb_pattern = NB_FREE_CIRCLES,
+                    Pattern::FreeTriangles => nb_pattern = NB_FREE_TRIANGLES,
                     Pattern::FreeStripes => {
-                        nb_pattern = NB_FREE_STRIPES as i32;
+                        nb_pattern = NB_FREE_STRIPES;
                         width_pattern = WIDTH_STRIPE;
                     }
                     Pattern::FreeSpirals => {
-                        nb_pattern = NB_FREE_SPIRALS as i32;
+                        nb_pattern = NB_FREE_SPIRALS;
                         width_pattern = WIDTH_SPIRAL;
                         tightness_spiral = TIGHTNESS_SPIRAL;
                     }
-                    Pattern::ConcentricCircles => nb_pattern = NB_CONCENTRIC_CIRCLES as i32,
+                    Pattern::ConcentricCircles => nb_pattern = NB_CONCENTRIC_CIRCLES,
                     Pattern::ParallelStripes => {
-                        nb_pattern = NB_PARALLEL_STRIPES as i32;
-                        var_stripes = VAR_PARALLEL_STRIPES as i32;
+                        nb_pattern = NB_PARALLEL_STRIPES;
+                        var_stripes = VAR_PARALLEL_STRIPES;
                     }
                     Pattern::CrossedStripes => {
-                        nb_pattern = NB_CROSSED_STRIPES as i32;
-                        var_stripes = VAR_CROSSED_STRIPES as i32;
+                        nb_pattern = NB_CROSSED_STRIPES;
+                        var_stripes = VAR_CROSSED_STRIPES;
                     }
                     Pattern::ParallelWaves => {
-                        nb_pattern = NB_PARALLEL_WAVES as i32;
+                        nb_pattern = NB_PARALLEL_WAVES;
                         width_pattern = WIDTH_WAVE;
                     }
                     Pattern::ParallelSawteeth => {
-                        nb_pattern = NB_PARALLEL_SAWTEETH as i32;
+                        nb_pattern = NB_PARALLEL_SAWTEETH;
                         width_pattern = WIDTH_SAWTOOTH;
                     }
                 }
@@ -398,7 +398,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                 }
                 themes.insert(
                     String::from("-default-"),
-                    Chooser::new(vec![((Color::random(rng), -1, -1), BASE_PONDERATION)]),
+                    Chooser::new(vec![((Color::random(rng), None, None), BASE_PONDERATION)]),
                 );
             } else {
                 themes.insert(
@@ -408,8 +408,8 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                             *colors
                                 .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
                                 .unwrap(),
-                            -1,
-                            -1,
+                            None,
+                            None,
                         ),
                         BASE_PONDERATION,
                     )]),
@@ -430,7 +430,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                     Tiling::HexagonsAndTriangles => (t.size_hex_and_tri.unwrap_or(size), 0),
                     Tiling::SquaresAndTriangles => (t.size_squ_and_tri.unwrap_or(size), 0),
                     Tiling::Rhombus => (t.size_rho.unwrap_or(size), 0),
-                    Tiling::Delaunay => (0.0, t.nb_delaunay.unwrap_or(NB_DELAUNAY) as i32),
+                    Tiling::Delaunay => (0.0, t.nb_delaunay.unwrap_or(NB_DELAUNAY)),
                 }
             } else {
                 match tiling {
@@ -439,7 +439,7 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
                     Tiling::HexagonsAndTriangles => (size, 0),
                     Tiling::SquaresAndTriangles => (size, 0),
                     Tiling::Rhombus => (size, 0),
-                    Tiling::Delaunay => (0.0, NB_DELAUNAY as i32),
+                    Tiling::Delaunay => (0.0, NB_DELAUNAY),
                 }
             }
         };
@@ -502,11 +502,11 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
                 return Ok(*color);
             }
             if s.len() == 7 && &s[0..1] == "#" {
-                let r = i32::from_str_radix(&s[1..3], 16);
-                let g = i32::from_str_radix(&s[3..5], 16);
-                let b = i32::from_str_radix(&s[5..7], 16);
+                let r = usize::from_str_radix(&s[1..3], 16);
+                let g = usize::from_str_radix(&s[3..5], 16);
+                let b = usize::from_str_radix(&s[5..7], 16);
                 match (r, g, b) {
-                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r as i32, g as i32, b as i32)),
+                    (Ok(r), Ok(g), Ok(b)) => Ok(Color(r, g, b)),
                     _ => Err(format!(
                         "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
                         s
@@ -528,7 +528,7 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
             }
             match &a[0..3] {
                 [Value::Integer(r), Value::Integer(g), Value::Integer(b)] => {
-                    Ok(Color(*r as i32, *g as i32, *b as i32))
+                    Ok(Color(*r as usize, *g as usize, *b as usize))
                 }
                 _ => Err(format!(
                     "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
@@ -543,7 +543,7 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
     }
 }
 
-fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>, verbose: Verbosity) -> (Color, usize, isize, isize) {
+fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>, verbose: Verbosity) -> (Color, usize, Option<usize>, Option<usize>) {
     let warn_invalid = |x| {
         if verbose.warn {
             println!(
@@ -563,32 +563,38 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
         Value::String(s) => {
             let mut c = Color(0, 0, 0);
             let mut p = BASE_PONDERATION;
-            let mut var = -1;
-            let mut w = -1;
+            let mut var = None;
+            let mut w = None;
             for item in s.split(' ') {
                 if item.is_empty() {
                     continue;
                 }
                 if &item[0..1] == "x" {
                     p = item[1..].parse().unwrap_or_else(|_| {
-                        println!("Not a valid ponderation: {}", &item[1..]);
+                        if verbose.warn {
+                            println!("Not a valid ponderation: {}", &item[1..]);
+                        }
                         BASE_PONDERATION
                     });
                 } else if &item[0..1] == "~" {
                     var = item[1..]
                         .parse::<usize>()
-                        .map(|x| x as isize)
+                        .map(|x| Some(x))
                         .unwrap_or_else(|_| {
-                            println!("Not a valid variability: {}", &item[1..]);
-                            -1
+                            if verbose.warn {
+                                println!("Not a valid variability: {}", &item[1..]);
+                            }
+                            None
                         });
                 } else if &item[0..1] == "!" {
                     w = item[1..]
                         .parse::<usize>()
-                        .map(|x| x as isize)
+                        .map(|x| Some(x))
                         .unwrap_or_else(|_| {
-                            println!("Not a valid weight: {}", &item[1..]);
-                            -1
+                            if verbose.warn {
+                                println!("Not a valid weight: {}", &item[1..]);
+                            }
+                            None
                         });
                 } else {
                     match color_from_value(&Value::String(item.to_string()), dict) {
@@ -603,7 +609,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
         }
         val => {
             warn_invalid(val.to_string());
-            (Color(0, 0, 0), BASE_PONDERATION, -1, -1)
+            (Color(0, 0, 0), BASE_PONDERATION, None, None)
         }
     }
 }
@@ -612,9 +618,9 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
 fn theme_from_value(
     v: &Value,
     colors: &HashMap<String, Color>,
-    themes: &HashMap<String, Chooser<(Color, isize, isize)>>,
+    themes: &HashMap<String, Chooser<(Color, Option<usize>, Option<usize>)>>,
     verbose: Verbosity,
-) -> Result<Chooser<(Color, isize, isize)>, String> {
+) -> Result<Chooser<(Color, Option<usize>, Option<usize>)>, String> {
     let mut items = Vec::new();
     if let Value::String(s) = v {
         if let Some(th) = themes.get(s) {
@@ -794,8 +800,8 @@ impl ConfigLines {
     }
 }
 
-const DEVIATION: i32 = 20;
-const WEIGHT: i32 = 40;
+const DEVIATION: usize = 20;
+const WEIGHT: usize = 40;
 const SIZE: f64 = 15.;
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 600;
