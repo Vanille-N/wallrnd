@@ -147,15 +147,17 @@ impl Contains for Triangle {
 pub struct Spiral {
     pub center: Pos,
     pub width: f64,
+    pub tightness: f64,
     pub color: ColorItem,
 }
 
 impl Spiral {
-    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, width: f64) -> Self {
+    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, width: f64, tightness: f64) -> Self {
         Self {
             center: Pos::random(f, rng),
             width,
             color,
+            tightness,
         }
     }
 }
@@ -165,7 +167,7 @@ impl Contains for Spiral {
         let Pos(di, dj) = self.center - p;
         let theta = di.atan2(dj);
         let radius = (di.powi(2) + dj.powi(2)).sqrt() + theta / std::f64::consts::PI * self.width;
-        if (radius / self.width).floor() as i32 % 2 == 0 {
+        if (radius / self.width).frac_part() < self.tightness {
             Some(self.color.sample(rng))
         } else {
             None
