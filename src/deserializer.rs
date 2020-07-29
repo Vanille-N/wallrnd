@@ -106,6 +106,7 @@ pub struct ConfigPatterns {
     pub width_stripe: Option<f64>,
     pub width_wave: Option<f64>,
     pub width_sawtooth: Option<f64>,
+    pub tightness_spiral: Option<f64>,
 }
 
 /// Entry for a single theme/time combination
@@ -303,9 +304,9 @@ impl MetaConfig {
         }
 
         // Get pattern-specific information according to picked shapes
-        let (nb_pattern, var_stripes, width_pattern) = {
+        let (nb_pattern, var_stripes, width_pattern, tightness_spiral) = {
             let nb_pattern;
-            let (mut var_stripes, mut width_pattern) = (0, 0.0);
+            let (mut var_stripes, mut width_pattern, mut tightness_spiral) = (0, 0.0, 0.0);
             if let Some(ConfigData {
                 patterns: Some(p),
                 tilings: _,
@@ -325,6 +326,7 @@ impl MetaConfig {
                     Pattern::FreeSpirals => {
                         nb_pattern = p.nb_free_spirals.unwrap_or(NB_FREE_SPIRALS) as i32;
                         width_pattern = p.width_spiral.unwrap_or(WIDTH_SPIRAL);
+                        tightness_spiral = p.tightness_spiral.unwrap_or(TIGHTNESS_SPIRAL);
                     }
                     Pattern::ConcentricCircles => {
                         nb_pattern = p.nb_concentric_circles.unwrap_or(NB_CONCENTRIC_CIRCLES) as i32
@@ -357,6 +359,7 @@ impl MetaConfig {
                     Pattern::FreeSpirals => {
                         nb_pattern = NB_FREE_SPIRALS as i32;
                         width_pattern = WIDTH_SPIRAL;
+                        tightness_spiral = TIGHTNESS_SPIRAL;
                     }
                     Pattern::ConcentricCircles => nb_pattern = NB_CONCENTRIC_CIRCLES as i32,
                     Pattern::ParallelStripes => {
@@ -382,7 +385,7 @@ impl MetaConfig {
 Variability of stripes orientation: {}
 Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
             }
-            (nb_pattern, var_stripes, width_pattern)
+            (nb_pattern, var_stripes, width_pattern, tightness_spiral)
         };
 
         if themes.is_empty() {
@@ -486,6 +489,7 @@ Line color: {}", line_width, line_color_default);
             nb_delaunay,
             size_tiling,
             width_pattern,
+            tightness_spiral,
         }
     }
 }
@@ -810,6 +814,7 @@ const WIDTH_SPIRAL: f64 = 0.3;
 const WIDTH_STRIPE: f64 = 0.1;
 const WIDTH_WAVE: f64 = 0.3;
 const WIDTH_SAWTOOTH: f64 = 0.3;
+const TIGHTNESS_SPIRAL: f64 = 0.5;
 const NB_DELAUNAY: usize = 1000;
 const LINE_WIDTH: f64 = 1.0;
 const LINE_COLOR: Color = Color(0, 0, 0);
