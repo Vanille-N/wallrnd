@@ -13,7 +13,7 @@ impl Movable {
         (reference, Path::new(data))
     }
 
-    pub fn hexagon(size: f64, rot: i32) -> Self {
+    pub fn hexagon(size: f64, rot: isize) -> Self {
         let mut pts = Vec::new();
         for i in 0..6 {
             pts.push(Pos::polar(rot + 60 * i, size))
@@ -21,7 +21,7 @@ impl Movable {
         Movable(pts)
     }
 
-    pub fn triangle(size: f64, rot: i32) -> Self {
+    pub fn triangle(size: f64, rot: isize) -> Self {
         let mut pts = Vec::new();
         for i in 0..3 {
             pts.push(Pos::polar(rot + 120 * i, size))
@@ -29,7 +29,7 @@ impl Movable {
         Movable(pts)
     }
 
-    pub fn square(size: f64, rot: i32) -> Self {
+    pub fn square(size: f64, rot: isize) -> Self {
         let mut pts = Vec::new();
         for i in 0..4 {
             pts.push(Pos::polar(rot + 45 + 90 * i, size))
@@ -37,7 +37,7 @@ impl Movable {
         Movable(pts)
     }
 
-    pub fn rhombus(ldiag: f64, sdiag: f64, rot: i32) -> Self {
+    pub fn rhombus(ldiag: f64, sdiag: f64, rot: isize) -> Self {
         Movable(vec![
             Pos::polar(rot, ldiag),
             Pos::polar(rot+90, sdiag),

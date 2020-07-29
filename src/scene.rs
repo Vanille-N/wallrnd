@@ -36,9 +36,9 @@ pub trait Contains: std::fmt::Display {
 #[derive(Debug, Clone)]
 pub struct ColorItem {
     pub shade: Color,
-    pub deviation: i32,
+    pub deviation: usize,
     pub theme: Color,
-    pub weight: i32,
+    pub weight: usize,
 }
 
 impl ColorItem {
@@ -86,10 +86,10 @@ pub struct HalfPlane {
 }
 
 impl HalfPlane {
-    pub fn random(rng: &mut ThreadRng, limit: Pos, indic: i32, var: i32, color: ColorItem) -> Self {
+    pub fn random(rng: &mut ThreadRng, limit: Pos, indic: isize, var: usize, color: ColorItem) -> Self {
         Self {
             limit,
-            reference: limit + Pos::polar(rng.gen_range(indic - var, indic + var), 100.),
+            reference: limit + Pos::polar(rng.gen_range(indic - var as isize, indic + var as isize), 100.),
             color,
         }
     }
@@ -229,7 +229,7 @@ impl Wave {
     pub fn random(
         _rng: &mut ThreadRng,
         limit: Pos,
-        indic: i32,
+        indic: isize,
         width: f64,
         amplitude: f64,
         color: ColorItem,
@@ -271,7 +271,7 @@ impl Sawtooth {
     pub fn random(
         _rng: &mut ThreadRng,
         limit: Pos,
-        indic: i32,
+        indic: isize,
         width: f64,
         amplitude: f64,
         color: ColorItem,

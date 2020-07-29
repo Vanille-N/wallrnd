@@ -42,14 +42,14 @@ where
     items
 }
 
-pub fn tile_hexagons(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
+pub fn tile_hexagons(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let idir = Pos::polar(rot - 30, (size * 2.) * radians(30).cos());
     let jdir = Pos::polar(rot + 30, (size * 2.) * radians(30).cos());
     let m = Movable::hexagon(size, rot);
     periodic_grid_tiling(f, |p| vec![m.render(p)], idir, jdir)
 }
 
-pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
+pub fn tile_triangles(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let idir = Pos::polar(rot - 30, (size * 2.) * radians(30).cos());
     let jdir = Pos::polar(rot + 30, (size * 2.) * radians(30).cos());
     let adjust = Pos::polar(rot + 60, size * radians(30).sin()) + idir * 0.5;
@@ -58,7 +58,7 @@ pub fn tile_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
     periodic_grid_tiling(f, |p| vec![m1.render(p), m2.render(p + adjust)], idir, jdir)
 }
 
-pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
+pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let idir = Pos::polar(rot, size * 2.);
     let jdir = Pos::polar(rot + 60, size * 2.);
     let adjust = Pos::polar(rot + 30, size / radians(30).cos());
@@ -81,7 +81,7 @@ pub fn tile_hybrid_hexagons_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Po
     )
 }
 
-pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos, Path)> {
+pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let a = size / 2_f64.sqrt();
     let b = a * radians(30).tan();
     let c = a / radians(30).cos();
@@ -129,7 +129,7 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: i32) -> Vec<(Pos
     )
 }
 
-pub fn tile_rhombus(f: &Frame, ldiag: f64, sdiag: f64, rot: i32) -> Vec<(Pos, Path)> {
+pub fn tile_rhombus(f: &Frame, ldiag: f64, sdiag: f64, rot: isize) -> Vec<(Pos, Path)> {
     let idir = Pos::polar(rot, ldiag) + Pos::polar(rot+90, sdiag);
     let jdir = Pos::polar(rot, -ldiag) + Pos::polar(rot+90, sdiag);
     let m = Movable::rhombus(ldiag, sdiag, rot);
@@ -156,7 +156,7 @@ fn fast_triangulate(pts: &[Pos]) -> Vec<(Pos, Pos, Pos)> {
     v
 }
 
-pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: i32) -> Vec<(Pos, Path)> {
+pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: usize) -> Vec<(Pos, Path)> {
     let mut pts = Vec::new();
     for _ in 0..n {
         pts.push(Pos::random(f, rng));
