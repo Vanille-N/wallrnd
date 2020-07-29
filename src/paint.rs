@@ -61,7 +61,7 @@ pub fn create_free_spirals(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosi
     for _ in 0..cfg.nb_pattern {
         let c = cfg.choose_color(rng);
         let w = cfg.width_pattern * cfg.frame.h as f64 * (rng.gen::<f64>() + 0.5);
-        items.push(Spiral::random(rng, &cfg.frame, c, w));
+        items.push(Spiral::random(rng, &cfg.frame, c, w, cfg.tightness_spiral));
     }
     items.sort_by(|a, b| a.width.partial_cmp(&b.width).unwrap());
     if verbose.details {

@@ -21,6 +21,7 @@ pub struct SceneCfg {
     pub width_pattern: f64,
     pub line_width: f64,
     pub line_color: Color,
+    pub tightness_spiral: f64,
 }
 
 /// A trait to box scene items and make them generic.
