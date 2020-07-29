@@ -50,7 +50,7 @@ impl fmt::Display for Triangle {
 
 impl fmt::Display for Spiral {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Spiral {} {} {} ", self.center.0, self.center.1, self.width)?;
+        write!(f, "Spiral {} {} {} {} ", self.center.0, self.center.1, self.width, self.tightness)?;
         write!(f, "{} #", self.color)
     }
 }
@@ -235,9 +235,10 @@ impl Restore for Spiral {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let center = Pos::restore(items);
         let width = f64::restore(items);
+        let tightness = f64::restore(items);
         let color = ColorItem::restore(items);
         assert_eq!(items.next().unwrap(), "#");
-        Self { center, width, color }
+        Self { center, width, color, tightness }
     }
 }
 
