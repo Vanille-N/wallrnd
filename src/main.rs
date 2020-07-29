@@ -3,10 +3,10 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use wallrnd::deserializer::MetaConfig;
+use wallrnd::log::Logger;
+use wallrnd::prelude::*;
 use wallrnd::scene::Scene;
 use wallrnd::svg::*;
-use wallrnd::prelude::*;
-use wallrnd::log::Logger;
 
 fn main() {
     let args = read_command_line_arguments();

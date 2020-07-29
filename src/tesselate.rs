@@ -130,8 +130,8 @@ pub fn tile_hybrid_squares_triangles(f: &Frame, size: f64, rot: isize) -> Vec<(P
 }
 
 pub fn tile_rhombus(f: &Frame, ldiag: f64, sdiag: f64, rot: isize) -> Vec<(Pos, Path)> {
-    let idir = Pos::polar(rot, ldiag) + Pos::polar(rot+90, sdiag);
-    let jdir = Pos::polar(rot, -ldiag) + Pos::polar(rot+90, sdiag);
+    let idir = Pos::polar(rot, ldiag) + Pos::polar(rot + 90, sdiag);
+    let jdir = Pos::polar(rot, -ldiag) + Pos::polar(rot + 90, sdiag);
     let m = Movable::rhombus(ldiag, sdiag, rot);
     periodic_grid_tiling(f, |p| vec![m.render(p)], idir, jdir)
 }

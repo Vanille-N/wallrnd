@@ -86,10 +86,20 @@ pub struct HalfPlane {
 }
 
 impl HalfPlane {
-    pub fn random(rng: &mut ThreadRng, limit: Pos, indic: isize, var: usize, color: ColorItem) -> Self {
+    pub fn random(
+        rng: &mut ThreadRng,
+        limit: Pos,
+        indic: isize,
+        var: usize,
+        color: ColorItem,
+    ) -> Self {
         Self {
             limit,
-            reference: limit + Pos::polar(rng.gen_range(indic - var as isize, indic + var as isize), 100.),
+            reference: limit
+                + Pos::polar(
+                    rng.gen_range(indic - var as isize, indic + var as isize),
+                    100.,
+                ),
             color,
         }
     }
@@ -152,7 +162,13 @@ pub struct Spiral {
 }
 
 impl Spiral {
-    pub fn random(rng: &mut ThreadRng, f: &Frame, color: ColorItem, width: f64, tightness: f64) -> Self {
+    pub fn random(
+        rng: &mut ThreadRng,
+        f: &Frame,
+        color: ColorItem,
+        width: f64,
+        tightness: f64,
+    ) -> Self {
         Self {
             center: Pos::random(f, rng),
             width,
@@ -302,7 +318,8 @@ impl Contains for Sawtooth {
         let proj = (p - self.limit).project(self.reference - self.limit);
         let nearpt = p - proj;
         let phase = (self.limit - nearpt).norm() * self.frequency;
-        if sawtooth(phase) * self.amplitude > (p - self.limit).dot((self.reference - self.limit).unit())
+        if sawtooth(phase) * self.amplitude
+            > (p - self.limit).dot((self.reference - self.limit).unit())
         {
             Some(self.color.sample(rng))
         } else {

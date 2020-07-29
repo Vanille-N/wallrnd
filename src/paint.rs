@@ -21,7 +21,11 @@ pub fn create_free_circles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosi
     items
 }
 
-pub fn create_free_triangles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<Triangle> {
+pub fn create_free_triangles(
+    rng: &mut ThreadRng,
+    cfg: &SceneCfg,
+    verbose: Verbosity,
+) -> Vec<Triangle> {
     let mut items = Vec::new();
     for i in 1..=cfg.nb_pattern {
         let c = cfg.choose_color(rng);
@@ -37,10 +41,10 @@ pub fn create_free_triangles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbo
         .into_iter()
         .map(|d| Triangle::random(rng, d))
         .collect::<Vec<_>>();
-        if verbose.details {
-            println!("{:#?}", items);
-        }
-        items
+    if verbose.details {
+        println!("{:#?}", items);
+    }
+    items
 }
 
 pub fn create_free_stripes(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<Stripe> {
@@ -70,7 +74,11 @@ pub fn create_free_spirals(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosi
     items
 }
 
-pub fn create_concentric_circles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<Disc> {
+pub fn create_concentric_circles(
+    rng: &mut ThreadRng,
+    cfg: &SceneCfg,
+    verbose: Verbosity,
+) -> Vec<Disc> {
     let mut items = Vec::new();
     let center = Pos::random(&cfg.frame, rng);
     let d = center
@@ -92,7 +100,11 @@ pub fn create_concentric_circles(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: V
     items
 }
 
-pub fn create_parallel_stripes(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<HalfPlane> {
+pub fn create_parallel_stripes(
+    rng: &mut ThreadRng,
+    cfg: &SceneCfg,
+    verbose: Verbosity,
+) -> Vec<HalfPlane> {
     let mut items = Vec::new();
     let (a, b, dir) = {
         let c = cfg.frame.center();
@@ -118,7 +130,11 @@ pub fn create_parallel_stripes(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Ver
     items
 }
 
-pub fn create_crossed_stripes(rng: &mut ThreadRng, cfg: &SceneCfg, verbose: Verbosity) -> Vec<HalfPlane> {
+pub fn create_crossed_stripes(
+    rng: &mut ThreadRng,
+    cfg: &SceneCfg,
+    verbose: Verbosity,
+) -> Vec<HalfPlane> {
     let mut items = Vec::new();
     let (a, b, a_orth, b_orth, dir) = {
         let c = cfg.frame.center();

@@ -77,20 +77,38 @@ impl Document {
             let svg_data = format!("{}", &self);
             let tree = match usvg::Tree::from_str(&svg_data, &usvg::Options::default()) {
                 Ok(tree) => tree,
-                Err(_) => return Err(io::Error::new(io::ErrorKind::InvalidData, "Failed to parse svg")),
+                Err(_) => {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidData,
+                        "Failed to parse svg",
+                    ))
+                }
             };
             let fit_to = usvg::FitTo::Original;
             let bg = None;
             let converted = match resvg::render(&tree, fit_to, bg) {
                 Some(img) => img,
-                None => return Err(io::Error::new(io::ErrorKind::InvalidData, "Failed to convert to png")),
+                None => {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidData,
+                        "Failed to convert to png",
+                    ))
+                }
             };
             match converted.save_png(dest) {
                 Ok(_) => Ok(()),
-                Err(_) => return Err(io::Error::new(io::ErrorKind::AddrNotAvailable, "Could not save image")),
+                Err(_) => {
+                    return Err(io::Error::new(
+                        io::ErrorKind::AddrNotAvailable,
+                        "Could not save image",
+                    ))
+                }
             }
         } else {
-            Err(io::Error::new(io::ErrorKind::InvalidData, "Can only support .svg and .png extensions"))
+            Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Can only support .svg and .png extensions",
+            ))
         }
     }
 }
