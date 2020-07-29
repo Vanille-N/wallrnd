@@ -166,7 +166,9 @@ struct Args {
 
 fn read_command_line_arguments() -> Args {
     let mut args = Args::default();
-    let mut it = env::args().collect::<Vec<_>>().into_iter().skip(1);
+    let argv = env::args().collect::<Vec<_>>();
+    let mut it = argv.iter().skip(1).flat_map(|s| s.split('='));
+
     loop {
         match it.next().as_deref() {
             None => return args,
