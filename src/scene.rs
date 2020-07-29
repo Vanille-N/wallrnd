@@ -162,6 +162,16 @@ impl Spiral {
     }
 }
 
+trait FracPart {
+    fn frac_part(self) -> Self;
+}
+
+impl FracPart for f64 {
+    fn frac_part(self) -> Self {
+        self - self.floor()
+    }
+}
+
 impl Contains for Spiral {
     fn contains(&self, p: Pos, rng: &mut ThreadRng) -> Option<Color> {
         let Pos(di, dj) = self.center - p;
