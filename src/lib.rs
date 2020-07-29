@@ -3,22 +3,22 @@ pub mod chooser;
 pub mod color;
 pub mod deserializer;
 pub mod frame;
+pub mod log;
 pub mod paint;
 pub mod pos;
 pub mod scene;
 pub mod shape;
 pub mod svg;
 pub mod tesselate;
-pub mod log;
 
 pub mod prelude {
+    pub use super::Verbosity;
     use super::*;
     pub use cfg::{Pattern, Tiling};
     pub use chooser::Chooser;
     pub use color::Color;
     pub use frame::Frame;
     pub use pos::{radians, Pos};
-    pub use super::Verbosity;
 }
 
 #[derive(Clone, Copy, Default)]
@@ -44,7 +44,10 @@ impl Verbosity {
                 'W' => v.warn = true,
                 'P' => v.prog = true,
                 'D' => v.details = true,
-                c => println!("Unknown verbosity option '{}', use one or more of 'IWPDA'", c),
+                c => println!(
+                    "Unknown verbosity option '{}', use one or more of 'IWPDA'",
+                    c
+                ),
             }
         }
         v

@@ -48,7 +48,10 @@ impl SceneCfg {
     /// Select a random color for a scene item.
     /// The actual color will depend on the Chooser<Color> with which it is mixed.
     pub fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
-        let (c, v, w) = self.theme.choose(rng).unwrap_or((Color(0, 0, 0), None, None));
+        let (c, v, w) = self
+            .theme
+            .choose(rng)
+            .unwrap_or((Color(0, 0, 0), None, None));
         ColorItem {
             shade: Color::random(rng),
             deviation: v.unwrap_or(self.deviation),
@@ -85,9 +88,12 @@ impl SceneCfg {
             Tiling::SquaresAndTriangles => {
                 tile_hybrid_squares_triangles(&self.frame, self.size_tiling, rng.gen_range(0, 360))
             }
-            Tiling::Rhombus => {
-                tile_rhombus(&self.frame, self.size_tiling, (rng.gen::<f64>() * 0.6 + 0.4)*self.size_tiling, rng.gen_range(0, 360))
-            }
+            Tiling::Rhombus => tile_rhombus(
+                &self.frame,
+                self.size_tiling,
+                (rng.gen::<f64>() * 0.6 + 0.4) * self.size_tiling,
+                rng.gen_range(0, 360),
+            ),
             Tiling::Delaunay => random_delaunay(&self.frame, rng, self.nb_delaunay),
         }
     }

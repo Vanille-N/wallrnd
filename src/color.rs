@@ -1,6 +1,6 @@
 use rand::{rngs::ThreadRng, Rng};
-use std::fmt;
 use std::convert::TryInto;
+use std::fmt;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color(pub usize, pub usize, pub usize);
@@ -18,9 +18,15 @@ impl Color {
     pub fn variate(mut self, rng: &mut ThreadRng, amount: usize) -> Self {
         if amount > 0 {
             let amount = amount as isize;
-            self.0 = (self.0 as isize + rng.gen_range(-amount as isize, amount as isize)).try_into().unwrap_or(0);
-            self.1 = (self.1 as isize + rng.gen_range(-amount as isize, amount as isize)).try_into().unwrap_or(0);
-            self.2 = (self.2 as isize + rng.gen_range(-amount as isize, amount as isize)).try_into().unwrap_or(0);
+            self.0 = (self.0 as isize + rng.gen_range(-amount as isize, amount as isize))
+                .try_into()
+                .unwrap_or(0);
+            self.1 = (self.1 as isize + rng.gen_range(-amount as isize, amount as isize))
+                .try_into()
+                .unwrap_or(0);
+            self.2 = (self.2 as isize + rng.gen_range(-amount as isize, amount as isize))
+                .try_into()
+                .unwrap_or(0);
         }
         self
     }

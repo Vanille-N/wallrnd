@@ -27,14 +27,22 @@ impl fmt::Display for ColorItem {
 
 impl fmt::Display for Disc {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Disc {} {} {} ", self.center.0, self.center.1, self.radius)?;
+        write!(
+            f,
+            "Disc {} {} {} ",
+            self.center.0, self.center.1, self.radius
+        )?;
         write!(f, "{} #", self.color)
     }
 }
 
 impl fmt::Display for HalfPlane {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "HalfPlane {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(
+            f,
+            "HalfPlane {} {} {} {} ",
+            self.limit.0, self.limit.1, self.reference.0, self.reference.1
+        )?;
         write!(f, "{} #", self.color)
     }
 }
@@ -50,21 +58,33 @@ impl fmt::Display for Triangle {
 
 impl fmt::Display for Spiral {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Spiral {} {} {} {} ", self.center.0, self.center.1, self.width, self.tightness)?;
+        write!(
+            f,
+            "Spiral {} {} {} {} ",
+            self.center.0, self.center.1, self.width, self.tightness
+        )?;
         write!(f, "{} #", self.color)
     }
 }
 
 impl fmt::Display for Stripe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Stripe {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(
+            f,
+            "Stripe {} {} {} {} ",
+            self.limit.0, self.limit.1, self.reference.0, self.reference.1
+        )?;
         write!(f, "{} #", self.color)
     }
 }
 
 impl fmt::Display for Wave {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Wave {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(
+            f,
+            "Wave {} {} {} {} ",
+            self.limit.0, self.limit.1, self.reference.0, self.reference.1
+        )?;
         write!(f, "{} {} ", self.amplitude, self.frequency)?;
         write!(f, "{} #", self.color)
     }
@@ -72,7 +92,11 @@ impl fmt::Display for Wave {
 
 impl fmt::Display for Sawtooth {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Sawtooth {} {} {} {} ", self.limit.0, self.limit.1, self.reference.0, self.reference.1)?;
+        write!(
+            f,
+            "Sawtooth {} {} {} {} ",
+            self.limit.0, self.limit.1, self.reference.0, self.reference.1
+        )?;
         write!(f, "{} {} ", self.amplitude, self.frequency)?;
         write!(f, "{} #", self.color)
     }
@@ -129,7 +153,11 @@ impl Restore for Pos {
 
 impl Restore for Color {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
-        Self(usize::restore(items), usize::restore(items), usize::restore(items))
+        Self(
+            usize::restore(items),
+            usize::restore(items),
+            usize::restore(items),
+        )
     }
 }
 
@@ -188,7 +216,11 @@ impl Restore for Disc {
         let radius = f64::restore(items);
         let color = ColorItem::restore(items);
         assert_eq!(items.next().unwrap(), "#");
-        Self { center, radius, color }
+        Self {
+            center,
+            radius,
+            color,
+        }
     }
 }
 
@@ -238,7 +270,12 @@ impl Restore for Spiral {
         let tightness = f64::restore(items);
         let color = ColorItem::restore(items);
         assert_eq!(items.next().unwrap(), "#");
-        Self { center, width, color, tightness }
+        Self {
+            center,
+            width,
+            color,
+            tightness,
+        }
     }
 }
 

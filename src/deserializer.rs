@@ -217,12 +217,15 @@ impl MetaConfig {
                 }
             }
             if verbose.details {
-                println!("Global settings:
+                println!(
+                    "Global settings:
     Deviation   (color)    {}
     Weight      (color)    {}
     Size        (tiles)    {}
     Width       (image)    {}
-    Height      (image)    {}", deviation, weight, size, width, height);
+    Height      (image)    {}",
+                    deviation, weight, size, width, height
+                );
             }
             (deviation, weight, size, width, height)
         };
@@ -300,7 +303,10 @@ impl MetaConfig {
             ),
         };
         if verbose.info {
-            println!("Pattern '{:?}' and tiling '{:?}' chosen from shapes '{}'", pattern, tiling, shape);
+            println!(
+                "Pattern '{:?}' and tiling '{:?}' chosen from shapes '{}'",
+                pattern, tiling, shape
+            );
         }
 
         // Get pattern-specific information according to picked shapes
@@ -381,9 +387,12 @@ impl MetaConfig {
                 }
             }
             if verbose.details {
-                println!("Number of patterns: {}
+                println!(
+                    "Number of patterns: {}
 Variability of stripes orientation: {}
-Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
+Width of pattern: {}",
+                    nb_pattern, var_stripes, width_pattern
+                );
             }
             (nb_pattern, var_stripes, width_pattern, tightness_spiral)
         };
@@ -444,9 +453,12 @@ Width of pattern: {}", nb_pattern, var_stripes, width_pattern);
             }
         };
         if verbose.details {
-            println!("Tiling size: {}
-Delaunay triangles count: {}", size_tiling, nb_delaunay);
-}
+            println!(
+                "Tiling size: {}
+Delaunay triangles count: {}",
+                size_tiling, nb_delaunay
+            );
+        }
         let (line_width, line_color_default) = {
             if let Some(lines) = self.lines {
                 lines.get_settings(tiling, &colors)
@@ -455,9 +467,12 @@ Delaunay triangles count: {}", size_tiling, nb_delaunay);
             }
         };
         if verbose.details {
-            println!("Line width: {}
-Line color: {}", line_width, line_color_default);
-}
+            println!(
+                "Line width: {}
+Line color: {}",
+                line_width, line_color_default
+            );
+        }
 
         SceneCfg {
             deviation,
@@ -543,7 +558,11 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
     }
 }
 
-fn theme_item_from_value(val: &Value, dict: &HashMap<String, Color>, verbose: Verbosity) -> (Color, usize, Option<usize>, Option<usize>) {
+fn theme_item_from_value(
+    val: &Value,
+    dict: &HashMap<String, Color>,
+    verbose: Verbosity,
+) -> (Color, usize, Option<usize>, Option<usize>) {
     let warn_invalid = |x| {
         if verbose.warn {
             println!(
