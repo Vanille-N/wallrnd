@@ -2,8 +2,11 @@
 deviation = 15 # How much the color varies within a shape. 0 for uniform shapes.
 weight = 25 # How far from the theme are the colors. 0 for theme-only colors, 100 for fully random.
 size = 15.0 # How big are tiles. Can be overriden for each tiling
-width = 1366 # Screen dimension
-height = 768 # Screen dimension
+# You should set the dimensions TWICE AS BIG as you actual screen
+# resolution if you're going to generate SVG with line width 0.0
+# This will truly hide the lines.
+width = 2732 # Screen dimension
+height = 1536 # Screen dimension
 
 [lines]
 # Set line appearance
