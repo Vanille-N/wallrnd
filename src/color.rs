@@ -1,30 +1,32 @@
 use rand::{rngs::ThreadRng, Rng};
 use std::fmt;
+use std::convert::TryInto;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Color(pub i32, pub i32, pub i32);
+pub struct Color(pub usize, pub usize, pub usize);
 
 impl Color {
     /// Ensure that all RGB values are within [[1; 100]]
     fn validate(mut self) -> Self {
-        self.0 = self.0.min(255).max(0);
-        self.1 = self.1.min(255).max(0);
-        self.2 = self.2.min(255).max(0);
+        self.0 = self.0.min(255);
+        self.1 = self.1.min(255);
+        self.2 = self.2.min(255);
         self
     }
 
     /// Random noise
-    pub fn variate(mut self, rng: &mut ThreadRng, amount: i32) -> Self {
+    pub fn variate(mut self, rng: &mut ThreadRng, amount: usize) -> Self {
         if amount > 0 {
-            self.0 += rng.gen_range(-amount, amount);
-            self.1 += rng.gen_range(-amount, amount);
-            self.2 += rng.gen_range(-amount, amount);
+            let amount = amount as isize;
+            self.0 = (self.0 as isize + rng.gen_range(-amount as isize, amount as isize)).try_into().unwrap_or(0);
+            self.1 = (self.1 as isize + rng.gen_range(-amount as isize, amount as isize)).try_into().unwrap_or(0);
+            self.2 = (self.2 as isize + rng.gen_range(-amount as isize, amount as isize)).try_into().unwrap_or(0);
         }
         self
     }
 
     /// Weighted mix with other color
-    pub fn meanpoint(mut self, th: Self, weight: i32) -> Self {
+    pub fn meanpoint(mut self, th: Self, weight: usize) -> Self {
         self.0 = (self.0 * weight + th.0 * (100 - weight)) / 100;
         self.1 = (self.1 * weight + th.1 * (100 - weight)) / 100;
         self.2 = (self.2 * weight + th.2 * (100 - weight)) / 100;

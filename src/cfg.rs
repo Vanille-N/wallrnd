@@ -8,16 +8,16 @@ use std::rc::Rc;
 
 /// General information on a scene
 pub struct SceneCfg {
-    pub theme: Chooser<(Color, isize, isize)>,
-    pub weight: i32,
-    pub deviation: i32,
+    pub theme: Chooser<(Color, Option<usize>, Option<usize>)>,
+    pub weight: usize,
+    pub deviation: usize,
     pub frame: Frame,
     pub pattern: Pattern,
     pub tiling: Tiling,
-    pub nb_pattern: i32,
-    pub var_stripes: i32,
+    pub nb_pattern: usize,
+    pub var_stripes: usize,
     pub size_tiling: f64,
-    pub nb_delaunay: i32,
+    pub nb_delaunay: usize,
     pub width_pattern: f64,
     pub line_width: f64,
     pub line_color: Color,
@@ -48,11 +48,11 @@ impl SceneCfg {
     /// Select a random color for a scene item.
     /// The actual color will depend on the Chooser<Color> with which it is mixed.
     pub fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
-        let (c, v, w) = self.theme.choose(rng).unwrap_or((Color(0, 0, 0), -1, -1));
+        let (c, v, w) = self.theme.choose(rng).unwrap_or((Color(0, 0, 0), None, None));
         ColorItem {
             shade: Color::random(rng),
-            deviation: if v < 0 { self.deviation } else { v as i32 },
-            weight: if w < 0 { self.weight } else { w as i32 },
+            deviation: v.unwrap_or(self.deviation),
+            weight: w.unwrap_or(self.weight),
             theme: c,
         }
     }
