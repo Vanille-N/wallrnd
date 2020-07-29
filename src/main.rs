@@ -104,24 +104,41 @@ fn main() {
         document.add(
             elem.with_fill_color(fill)
                 .with_stroke_color(if stroke_like_fill { fill } else { stroke })
-                .with_stroke_width(stroke_width.max(1.0)),
+                .with_stroke_width(stroke_width.max(0.1)),
         );
     }
 
     if verbose.prog {
         println!("Writing image to file");
     }
-    document.save(&dest).unwrap_or_else(|e| {
+    document.save(&(dest.clone() + ".tmp")).unwrap_or_else(|e| {
         if verbose.warn {
             println!("An error occured: {:?}", e);
         }
         std::process::exit(1);
     });
+    std::process::Command::new("mv")
+        .arg(format!("{}.tmp", &dest))
+        .arg(dest.clone())
+        .status()
+        .unwrap_or_else(|e| {
+            if verbose.warn {
+                println!("An error occured: {}", e);
+            }
+            std::process::exit(1);
+        });
     if args.set {
         if verbose.prog {
             println!("Setting as wallpaper");
         }
-        wallpaper::set_from_path(&dest).unwrap_or_else(|e| {
+        use wallpaper_rs::{Desktop, DesktopEnvt};
+        let envt = DesktopEnvt::new().unwrap_or_else(|_| {
+            if verbose.warn {
+                println!("Unable to detect desktop environment");
+            }
+            std::process::exit(1);
+        });
+        envt.set_wallpaper(&dest).unwrap_or_else(|e| {
             if verbose.warn {
                 println!("Could not set as wallpaper");
                 println!("Message: {}", e);
