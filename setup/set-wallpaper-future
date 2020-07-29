@@ -10,6 +10,6 @@ if [ "$ac_adapter" = "off" ]; then
     exit 100
 fi
 
-IMG=/tmp/wallpaper.png
+IMG=/tmp/wallpaper.svg
 CFG=/home/$( whoami )/wallrnd.toml
-nice -n 20 -- wallrnd --image $IMG --config $CFG --set
+nice -n 20 -- wallrnd --image=$IMG --config=$CFG --set
