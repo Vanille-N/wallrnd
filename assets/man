@@ -16,7 +16,7 @@ OPTIONS
     --log F        Save generation information for image replication in file F
     --verbose V    Display more debug information. See verbosity description below.
     --time T       Generate image as if the current time was T (format HHMM)
-    --image I      Destination of the generated file. If absent or invalid, program aborts.
+    --image I      Destination of the generated file. If absent or invalid, program aborts. Not necessarily absolute path.
     --config C     Location of the config file. If absent or invalid, default parameters are used.
     --init C       Create a default configuration in file C and exit.
     --set          Set as wallpaper (requires image to be saved). Absolute path recommended for --image.
