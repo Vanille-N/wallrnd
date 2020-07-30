@@ -1,9 +1,14 @@
 [global]
 deviation = 15 # How much the color varies within a shape. 0 for uniform shapes.
 weight = 25 # How far from the theme are the colors. 0 for theme-only colors, 100 for fully random.
-size = 15.0 # How big are tiles. Can be overriden for each tiling
-width = 1366 # Screen dimension
-height = 768 # Screen dimension
+size = 30.0 # How big are tiles. Can be overriden for each tiling
+# You should set the dimensions TWICE AS BIG as you actual screen
+# resolution if you're going to generate SVG with line width 0.0
+# This will truly hide the lines.
+# Warning: massive performance hit when converting to PNG, SVG is still fine
+# ("massive" being ~700ms instead of ~130ms in --release)
+width = 2732 # Screen dimension
+height = 1536 # Screen dimension
 
 [lines]
 # Set line appearance
@@ -215,28 +220,29 @@ all = []
 
 [data.patterns]
 nb_free_triangles = 15
-nb_free_circles = 10
+nb_free_circles = 15
 nb_free_stripes = 15
 nb_parallel_stripes = 15
 nb_concentric_circles = 13
-nb_crossed_stripes = 10
+nb_crossed_stripes = 13
 nb_free_spirals = 3
 nb_parallel_waves = 10
 nb_parallel_sawteeth = 10
-var_parallel_stripes = 15 # Variability of the orientation
-var_crossed_stripes = 15
-width_spiral = 0.3 # As a proportion of the window height
-width_stripe = 0.1
-width_wave = 0.5
+var_parallel_stripes = 10 # Variability of the orientation
+var_crossed_stripes = 10
+width_spiral = 0.2 # As a proportion of the window height
+width_stripe = 0.2
+width_wave = 0.7
 width_sawtooth = 0.5
+tightness_spiral = 0.3 # As a proportion of width_spiral
 
 [data.tilings]
-size_hex = 12.0 # In absolute size
-size_tri = 15.0
-size_hex_and_tri = 13.0
-size_squ_and_tri = 15.0
-size_rho = 15.0
-nb_delaunay = 3000
+size_hex = 10.0 # In absolute size
+size_tri = 10.0
+size_hex_and_tri = 10.0
+size_squ_and_tri = 10.0
+size_rho = 14.0
+nb_delaunay = 20000
 
 [[entry]]
 themes = ["night"] # List of possible themes linked to this entry
