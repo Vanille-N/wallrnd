@@ -407,13 +407,13 @@ Width of pattern: {}",
                 }
                 themes.insert(
                     String::from("-default-"),
-                    Chooser::new(vec![((Color::random(rng), None, None), BASE_PONDERATION)]),
+                    Chooser::new(vec![(ThemeItem(Color::random(rng), None, None), BASE_PONDERATION)]),
                 );
             } else {
                 themes.insert(
                     String::from("-default-"),
                     Chooser::new(vec![(
-                        (
+                        ThemeItem(
                             *colors
                                 .get(*colors.keys().collect::<Vec<_>>().choose(rng).unwrap())
                                 .unwrap(),
@@ -562,7 +562,7 @@ fn theme_item_from_value(
     val: &Value,
     dict: &HashMap<String, Color>,
     verbose: Verbosity,
-) -> (Color, usize, Option<usize>, Option<usize>) {
+) -> (ThemeItem, usize) {
     let warn_invalid = |x| {
         if verbose.warn {
             println!(
@@ -598,7 +598,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 } else if &item[0..1] == "~" {
                     var = item[1..]
                         .parse::<usize>()
-                        .map(|x| Some(x))
+                        .map(Some)
                         .unwrap_or_else(|_| {
                             if verbose.warn {
                                 println!("Not a valid variability: {}", &item[1..]);
@@ -608,7 +608,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 } else if &item[0..1] == "!" {
                     w = item[1..]
                         .parse::<usize>()
-                        .map(|x| Some(x))
+                        .map(Some)
                         .unwrap_or_else(|_| {
                             if verbose.warn {
                                 println!("Not a valid weight: {}", &item[1..]);
@@ -624,11 +624,11 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                 }
             }
-            (c, p, var, w)
+            (ThemeItem(c, var, w), p)
         }
         val => {
             warn_invalid(val.to_string());
-            (Color(0, 0, 0), BASE_PONDERATION, None, None)
+            (ThemeItem(Color(0, 0, 0), None, None), BASE_PONDERATION)
         }
     }
 }
@@ -636,10 +636,10 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
 /// Read group of colors as a theme
 fn theme_from_value(
     v: &Value,
-    colors: &HashMap<String, Color>,
-    themes: &HashMap<String, Chooser<(Color, Option<usize>, Option<usize>)>>,
+    colors: &ColorList,
+    themes: &ThemeList,
     verbose: Verbosity,
-) -> Result<Chooser<(Color, Option<usize>, Option<usize>)>, String> {
+) -> Result<Chooser<ThemeItem>, String> {
     let mut items = Vec::new();
     if let Value::String(s) = v {
         if let Some(th) = themes.get(s) {
@@ -655,8 +655,8 @@ fn theme_from_value(
                         continue;
                     }
                 }
-                let (color, ponderation, var, weight) = theme_item_from_value(x, colors, verbose);
-                items.push(((color, var, weight), ponderation));
+                let (item, ponderation) = theme_item_from_value(x, colors, verbose);
+                items.push((item, ponderation));
             }
             Ok(Chooser::new(items))
         }

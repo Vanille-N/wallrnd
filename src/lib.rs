@@ -19,7 +19,14 @@ pub mod prelude {
     pub use color::Color;
     pub use frame::Frame;
     pub use pos::{radians, Pos};
+
+    use std::collections::HashMap;
+    pub type ColorList = HashMap<String, Color>;
+    pub type ThemeList = HashMap<String, Chooser<ThemeItem>>;
+    #[derive(Clone, Copy, Debug)]
+    pub struct ThemeItem(pub Color, pub Option<usize>, pub Option<usize>);
 }
+
 
 #[derive(Clone, Copy, Default)]
 pub struct Verbosity {

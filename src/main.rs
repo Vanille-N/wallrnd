@@ -117,6 +117,8 @@ fn main() {
         }
         std::process::exit(1);
     });
+    #[allow(clippy::redundant_clone)]
+    // Reason: clone is NOT redundant when certain feature flags are used...
     std::process::Command::new("mv")
         .arg(format!("{}.tmp", &dest))
         .arg(dest.clone())
@@ -194,8 +196,8 @@ struct Args {
 
 fn read_command_line_arguments() -> Args {
     let mut args = Args::default();
-    let argv = env::args().collect::<Vec<_>>();
-    let mut it = argv.iter().skip(1).flat_map(|s| s.split('='));
+    let args_split = env::args().collect::<Vec<_>>();
+    let mut it = args_split.iter().skip(1).flat_map(|s| s.split('='));
 
     loop {
         match it.next().as_deref() {
