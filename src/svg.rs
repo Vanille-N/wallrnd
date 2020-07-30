@@ -74,35 +74,48 @@ impl Document {
             let mut buffer = std::fs::File::create(dest)?;
             buffer.write_all(&format!("{}", &self).into_bytes())
         } else if dest.ends_with(".png") || dest.ends_with(".png.tmp") {
-            let svg_data = format!("{}", &self);
-            let tree = match usvg::Tree::from_str(&svg_data, &usvg::Options::default()) {
-                Ok(tree) => tree,
-                Err(_) => {
-                    return Err(io::Error::new(
-                        io::ErrorKind::InvalidData,
-                        "Failed to parse svg",
-                    ))
+            #[cfg(feature = "make-png")]
+            {
+                // The following code uses functionality from two crates licensed under MPL 2.0
+                //   usvg: https://crates.io/crates/usvg
+                //   resvg: https://crates.io/crates/resvg
+                let svg_data = format!("{}", &self);
+                let tree = match usvg::Tree::from_str(&svg_data, &usvg::Options::default()) {
+                    Ok(tree) => tree,
+                    Err(_) => {
+                        return Err(io::Error::new(
+                            io::ErrorKind::InvalidData,
+                            "Failed to parse svg",
+                        ))
+                    }
+                };
+                let fit_to = usvg::FitTo::Original;
+                let bg = None;
+                let converted = match resvg::render(&tree, fit_to, bg) {
+                    Some(img) => img,
+                    None => {
+                        return Err(io::Error::new(
+                            io::ErrorKind::InvalidData,
+                            "Failed to convert to png",
+                        ))
+                    }
+                };
+                match converted.save_png(dest) {
+                    Ok(_) => Ok(()),
+                    Err(_) => {
+                        return Err(io::Error::new(
+                            io::ErrorKind::AddrNotAvailable,
+                            "Could not save image",
+                        ))
+                    }
                 }
-            };
-            let fit_to = usvg::FitTo::Original;
-            let bg = None;
-            let converted = match resvg::render(&tree, fit_to, bg) {
-                Some(img) => img,
-                None => {
-                    return Err(io::Error::new(
-                        io::ErrorKind::InvalidData,
-                        "Failed to convert to png",
-                    ))
-                }
-            };
-            match converted.save_png(dest) {
-                Ok(_) => Ok(()),
-                Err(_) => {
-                    return Err(io::Error::new(
-                        io::ErrorKind::AddrNotAvailable,
-                        "Could not save image",
-                    ))
-                }
+            }
+            #[cfg(not(feature = "make-png"))]
+            {
+                Err(io::Error::new(
+                    io::ErrorKind::InvalidData,
+                    "PNG is not supported with the current feature flags --  Make sure to include the feature 'make-png' to access this option -- See 'https://doc.rust-lang.org/cargo/reference/features.html' to learn how to do it",
+                ))
             }
         } else {
             Err(io::Error::new(
