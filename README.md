@@ -135,6 +135,8 @@ You may be interested in these other setup methods if
 
 * The appropriate version should be put in your path and executed whenever necessary by adding an entry to your Crontab. `* * * * * set-wallpaper`
 
+* Note that the file path does not have to be absolute. `wallrnd` resolves paths before writing the wallpaper configuration.
+
 ---
 
 ## Alternative tools
