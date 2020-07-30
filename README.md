@@ -56,25 +56,39 @@ Portability of this script is outside of the scope of this project (the image ge
 @@     perl -pi -e 's/\[\"([a-zA-Z0-9_]*)\", *([0-9]+)\]/\"$1 x$2\"/g' setup/wallrnd.toml    @@
 ```
 
-### Recommended setup (executable `wallrnd`)
+## Features and licensing
 
-* `cargo install wallrnd`
+While the code in this crate is licensed under the [MIT license](https://opensource.org/licenses/MIT), the binary target includes (purely for user convenience) dependencies that have more restrictive licenses.
 
-* Put `setup/wallrnd.toml` at a location `$CFG`
+[resvg](https://crates.io/crates/resvg) and [usvg](https://crates.io/usvg) require the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0) and pull in some other dependencies under the [BSD 3-clause](https://opensource.org/licenses/BSD-3-Clause).
 
-* Edit accordingly the `set-wallpaper` script, make it executable, and add it to a folder in your `$PATH`
+[wallpaper_rs](https://crates.io/crates/wallpaper_rs) is licensed under [GPL 3.0](https://opensource.org/licenses/GPL-3.0)
 
-* Adjust the colors, themes, shapes in `wallrnd.toml` to your liking
+The features provided by these crates are purely optional. The different features available are explained in more detail in the [Advanced setup](#advanced-setup) section.
 
-* Make a new Crontab entry: `* * * * * set-wallpaper`
+Using the `make-png` feature requires MPL 2.0 or a compatible license.
 
-Performance is good enough that running it every 60 seconds is not even noticeable (4-core Intel i5).
+Using the `set-wallpaper` feature requires GPL 3.0 or a compatible license.
 
-Thanks to [`nice`](https://en.wikipedia.org/wiki/Nice_(Unix)) giving the program a very low priority, it can run in the background without issue. The script also exits early when running on battery.
+Using both requires GPL 3.0 at least.
+
+The inclusion of MPL- and GPL-licensed crates as dependencies of this crate licensed under MIT does not grant to anyone the right to distribute executables that were compiled using the corresponding feature flags under non-GPL-compatible licenses. Any derivative work that does not include these flags can safely be provided under the MIT license.
+
+It is not recommended for any crates dependent on this one to use the feature flags, as the functionality obtained from the GPL dependencies is not reexported by wallrnd and thus adds needless dependencies.
+
+## Recommended setup (executable `wallrnd`)
+
+* `cargo install wallrnd --features set-wallpaper`
+
+* Make a copy of `setup/wallrnd.toml` and adjust the settings to your liking
+
+* Make a new Crontab entry: `* * * * * nice -n 20 -- wallrnd --config /path/to/wallrnd.toml --image /tmp/wallpaper.svg --set`
+
+Thanks to [`nice`](https://en.wikipedia.org/wiki/Nice_(Unix)) giving the program a very low priority, it can run in the background without issue.
 
 It will soon be possible to achieve the same without `nice`.
 
-### Recommended setup (executable `prototype/prototype.py`)
+## Recommended setup (executable `prototype/prototype.py`)
 
 `wallrnd` is a more developed product than this, but if you still want to use the prototype it is possible.
 
@@ -88,24 +102,24 @@ Be warned that performance is a lot worse and that this version is far less conf
 
 ---
 
-### Alternative tools
+## Alternative tools
 
-#### Online
+### Online
 
 * [Random Wallpaper Generator!](http://bjmiller.net/canvas/wallpaper/)
 
 * [Background Generator](https://bggenerator.com/)
 
-#### Scripts
+### Scripts
 
 * [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
 
 * [qryxip/sky-color-wallpaper](https://crates.io/crates/sky-color-wallpaper)
 
-#### Apps
+### Apps
 * [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
 
-### Examples
+## Examples
 
 As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**<a name="return-methodology">[\*](#methodology)</a>. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
 
