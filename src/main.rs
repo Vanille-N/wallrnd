@@ -128,24 +128,37 @@ fn main() {
             std::process::exit(1);
         });
     if args.set {
-        if verbose.prog {
-            println!("Setting as wallpaper");
+        #[cfg(feature = "set-wallpaper")]
+        {
+            // The following code includes functionality from a crate licensed under GPL 3.0
+            //   wallpaper_rs: https://crates.io/crates/wallpaper_rs
+            if verbose.prog {
+                println!("Setting as wallpaper");
+            }
+            use wallpaper_rs::{Desktop, DesktopEnvt};
+            let envt = DesktopEnvt::new().unwrap_or_else(|_| {
+                if verbose.warn {
+                    println!("Unable to detect desktop environment");
+                }
+                std::process::exit(1);
+            });
+            envt.set_wallpaper(&dest).unwrap_or_else(|e| {
+                if verbose.warn {
+                    println!("Could not set as wallpaper");
+                    println!("Message: {}", e);
+                }
+            });
         }
-        use wallpaper_rs::{Desktop, DesktopEnvt};
-        let envt = DesktopEnvt::new().unwrap_or_else(|_| {
+        #[cfg(not(feature = "set-wallpaper"))]
+        {
             if verbose.warn {
-                println!("Unable to detect desktop environment");
+                println!("You have not selected the set-wallpaper functionality");
+                println!("Make sure to include the feature 'set-wallpaper' to access this option");
+                println!("See 'https://doc.rust-lang.org/cargo/reference/features.html' to learn how to do it");
             }
             std::process::exit(1);
-        });
-        envt.set_wallpaper(&dest).unwrap_or_else(|e| {
-            if verbose.warn {
-                println!("Could not set as wallpaper");
-                println!("Message: {}", e);
-            }
-        });
+        }
     }
-
     if verbose.prog {
         println!("Process exited successfully");
     }
