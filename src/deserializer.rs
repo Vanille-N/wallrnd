@@ -3,7 +3,6 @@ use crate::prelude::*;
 use rand::{rngs::ThreadRng, seq::SliceRandom};
 use serde_derive::Deserialize;
 use std::collections::HashMap;
-use std::convert::TryInto;
 use toml::{map::Map, Value};
 
 const BASE_PONDERATION: usize = 10;
@@ -156,14 +155,7 @@ impl MetaConfig {
                             }
                             deviation = DEVIATION;
                         }
-                        Some(d) => {
-                            deviation = d.try_into().unwrap_or_else(|_| {
-                                if verbose.warn {
-                                    println!("Unreadable global.deviation");
-                                }
-                                DEVIATION
-                            })
-                        }
+                        Some(d) => deviation = d,
                     }
                     match g.weight {
                         None => {
@@ -172,14 +164,7 @@ impl MetaConfig {
                             }
                             weight = WEIGHT;
                         }
-                        Some(w) => {
-                            weight = w.try_into().unwrap_or_else(|_| {
-                                if verbose.warn {
-                                    println!("Unreadable global.weight");
-                                }
-                                WEIGHT
-                            })
-                        }
+                        Some(w) => weight = w,
                     }
                     match g.size {
                         None => {
@@ -534,20 +519,20 @@ fn color_from_value(val: &Value, dict: &HashMap<String, Color>) -> Result<Color,
                 ))
             }
         }
-        Value::Array(a) => {
-            if a.len() != 3 {
+        Value::Array(arr) => {
+            if arr.len() != 3 {
                 return Err(format!(
                     "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
                     val
                 ));
             }
-            match &a[0..3] {
+            match &arr[0..3] {
                 [Value::Integer(r), Value::Integer(g), Value::Integer(b)] => {
                     Ok(Color(*r as usize, *g as usize, *b as usize))
                 }
                 _ => Err(format!(
                     "{:?} is not a valid color format.\nUse [0, 0, 255] or \"#0000FF\"",
-                    a
+                    arr
                 )),
             }
         }
@@ -580,16 +565,16 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
     };
     match val {
         Value::String(s) => {
-            let mut c = Color(0, 0, 0);
-            let mut p = BASE_PONDERATION;
+            let mut color = Color(0, 0, 0);
+            let mut pond = BASE_PONDERATION;
             let mut var = None;
-            let mut w = None;
+            let mut wht = None;
             for item in s.split(' ') {
                 if item.is_empty() {
                     continue;
                 }
                 if &item[0..1] == "x" {
-                    p = item[1..].parse().unwrap_or_else(|_| {
+                    pond = item[1..].parse().unwrap_or_else(|_| {
                         if verbose.warn {
                             println!("Not a valid ponderation: {}", &item[1..]);
                         }
@@ -606,7 +591,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                             None
                         });
                 } else if &item[0..1] == "!" {
-                    w = item[1..]
+                    wht = item[1..]
                         .parse::<usize>()
                         .map(Some)
                         .unwrap_or_else(|_| {
@@ -617,14 +602,14 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                         });
                 } else {
                     match color_from_value(&Value::String(item.to_string()), dict) {
-                        Ok(color) => c = color,
+                        Ok(c) => color = c,
                         Err(e) => {
                             warn_invalid(e);
                         }
                     }
                 }
             }
-            (ThemeItem(c, var, w), p)
+            (ThemeItem(color, var, wht), pond)
         }
         val => {
             warn_invalid(val.to_string());
