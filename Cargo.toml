@@ -9,6 +9,13 @@ readme = "README.md"
 repository = "https://github.com/Vanille-N/wallrnd"
 keywords = ["wallpaper", "random", "desktop"]
 categories = ["command-line-utilities", "graphics"]
+include = ["src/**/*", "README.md"]
+
+[features]
+default = []
+all = ["set-wallpaper", "make-png"]
+set-wallpaper = ["wallpaper_rs"]
+make-png = ["resvg", "usvg"]
 
 [dependencies]
 rand = "0.7.*"
