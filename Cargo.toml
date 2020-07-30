@@ -9,7 +9,7 @@ readme = "README.md"
 repository = "https://github.com/Vanille-N/wallrnd"
 keywords = ["wallpaper", "random", "desktop"]
 categories = ["command-line-utilities", "graphics"]
-include = ["src/**/*", "README.md"]
+include = ["src/**/*", "README.md", "assets/*"]
 
 [features]
 default = []
