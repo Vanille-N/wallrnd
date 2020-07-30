@@ -100,6 +100,41 @@ Be warned that performance is a lot worse and that this version is far less conf
 
 [`psutil`](https://pypi.org/project/psutil/) is used to abort the process if CPU usage is already high.
 
+
+## Advanced setup
+
+You may be interested in these other setup methods if
+- your OS does not support setting an SVG image as wallpaper
+- you do not wish to use GPL- or MPL-licensed products
+- your OS is not included in [this list of supported environments](https://github.com/vineetred/flowy#supported-environments)
+- you want custom functionality such as aborting the script when running on battery
+- you want to build from source
+
+### Installation:
+* If you do not need `wallrnd` to set wallpapers, then do not use the feature `set-wallaper`: `cargo install wallrnd`
+
+* If you want to be able to create png images, then you should add the `make-png` feature: `cargo install wallrnd --features make-png`
+
+* To have both features, you can use `cargo install wallrnd --features all`
+
+* You can also build from source:
+  ```
+  git clone https://github.com/Vanille-N/wallrnd
+  cd wallrnd
+  cargo build --release
+  cp target/release/wallrnd ~/bin/wallrnd
+  ```
+
+### Configuration
+* `setup/wallrnd.toml` includes examples and explanations on how to setup options. Feel free to ask for more explanations.
+
+* The configuration file doesn't have to be named `wallrnd.toml`, but it has to be formatted like a TOML file.
+
+### Automation
+* `setup/set-wallpaper-*` are examples of how to set wallrnd to be executed.
+
+* The appropriate version should be put in your path and executed whenever necessary by adding an entry to your Crontab. `* * * * * set-wallpaper`
+
 ---
 
 ## Alternative tools
