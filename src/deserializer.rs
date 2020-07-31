@@ -620,16 +620,22 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 }
                 None => Color(0, 0, 0),
             };
-            let var = match map.get("variability") {
-                Some(Value::Integer(v)) => v,
-                Some(Value::Float(v)) => v.round(),
-                _ => 0,
-            };
             let wht = match map.get("weight") {
                 Some(Value::Integer(w)) => w,
                 Some(Value::Float(w)) => w.round(),
                 _ => 0,
             };
+            let var = (match map.get("variability") {
+                    Some(Value::Integer(v)) => Some(*v),
+                    Some(Value::Float(v)) => Some(v.round() as i64),
+                    Some(x) => {
+                        if verbose.warn {
+                            println!("Not a valid variability: {:?}", x);
+                        }
+                        None
+                    }
+                    None => None,
+                }).map(|n| n.max(0) as usize);
             let pond = match map.get("ponderation") {
                 Some(Value::Integer(p)) => p,
                 Some(Value::Float(p)) => p.round(),
