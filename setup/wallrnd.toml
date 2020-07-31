@@ -178,17 +178,65 @@ white = "#FFFFFF"
 [themes]
 # A theme is a list of weighted colors (named or not); e.g. theme1 = ["white x20 ~10", "black x10"]
 # You may include a previously created theme inside another; e.g. theme2 = ["theme2", "grey x20"]
-night = ["midnightblue x40 !20", "black x30 !5 ~10", "slategray x10 ~5 !10"]
-dawn = ["goldenrod x10 !10", "aqua x30", "magenta x50 ~50"]
-spring = ["lawngreen x30 ~60", "gold x10", "aqua x10", "magenta x10 !10 ~40"]
-sky = ["aqua x50", "gold x30 ~50", "skyblue x50"]
-rust = ["coral x40 !20", "orange x30 !20", "springgreen x10 ~50 !0", "silver x20 ~10 !10"]
-fire = ["yellow x20 !10", "orangered x30 ~30", "darkred x10", "red x20 ~30"]
-forest = ["palegreen x30", "forestgreen x30 ~30", "linen x20"]
-ocean = ["navy x60", "indigo x30", "mediumaquamarine x30"]
-blood = ["maroon x30", "crimson x10", "salmon x20"]
-dusk = ["mediumslateblue x30", "hotpink x20 ~30", "darkorange x20 ~30"]
-shadow = ["indigo x30", "black x10 !5 ~5", "purple x20 !5 ~30"]
+# A color can also be described by a table: { color, weight, distance, variability }
+night = [
+  { color = "#191970", weight = 40, distance = 20 },
+  { color = "#000000", weight = 30, distance = 5,  variability = 10 },
+  { color = "#708090", weight = 10, distance = 10, variability = 5 }
+]
+dawn = [
+  { color = "#FF00FF", weight = 40, variability = 50 },
+  { color = "#00FFFF", weight = 30 },
+  { color = "#DAA520", weight = 20, distance = 10 }
+]
+spring = [
+  { color = "#7CFC00", weight = 30, variability = 60 },
+  { color = "#FFD700", weight = 10 },
+  { color = "#00FFFF", weight = 10 },
+  { color = "#FF00FF", weight = 10, distance = 10, variability = 40 }
+]
+sky = [
+  { color = "#00FFFF", weight = 50 },
+  { color = "#87CEEB", weight = 50 },
+  { color = "#FFD700", weight = 30, variability = 50 }
+]
+rust = [
+  { color = "#FF7F50", weight = 40, distance = 20 },
+  { color = "#FFA500", weight = 30, distance = 20 },
+  { color = "#C0C0C0", weight = 20, distance = 10, variability = 10 },
+  { color = "#00FF7F", weight = 10, distance = 0, variability = 50 }
+]
+fire = [
+  { color = "#FF4500", weight = 30, variability = 30 },
+  { color = "#FFFF00", weight = 20, distance = 10 },
+  { color = "#FF0000", weight = 20, variability = 30 },
+  { color = "#8B0000", weight = 10 }
+]
+forest = [
+  { color = "#228B22", weight = 40, variability = 30},
+  { color = "#9ACD32", weight = 20, variability = 30, distance = 10 },
+  { color = "#8B4513", weight = 20, distance = 10 }
+]
+ocean = [
+  { color = "#000080", weight = 60 },
+  { color = "#4B0082", weight = 30 },
+  { color = "#66CDAA", weight = 30 }
+]
+blood = [
+  { color = "#800000", weight = 30 },
+  { color = "#FA8072", weight = 20 },
+  { color = "#DC143C", weight = 10 }
+]
+dusk = [
+  { color = "#7B68EE", weight = 30 },
+  { color = "#FF69B4", weight = 20, variability = 30 },
+  { color = "#FF8C00", weight = 20, variability = 30 }
+]
+shadow = [
+  { color = "#4B0082", weight = 30 },
+  { color = "#800080", weight = 20, variability = 30, distance = 5 },
+  { color = "#000000", weight = 10, variability = 5, distance = 5 }
+]
 
 [shapes]
 # Both tilings and patterns
