@@ -23,7 +23,7 @@ pub struct MetaConfig {
 #[derive(Deserialize, Default, Debug)]
 pub struct ConfigGlobal {
     pub deviation: Option<usize>,
-    pub weight: Option<usize>,
+    pub weight: Option<usize>, // Artifact of previous name
     pub distance: Option<usize>,
     pub size: Option<f64>,
     pub width: Option<usize>,
@@ -160,6 +160,12 @@ impl MetaConfig {
                     }
                     match g.distance {
                         None => {
+                            distance = g.weight.unwrap_or_else(|| {
+                                if verbose.info {
+                                    println!("Default global.distance");
+                                }
+                                DISTANCE
+                            });
                         }
                         Some(w) => distance = w,
                     }
