@@ -561,7 +561,7 @@ Provide one of:
 - any of the above along with an integer ponderation (\"<COLOR> xPONDERATION\")
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
 - any of the above along with a weight override (\"<COLOR> !WEIGHT\")
-- a map item ({ color, variability, ponderation, weight })
+- a map item ({{ color, variability, ponderation, weight }})
 Note that the format [<R>, <G>, <B>] is not accepted here",
                 x
             );
