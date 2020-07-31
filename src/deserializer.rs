@@ -561,6 +561,7 @@ Provide one of:
 - any of the above along with an integer ponderation (\"<COLOR> xPONDERATION\")
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
 - any of the above along with a weight override (\"<COLOR> !WEIGHT\")
+- a map item ({ color, variability, ponderation, weight })
 Note that the format [<R>, <G>, <B>] is not accepted here",
                 x
             );
@@ -606,6 +607,28 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                 }
             }
+            (ThemeItem(color, var, wht), pond)
+        }
+        Value::Map(map) => {
+            let color = match map.get("color") {
+                Some(val) => color_from_value(val),
+                None => Color(0, 0, 0),
+            };
+            let var = match map.get("variability") {
+                Some(Value::Integer(v)) => v,
+                Some(Value::Float(v)) => v.round(),
+                _ => 0,
+            };
+            let wht = match map.get("weight") {
+                Some(Value::Integer(w)) => w,
+                Some(Value::Float(w)) => w.round(),
+                _ => 0,
+            };
+            let pond = match map.get("ponderation") {
+                Some(Value::Integer(p)) => p,
+                Some(Value::Float(p)) => p.round(),
+                _ => 0,
+            };
             (ThemeItem(color, var, wht), pond)
         }
         val => {
