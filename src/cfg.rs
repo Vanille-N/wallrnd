@@ -9,7 +9,7 @@ use std::rc::Rc;
 /// General information on a scene
 pub struct SceneCfg {
     pub theme: Chooser<ThemeItem>,
-    pub weight: usize,
+    pub distance: usize,
     pub deviation: usize,
     pub frame: Frame,
     pub pattern: Pattern,
@@ -55,7 +55,7 @@ impl SceneCfg {
         ColorItem {
             shade: Color::random(rng),
             deviation: v.unwrap_or(self.deviation),
-            weight: w.unwrap_or(self.weight),
+            distance: w.unwrap_or(self.distance),
             theme: c,
         }
     }

@@ -32,10 +32,10 @@ impl Color {
     }
 
     /// Weighted mix with other color
-    pub fn meanpoint(mut self, th: Self, weight: usize) -> Self {
-        self.0 = (self.0 * weight + th.0 * (100 - weight)) / 100;
-        self.1 = (self.1 * weight + th.1 * (100 - weight)) / 100;
-        self.2 = (self.2 * weight + th.2 * (100 - weight)) / 100;
+    pub fn meanpoint(mut self, th: Self, distance: usize) -> Self {
+        self.0 = (self.0 * distance + th.0 * (100 - distance)) / 100;
+        self.1 = (self.1 * distance + th.1 * (100 - distance)) / 100;
+        self.2 = (self.2 * distance + th.2 * (100 - distance)) / 100;
         self
     }
 

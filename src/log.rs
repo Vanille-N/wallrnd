@@ -21,7 +21,7 @@ impl fmt::Display for ColorItem {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} {} {} ", self.shade.0, self.shade.1, self.shade.2)?;
         write!(f, "{} {} {} ", self.theme.0, self.theme.1, self.theme.2)?;
-        write!(f, "{} {} #", self.deviation, self.weight)
+        write!(f, "{} {} #", self.deviation, self.distance)
     }
 }
 
@@ -199,13 +199,13 @@ impl Restore for ColorItem {
         let shade = Color::restore(items);
         let theme = Color::restore(items);
         let deviation = usize::restore(items);
-        let weight = usize::restore(items);
+        let distance = usize::restore(items);
         assert_eq!(items.next().unwrap(), "#");
         Self {
             shade,
             theme,
             deviation,
-            weight,
+            distance,
         }
     }
 }

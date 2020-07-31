@@ -24,6 +24,7 @@ pub struct MetaConfig {
 pub struct ConfigGlobal {
     pub deviation: Option<usize>,
     pub weight: Option<usize>,
+    pub distance: Option<usize>,
     pub size: Option<f64>,
     pub width: Option<usize>,
     pub height: Option<usize>,
@@ -112,7 +113,7 @@ pub struct ConfigPatterns {
 #[derive(Deserialize, Debug)]
 pub struct ConfigEntry {
     pub span: Option<String>,
-    pub weight: Option<usize>,
+    pub distance: Option<usize>,
     pub themes: Option<Vec<String>>,
     pub shapes: Option<Vec<String>>,
     pub line_color: Option<String>,
@@ -134,15 +135,15 @@ impl MetaConfig {
     /// Choose options at random according to configuration
     pub fn pick_cfg(self, rng: &mut ThreadRng, time: usize, verbose: Verbosity) -> SceneCfg {
         // Read default/overriden global options
-        let (deviation, weight, size, width, height) = {
-            let (deviation, weight, size, width, height);
+        let (deviation, distance, size, width, height) = {
+            let (deviation, distance, size, width, height);
             match self.global {
                 None => {
                     if verbose.info {
                         println!("Default global");
                     }
                     deviation = DEVIATION;
-                    weight = WEIGHT;
+                    distance = DISTANCE;
                     size = SIZE;
                     width = WIDTH;
                     height = HEIGHT;
@@ -157,14 +158,10 @@ impl MetaConfig {
                         }
                         Some(d) => deviation = d,
                     }
-                    match g.weight {
+                    match g.distance {
                         None => {
-                            if verbose.info {
-                                println!("Default global.weight");
-                            }
-                            weight = WEIGHT;
                         }
-                        Some(w) => weight = w,
+                        Some(w) => distance = w,
                     }
                     match g.size {
                         None => {
@@ -205,14 +202,14 @@ impl MetaConfig {
                 println!(
                     "Global settings:
     Deviation   (color)    {}
-    Weight      (color)    {}
+    Distance      (color)    {}
     Size        (tiles)    {}
     Width       (image)    {}
     Height      (image)    {}",
-                    deviation, weight, size, width, height
+                    deviation, distance, size, width, height
                 );
             }
-            (deviation, weight, size, width, height)
+            (deviation, distance, size, width, height)
         };
 
         // Get list of named colors
@@ -464,7 +461,7 @@ Line color: {}",
 
         SceneCfg {
             deviation,
-            weight,
+            distance,
             theme: themes
                 .get(&theme)
                 .unwrap_or_else(|| {
@@ -560,8 +557,8 @@ Provide one of:
 - a hex code (\"#0000FF\")
 - any of the above along with an integer ponderation (\"<COLOR> xPONDERATION\")
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
-- any of the above along with a weight override (\"<COLOR> !WEIGHT\")
-- a map item ({{ color, variability, ponderation, weight }})
+- any of the above along with a distance override (\"<COLOR> !DISTANCE\")
+- a map item ({{ color, variability, ponderation, distance }})
 Note that the format [<R>, <G>, <B>] is not accepted here",
                 x
             );
@@ -594,7 +591,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 } else if &item[0..1] == "!" {
                     wht = item[1..].parse::<usize>().map(Some).unwrap_or_else(|_| {
                         if verbose.warn {
-                            println!("Not a valid weight: {}", &item[1..]);
+                            println!("Not a valid distance: {}", &item[1..]);
                         }
                         None
                     });
@@ -631,12 +628,12 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                     None => None,
                 }).map(|n| n.max(0) as usize);
-            let wht = (match map.get("weight") {
+            let wht = (match map.get("distance") {
                 Some(Value::Integer(w)) => Some(*w),
                 Some(Value::Float(w)) => Some(w.round() as i64),
                 Some(x) => {
                     if verbose.warn {
-                        println!("Not a valid weight: {:?}", x);
+                        println!("Not a valid distance: {:?}", x);
                     }
                     None
                 }
@@ -789,7 +786,7 @@ fn choose_theme_shapes(
                     .parse::<usize>()
                     .unwrap_or(2400);
                 if start <= time && time <= end {
-                    valid.push(e, e.weight.unwrap_or(BASE_PONDERATION));
+                    valid.push(e, e.distance.unwrap_or(BASE_PONDERATION));
                 }
             }
             match valid.choose(rng) {
@@ -849,7 +846,7 @@ impl ConfigLines {
 }
 
 const DEVIATION: usize = 20;
-const WEIGHT: usize = 40;
+const DISTANCE: usize = 40;
 const SIZE: f64 = 15.;
 const WIDTH: usize = 1000;
 const HEIGHT: usize = 600;

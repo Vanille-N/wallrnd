@@ -38,13 +38,13 @@ pub struct ColorItem {
     pub shade: Color,
     pub deviation: usize,
     pub theme: Color,
-    pub weight: usize,
+    pub distance: usize,
 }
 
 impl ColorItem {
     pub fn sample(&self, rng: &mut ThreadRng) -> Color {
         self.shade
-            .meanpoint(self.theme, self.weight)
+            .meanpoint(self.theme, self.distance)
             .variate(rng, self.deviation)
     }
 }
