@@ -609,9 +609,15 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
             }
             (ThemeItem(color, var, wht), pond)
         }
-        Value::Map(map) => {
+        Value::Table(map) => {
             let color = match map.get("color") {
-                Some(val) => color_from_value(val),
+                Some(val) => match color_from_value(val, dict) {
+                    Ok(c) => c,
+                    Err(e) => {
+                        warn_invalid(e);
+                        Color(0, 0, 0)
+                    }
+                }
                 None => Color(0, 0, 0),
             };
             let var = match map.get("variability") {
