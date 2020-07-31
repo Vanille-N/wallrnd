@@ -65,7 +65,7 @@ impl<T: Copy> Chooser<T> {
     /// Add new item
     pub fn push(&mut self, item: T, w: usize) {
         if w == 0 {
-            panic!("In call to Chooser::push, 0 is not a valid ponderation");
+            panic!("In call to Chooser::push, 0 is not a valid weight");
         }
         self.0 += w;
         self.1.push((item, self.0));

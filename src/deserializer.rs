@@ -5,7 +5,7 @@ use serde_derive::Deserialize;
 use std::collections::HashMap;
 use toml::{map::Map, Value};
 
-const BASE_PONDERATION: usize = 10;
+const BASE_WEIGHT: usize = 10;
 
 /// All config information
 #[derive(Deserialize, Default, Debug)]
@@ -397,7 +397,7 @@ Width of pattern: {}",
                     String::from("-default-"),
                     Chooser::new(vec![(
                         ThemeItem(Color::random(rng), None, None),
-                        BASE_PONDERATION,
+                        BASE_WEIGHT,
                     )]),
                 );
             } else {
@@ -411,7 +411,7 @@ Width of pattern: {}",
                             None,
                             None,
                         ),
-                        BASE_PONDERATION,
+                        BASE_WEIGHT,
                     )]),
                 );
             }
@@ -561,10 +561,10 @@ fn theme_item_from_value(
 Provide one of:
 - a named color (\"blue\")
 - a hex code (\"#0000FF\")
-- any of the above along with an integer ponderation (\"<COLOR> xPONDERATION\")
+- any of the above along with an integer weight (\"<COLOR> xWEIGHT\")
 - any of the above along with a variability override (\"<COLOR> ~VAR\")
 - any of the above along with a distance override (\"<COLOR> !DISTANCE\")
-- a map item ({{ color, variability, ponderation, distance }})
+- a map item ({{ color, variability, weight, distance }})
 Note that the format [<R>, <G>, <B>] is not accepted here",
                 x
             );
@@ -573,19 +573,19 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
     match val {
         Value::String(s) => {
             let mut color = Color(0, 0, 0);
-            let mut pond = BASE_PONDERATION;
+            let mut wht = BASE_WEIGHT;
             let mut var = None;
-            let mut wht = None;
+            let mut dist = None;
             for item in s.split(' ') {
                 if item.is_empty() {
                     continue;
                 }
                 if &item[0..1] == "x" {
-                    pond = item[1..].parse().unwrap_or_else(|_| {
+                    wht = item[1..].parse().unwrap_or_else(|_| {
                         if verbose.warn {
                             println!("Not a valid ponderation: {}", &item[1..]);
                         }
-                        BASE_PONDERATION
+                        BASE_WEIGHT
                     });
                 } else if &item[0..1] == "~" {
                     var = item[1..].parse::<usize>().map(Some).unwrap_or_else(|_| {
@@ -595,7 +595,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                         None
                     });
                 } else if &item[0..1] == "!" {
-                    wht = item[1..].parse::<usize>().map(Some).unwrap_or_else(|_| {
+                    dist = item[1..].parse::<usize>().map(Some).unwrap_or_else(|_| {
                         if verbose.warn {
                             println!("Not a valid distance: {}", &item[1..]);
                         }
@@ -610,7 +610,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                 }
             }
-            (ThemeItem(color, var, wht), pond)
+            (ThemeItem(color, var, dist), wht)
         }
         Value::Table(map) => {
             let color = match map.get("color") {
@@ -634,9 +634,9 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                     None => None,
                 }).map(|n| n.max(0) as usize);
-            let wht = (match map.get("distance") {
-                Some(Value::Integer(w)) => Some(*w),
-                Some(Value::Float(w)) => Some(w.round() as i64),
+            let dist = (match map.get("distance") {
+                Some(Value::Integer(d)) => Some(*d),
+                Some(Value::Float(d)) => Some(d.round() as i64),
                 Some(x) => {
                     if verbose.warn {
                         println!("Not a valid distance: {:?}", x);
@@ -645,22 +645,22 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 }
                 None => None,
             }).map(|n| n.max(0) as usize);
-            let pond = match map.get("ponderation") {
-                Some(Value::Integer(p)) => *p.max(&0) as usize,
-                Some(Value::Float(p)) => p.round().max(0.0) as usize,
+            let wht = match map.get("weight") {
+                Some(Value::Integer(w)) => *w.max(&0) as usize,
+                Some(Value::Float(w)) => w.round().max(0.0) as usize,
                 Some(x) => {
                     if verbose.warn {
-                        println!("Not a valid ponderation: {:?}", x);
+                        println!("Not a valid weight: {:?}", x);
                     }
-                    BASE_PONDERATION
+                    BASE_WEIGHT
                 }
-                None => BASE_PONDERATION,
+                None => BASE_WEIGHT,
             };
-            (ThemeItem(color, var, wht), pond)
+            (ThemeItem(color, var, dist), wht)
         }
         val => {
             warn_invalid(val.to_string());
-            (ThemeItem(Color(0, 0, 0), None, None), BASE_PONDERATION)
+            (ThemeItem(Color(0, 0, 0), None, None), BASE_WEIGHT)
         }
     }
 }
@@ -687,8 +687,8 @@ fn theme_from_value(
                         continue;
                     }
                 }
-                let (item, ponderation) = theme_item_from_value(x, colors, verbose);
-                items.push((item, ponderation));
+                let (item, weight) = theme_item_from_value(x, colors, verbose);
+                items.push((item, weight));
             }
             Ok(Chooser::new(items))
         }
@@ -716,7 +716,7 @@ fn shapes_from_value(
                             tilings.append(t.extract());
                             patterns.append(p.extract());
                         } else {
-                            add_shape(&s[..], BASE_PONDERATION, &mut tilings, &mut patterns);
+                            add_shape(&s[..], BASE_WEIGHT, &mut tilings, &mut patterns);
                         }
                     }
                     Value::Array(a) => {
@@ -792,7 +792,7 @@ fn choose_theme_shapes(
                     .parse::<usize>()
                     .unwrap_or(2400);
                 if start <= time && time <= end {
-                    valid.push(e, e.distance.unwrap_or(BASE_PONDERATION));
+                    valid.push(e, e.distance.unwrap_or(BASE_WEIGHT));
                 }
             }
             match valid.choose(rng) {
