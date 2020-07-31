@@ -8,7 +8,7 @@ use toml::{map::Map, Value};
 const BASE_PONDERATION: usize = 10;
 
 /// All config information
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug)]
 pub struct MetaConfig {
     pub global: Option<ConfigGlobal>,
     pub lines: Option<ConfigLines>,
@@ -20,7 +20,7 @@ pub struct MetaConfig {
 }
 
 /// Global options
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug)]
 pub struct ConfigGlobal {
     pub deviation: Option<usize>,
     pub weight: Option<usize>,
@@ -30,7 +30,7 @@ pub struct ConfigGlobal {
 }
 
 /// Lines appearance
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug)]
 pub struct ConfigLines {
     pub width: Option<f64>,
     pub color: Option<String>,
