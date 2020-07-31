@@ -108,6 +108,13 @@ fn main() {
         );
     }
 
+    if dest == "" {
+        if verbose.prog {
+            println!("No destination specified");
+        }
+        std::process::exit(1);
+    }
+
     if verbose.prog {
         println!("Writing image to file");
     }
