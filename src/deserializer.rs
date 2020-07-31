@@ -643,9 +643,15 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 None => None,
             }).map(|n| n.max(0) as usize);
             let pond = match map.get("ponderation") {
-                Some(Value::Integer(p)) => p,
-                Some(Value::Float(p)) => p.round(),
-                _ => 0,
+                Some(Value::Integer(p)) => *p.max(&0) as usize,
+                Some(Value::Float(p)) => p.round().max(0.0) as usize,
+                Some(x) => {
+                    if verbose.warn {
+                        println!("Not a valid ponderation: {:?}", x);
+                    }
+                    BASE_PONDERATION
+                }
+                None => BASE_PONDERATION,
             };
             (ThemeItem(color, var, wht), pond)
         }
