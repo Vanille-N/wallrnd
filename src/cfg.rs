@@ -48,10 +48,10 @@ impl SceneCfg {
     /// Select a random color for a scene item.
     /// The actual color will depend on the Chooser<Color> with which it is mixed.
     pub fn choose_color(&self, rng: &mut ThreadRng) -> ColorItem {
-        let ThemeItem(c, v, w) = self
-            .theme
-            .choose(rng)
-            .unwrap_or(ThemeItem(Color(0, 0, 0), None, None));
+        let ThemeItem(c, v, w) =
+            self.theme
+                .choose(rng)
+                .unwrap_or(ThemeItem(Color(0, 0, 0), None, None));
         ColorItem {
             shade: Color::random(rng),
             deviation: v.unwrap_or(self.deviation),

@@ -145,17 +145,21 @@ fn main() {
                 std::process::exit(1);
             });
             let imgdir = std::path::PathBuf::from(&dest);
-            let canon = std::fs::canonicalize(&imgdir).unwrap_or_else(|_| {
-                if verbose.warn {
-                    println!("Could not resolve path");
-                }
-                std::process::exit(1);
-            }).into_os_string().into_string().unwrap_or_else(|_| {
-                if verbose.warn {
-                    println!("Invalid file name");
-                }
-                std::process::exit(1);
-            });
+            let canon = std::fs::canonicalize(&imgdir)
+                .unwrap_or_else(|_| {
+                    if verbose.warn {
+                        println!("Could not resolve path");
+                    }
+                    std::process::exit(1);
+                })
+                .into_os_string()
+                .into_string()
+                .unwrap_or_else(|_| {
+                    if verbose.warn {
+                        println!("Invalid file name");
+                    }
+                    std::process::exit(1);
+                });
             if verbose.info {
                 println!("File path resolved to '{}'", &canon);
             }

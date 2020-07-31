@@ -392,7 +392,10 @@ Width of pattern: {}",
                 }
                 themes.insert(
                     String::from("-default-"),
-                    Chooser::new(vec![(ThemeItem(Color::random(rng), None, None), BASE_PONDERATION)]),
+                    Chooser::new(vec![(
+                        ThemeItem(Color::random(rng), None, None),
+                        BASE_PONDERATION,
+                    )]),
                 );
             } else {
                 themes.insert(
@@ -581,25 +584,19 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                         BASE_PONDERATION
                     });
                 } else if &item[0..1] == "~" {
-                    var = item[1..]
-                        .parse::<usize>()
-                        .map(Some)
-                        .unwrap_or_else(|_| {
-                            if verbose.warn {
-                                println!("Not a valid variability: {}", &item[1..]);
-                            }
-                            None
-                        });
+                    var = item[1..].parse::<usize>().map(Some).unwrap_or_else(|_| {
+                        if verbose.warn {
+                            println!("Not a valid variability: {}", &item[1..]);
+                        }
+                        None
+                    });
                 } else if &item[0..1] == "!" {
-                    wht = item[1..]
-                        .parse::<usize>()
-                        .map(Some)
-                        .unwrap_or_else(|_| {
-                            if verbose.warn {
-                                println!("Not a valid weight: {}", &item[1..]);
-                            }
-                            None
-                        });
+                    wht = item[1..].parse::<usize>().map(Some).unwrap_or_else(|_| {
+                        if verbose.warn {
+                            println!("Not a valid weight: {}", &item[1..]);
+                        }
+                        None
+                    });
                 } else {
                     match color_from_value(&Value::String(item.to_string()), dict) {
                         Ok(c) => color = c,

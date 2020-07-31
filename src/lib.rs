@@ -27,7 +27,6 @@ pub mod prelude {
     pub struct ThemeItem(pub Color, pub Option<usize>, pub Option<usize>);
 }
 
-
 #[derive(Clone, Copy, Default)]
 pub struct Verbosity {
     pub info: bool,
