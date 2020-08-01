@@ -17,3 +17,14 @@ impl SaltItem {
         }
     }
 }
+
+impl Salt {
+    pub fn sample(&self, rng: &mut ThreadRng) -> Option<Color> {
+        for item in self.0.iter() {
+            if let Some(c) = item.sample(rng) {
+                return Some(c);
+            }
+        }
+        None
+    }
+}
