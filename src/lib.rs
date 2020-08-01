@@ -20,7 +20,7 @@ pub mod prelude {
     pub use color::Color;
     pub use frame::Frame;
     pub use pos::{radians, Pos};
-    pub use salt::Salt;
+    pub use salt::{Salt, SaltItem};
 
     use std::collections::HashMap;
     pub type ColorList = HashMap<String, Color>;

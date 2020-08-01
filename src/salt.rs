@@ -3,9 +3,9 @@ use crate::prelude::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct SaltItem {
-    color: Color,
-    likeliness: f64,
-    variability: usize,
+    pub color: Color,
+    pub likeliness: f64,
+    pub variability: usize,
 }
 
 #[derive(Clone, Debug, Default)]

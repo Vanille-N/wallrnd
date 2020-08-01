@@ -660,11 +660,11 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
             let salt = match map.get("salt") {
                 None => Salt::none(),
                 Some(Value::Array(vec)) => {
-                    let mut salt = SaltItem::none();
+                    let mut salt = Salt::default();
                     for item in vec.iter() {
                         if let Value::Table(tbl) = item {
                             let color = tbl.get("color")
-                                .map(|v| color_from_value(v, &colors)
+                                .map(|v| color_from_value(v, &dict)
                                     .unwrap_or_else(|e| {
                                         if verbose.warn { println!("Invalid color: {:?}", v) }
                                         Color(0, 0, 0)
