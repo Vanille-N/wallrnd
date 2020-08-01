@@ -21,7 +21,24 @@ impl fmt::Display for ColorItem {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} {} {} ", self.shade.0, self.shade.1, self.shade.2)?;
         write!(f, "{} {} {} ", self.theme.0, self.theme.1, self.theme.2)?;
+        write!(f, "{} ", self.salt)?;
         write!(f, "{} {} #", self.deviation, self.distance)
+    }
+}
+
+impl fmt::Display for SaltItem {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} {} {} ", self.color.0, self.color.1, self.color.2)?;
+        write!(f, "{} {} ", self.likeliness, self.variability)
+    }
+}
+
+impl fmt::Display for Salt {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for item in self.0.iter() {
+            write!(f, "{} ", item)?;
+        }
+        write!(f, "#")
     }
 }
 
