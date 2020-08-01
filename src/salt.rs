@@ -2,14 +2,14 @@ use rand::{rngs::ThreadRng, Rng};
 use crate::prelude::*;
 
 #[derive(Clone, Copy, Debug)]
-struct SaltItem {
+pub struct SaltItem {
     color: Color,
     likeliness: f64,
     variability: usize,
 }
 
-#[derive(Clone, Debug)]
-pub struct Salt(Vec<SaltItem>);
+#[derive(Clone, Debug, Default)]
+pub struct Salt(pub Vec<SaltItem>);
 
 impl SaltItem {
     fn sample(&self, rng: &mut ThreadRng) -> Option<Color> {
@@ -29,5 +29,9 @@ impl Salt {
             }
         }
         None
+    }
+
+    pub fn none() -> Self {
+        Self(Vec::new())
     }
 }

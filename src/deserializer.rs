@@ -396,7 +396,7 @@ Width of pattern: {}",
                 themes.insert(
                     String::from("-default-"),
                     Chooser::new(vec![(
-                        ThemeItem(Color::random(rng), None, None),
+                        ThemeItem(Color::random(rng), None, None, Salt::none()),
                         BASE_WEIGHT,
                     )]),
                 );
@@ -658,15 +658,48 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
             };
             let salt = match map.get("salt") {
                 None => Salt::none(),
-                Some(Value::Table(tbl)) => {
-                    Salt::from(vec![tbl])
-                }
                 Some(Value::Array(vec)) => {
-                    Salt::from(vec)
+                    let mut salt = SaltItem::none();
+                    for item in vec.iter() {
+                        if let Value::Table(tbl) = item {
+                            let color = tbl.get("color")
+                                .map(|v| color_from_value(v, &colors)
+                                    .unwrap_or_else(|e| {
+                                        if verbose.warn { println!("Invalid color: {:?}", v) }
+                                        Color(0, 0, 0)
+                                    })
+                                )
+                                .unwrap_or(Color(0, 0, 0));
+                            let likeliness = match tbl.get("likeliness") {
+                                None => 1.0,
+                                Some(Value::Float(f)) => f,
+                                Some(Value::Integer(n)) => *n as f64,
+                                Some(v) => {
+                                    if verbose.warn {
+                                        println!("Not a valid likeliness: {:?}", v);
+                                    }
+                                    1.0
+                                }
+                            };
+                            let variability = match tbl.get("variability") {
+                                None => 0,
+                                Some(Value::Integer(n)) => if n > 0 { *n as usize } else { 0 }
+                                Some(Value::Float(f)) => if f > 0 { f.round() as usize } else { 0 }
+                                Some(v) => {
+                                    if verbose.warn {
+                                        println!("Not a valid variability: {:?}", v);
+                                    }
+                                    0
+                                }
+                            };
+                            salt..0.push(SaltItem { color, likeliness, variability });
+                        }
+                    }
+                    salt
                 }
                 _ => {
                     if verbose.warn {
-                        println!("Invalid Salt. Expected a table or an array.");
+                        println!("Invalid Salt. Expected an array.");
                     }
                     Salt::none()
                 }
@@ -675,7 +708,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
         }
         val => {
             warn_invalid(val.to_string());
-            (ThemeItem(Color(0, 0, 0), None, None), BASE_WEIGHT)
+            (ThemeItem(Color(0, 0, 0), None, None, Salt::none()), BASE_WEIGHT)
         }
     }
 }
