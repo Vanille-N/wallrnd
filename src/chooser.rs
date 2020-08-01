@@ -35,12 +35,12 @@ impl<T: Clone> Chooser<T> {
 
     fn dichotomy(&self, target: usize, inf: usize, sup: usize) -> T {
         if inf == sup {
-            self.1[inf].0
+            self.1[inf].0.clone()
         } else if inf + 1 == sup {
             if self.1[inf].1 < target {
-                self.1[inf + 1].0
+                self.1[inf + 1].0.clone()
             } else {
-                self.1[inf].0
+                self.1[inf].0.clone()
             }
         } else {
             let mid = (sup + inf) / 2;
