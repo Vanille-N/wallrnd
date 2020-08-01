@@ -57,6 +57,7 @@ impl SceneCfg {
             deviation: v.unwrap_or(self.deviation),
             distance: w.unwrap_or(self.distance),
             theme: c,
+            salt,
         }
     }
 
