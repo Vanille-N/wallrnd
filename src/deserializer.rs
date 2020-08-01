@@ -410,6 +410,7 @@ Width of pattern: {}",
                                 .unwrap(),
                             None,
                             None,
+                            Salt::none(),
                         ),
                         BASE_WEIGHT,
                     )]),
@@ -672,7 +673,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                                 .unwrap_or(Color(0, 0, 0));
                             let likeliness = match tbl.get("likeliness") {
                                 None => 1.0,
-                                Some(Value::Float(f)) => f,
+                                Some(Value::Float(f)) => *f,
                                 Some(Value::Integer(n)) => *n as f64,
                                 Some(v) => {
                                     if verbose.warn {
@@ -683,8 +684,8 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                             };
                             let variability = match tbl.get("variability") {
                                 None => 0,
-                                Some(Value::Integer(n)) => if n > 0 { *n as usize } else { 0 }
-                                Some(Value::Float(f)) => if f > 0 { f.round() as usize } else { 0 }
+                                Some(Value::Integer(n)) => if *n > 0 { *n as usize } else { 0 }
+                                Some(Value::Float(f)) => if *f > 0. { f.round() as usize } else { 0 }
                                 Some(v) => {
                                     if verbose.warn {
                                         println!("Not a valid variability: {:?}", v);
@@ -692,7 +693,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                                     0
                                 }
                             };
-                            salt..0.push(SaltItem { color, likeliness, variability });
+                            salt.0.push(SaltItem { color, likeliness, variability });
                         }
                     }
                     salt
