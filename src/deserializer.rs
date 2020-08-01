@@ -610,7 +610,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     }
                 }
             }
-            (ThemeItem(color, var, dist), wht)
+            (ThemeItem(color, var, dist, Salt::none()), wht)
         }
         Value::Table(map) => {
             let color = match map.get("color") {
@@ -656,7 +656,22 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                 }
                 None => BASE_WEIGHT,
             };
-            (ThemeItem(color, var, dist), wht)
+            let salt = match map.get("salt") {
+                None => Salt::none(),
+                Some(Value::Table(tbl)) => {
+                    Salt::from(vec![tbl])
+                }
+                Some(Value::Array(vec)) => {
+                    Salt::from(vec)
+                }
+                _ => {
+                    if verbose.warn {
+                        println!("Invalid Salt. Expected a table or an array.");
+                    }
+                    Salt::none()
+                }
+            };
+            (ThemeItem(color, var, dist, salt), wht)
         }
         val => {
             warn_invalid(val.to_string());
