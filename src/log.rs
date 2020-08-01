@@ -211,10 +211,32 @@ impl Restore for Frame {
     }
 }
 
+impl Restore for Salt {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let nb = usize::restore(items);
+        let mut salt = Salt::default();
+        for _ in 0..nb {
+            salt.0.push(SaltItem::restore(items));
+        }
+        assert_eq!(items.next().unwrap(), "#");
+        salt
+    }
+}
+
+impl Restore for SaltItem {
+    fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
+        let color = Color::restore(items);
+        let likeliness = f64::restore(items);
+        let variability = usize::restore(items);
+        Self { color, likeliness, variability }
+    }
+}
+
 impl Restore for ColorItem {
     fn restore<'a>(items: &mut impl Iterator<Item = &'a str>) -> Self {
         let shade = Color::restore(items);
         let theme = Color::restore(items);
+        let salt = Salt::restore(items);
         let deviation = usize::restore(items);
         let distance = usize::restore(items);
         assert_eq!(items.next().unwrap(), "#");
@@ -223,6 +245,7 @@ impl Restore for ColorItem {
             theme,
             deviation,
             distance,
+            salt,
         }
     }
 }
