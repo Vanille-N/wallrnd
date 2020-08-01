@@ -665,7 +665,7 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                         if let Value::Table(tbl) = item {
                             let color = tbl.get("color")
                                 .map(|v| color_from_value(v, &dict)
-                                    .unwrap_or_else(|e| {
+                                    .unwrap_or_else(|_| {
                                         if verbose.warn { println!("Invalid color: {:?}", v) }
                                         Color(0, 0, 0)
                                     })

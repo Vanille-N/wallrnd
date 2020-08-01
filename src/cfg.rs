@@ -51,7 +51,7 @@ impl SceneCfg {
         let ThemeItem(c, v, w, salt) =
             self.theme
                 .choose(rng)
-                .unwrap_or(ThemeItem(Color(0, 0, 0), None, None, Salt::none()));
+                .unwrap_or_else(|| ThemeItem(Color(0, 0, 0), None, None, Salt::none()));
         ColorItem {
             shade: Color::random(rng),
             deviation: v.unwrap_or(self.deviation),
