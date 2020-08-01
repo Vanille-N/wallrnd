@@ -1,5 +1,5 @@
-use rand::{rngs::ThreadRng, Rng};
 use crate::prelude::*;
+use rand::{rngs::ThreadRng, Rng};
 
 #[derive(Clone, Copy, Debug)]
 pub struct SaltItem {

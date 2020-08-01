@@ -228,7 +228,11 @@ impl Restore for SaltItem {
         let color = Color::restore(items);
         let likeliness = f64::restore(items);
         let variability = usize::restore(items);
-        Self { color, likeliness, variability }
+        Self {
+            color,
+            likeliness,
+            variability,
+        }
     }
 }
 

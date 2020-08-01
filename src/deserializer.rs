@@ -621,20 +621,21 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                         warn_invalid(e);
                         Color(0, 0, 0)
                     }
-                }
+                },
                 None => Color(0, 0, 0),
             };
             let var = (match map.get("variability") {
-                    Some(Value::Integer(v)) => Some(*v),
-                    Some(Value::Float(v)) => Some(v.round() as i64),
-                    Some(x) => {
-                        if verbose.warn {
-                            println!("Not a valid variability: {:?}", x);
-                        }
-                        None
+                Some(Value::Integer(v)) => Some(*v),
+                Some(Value::Float(v)) => Some(v.round() as i64),
+                Some(x) => {
+                    if verbose.warn {
+                        println!("Not a valid variability: {:?}", x);
                     }
-                    None => None,
-                }).map(|n| n.max(0) as usize);
+                    None
+                }
+                None => None,
+            })
+            .map(|n| n.max(0) as usize);
             let dist = (match map.get("distance") {
                 Some(Value::Integer(d)) => Some(*d),
                 Some(Value::Float(d)) => Some(d.round() as i64),
@@ -645,7 +646,8 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     None
                 }
                 None => None,
-            }).map(|n| n.max(0) as usize);
+            })
+            .map(|n| n.max(0) as usize);
             let wht = match map.get("weight") {
                 Some(Value::Integer(w)) => *w.max(&0) as usize,
                 Some(Value::Float(w)) => w.round().max(0.0) as usize,
@@ -663,13 +665,16 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                     let mut salt = Salt::default();
                     for item in vec.iter() {
                         if let Value::Table(tbl) = item {
-                            let color = tbl.get("color")
-                                .map(|v| color_from_value(v, &dict)
-                                    .unwrap_or_else(|_| {
-                                        if verbose.warn { println!("Invalid color: {:?}", v) }
+                            let color = tbl
+                                .get("color")
+                                .map(|v| {
+                                    color_from_value(v, &dict).unwrap_or_else(|_| {
+                                        if verbose.warn {
+                                            println!("Invalid color: {:?}", v)
+                                        }
                                         Color(0, 0, 0)
                                     })
-                                )
+                                })
                                 .unwrap_or(Color(0, 0, 0));
                             let likeliness = match tbl.get("likeliness") {
                                 None => 1.0,
@@ -684,8 +689,20 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                             };
                             let variability = match tbl.get("variability") {
                                 None => 0,
-                                Some(Value::Integer(n)) => if *n > 0 { *n as usize } else { 0 }
-                                Some(Value::Float(f)) => if *f > 0. { f.round() as usize } else { 0 }
+                                Some(Value::Integer(n)) => {
+                                    if *n > 0 {
+                                        *n as usize
+                                    } else {
+                                        0
+                                    }
+                                }
+                                Some(Value::Float(f)) => {
+                                    if *f > 0. {
+                                        f.round() as usize
+                                    } else {
+                                        0
+                                    }
+                                }
                                 Some(v) => {
                                     if verbose.warn {
                                         println!("Not a valid variability: {:?}", v);
@@ -693,7 +710,11 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
                                     0
                                 }
                             };
-                            salt.0.push(SaltItem { color, likeliness, variability });
+                            salt.0.push(SaltItem {
+                                color,
+                                likeliness,
+                                variability,
+                            });
                         }
                     }
                     salt
@@ -709,7 +730,10 @@ Note that the format [<R>, <G>, <B>] is not accepted here",
         }
         val => {
             warn_invalid(val.to_string());
-            (ThemeItem(Color(0, 0, 0), None, None, Salt::none()), BASE_WEIGHT)
+            (
+                ThemeItem(Color(0, 0, 0), None, None, Salt::none()),
+                BASE_WEIGHT,
+            )
         }
     }
 }

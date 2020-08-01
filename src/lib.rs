@@ -6,11 +6,11 @@ pub mod frame;
 pub mod log;
 pub mod paint;
 pub mod pos;
+pub mod salt;
 pub mod scene;
 pub mod shape;
 pub mod svg;
 pub mod tesselate;
-pub mod salt;
 
 pub mod prelude {
     pub use super::Verbosity;
