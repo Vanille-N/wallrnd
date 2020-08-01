@@ -1,9 +1,9 @@
 use rand::{rngs::ThreadRng, Rng};
 
 #[derive(Clone)]
-pub struct Chooser<T: Copy>(usize, Vec<(T, usize)>);
+pub struct Chooser<T: Clone>(usize, Vec<(T, usize)>);
 
-impl<T: Copy> Chooser<T> {
+impl<T: Clone> Chooser<T> {
     /// Empty Chooser
     pub fn default() -> Self {
         Self(0, Vec::new())

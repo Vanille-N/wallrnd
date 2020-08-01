@@ -26,7 +26,7 @@ pub mod prelude {
     pub type ColorList = HashMap<String, Color>;
     pub type ThemeList = HashMap<String, Chooser<ThemeItem>>;
 
-    #[derive(Clone, Copy, Debug)]
+    #[derive(Clone, Debug)]
     pub struct ThemeItem(pub Color, pub Option<usize>, pub Option<usize>, pub Salt);
 }
 
