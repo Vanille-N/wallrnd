@@ -10,6 +10,7 @@ pub mod scene;
 pub mod shape;
 pub mod svg;
 pub mod tesselate;
+pub mod salt;
 
 pub mod prelude {
     pub use super::Verbosity;
@@ -19,12 +20,14 @@ pub mod prelude {
     pub use color::Color;
     pub use frame::Frame;
     pub use pos::{radians, Pos};
+    pub use salt::Salt;
 
     use std::collections::HashMap;
     pub type ColorList = HashMap<String, Color>;
     pub type ThemeList = HashMap<String, Chooser<ThemeItem>>;
+
     #[derive(Clone, Copy, Debug)]
-    pub struct ThemeItem(pub Color, pub Option<usize>, pub Option<usize>);
+    pub struct ThemeItem(pub Color, pub Option<usize>, pub Option<usize>, pub Salt);
 }
 
 #[derive(Clone, Copy, Default)]
