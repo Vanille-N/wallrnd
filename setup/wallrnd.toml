@@ -204,9 +204,12 @@ spring = [
   { color = "#FF00FF", weight = 10, distance = 10, variability = 40 }
 ]
 sky = [
-  { color = "#00FFFF", weight = 50 },
-  { color = "#87CEEB", weight = 50 },
-  { color = "#FFD700", weight = 30, variability = 50 }
+  { color = "#00FFFF", weight = 50, salt = [
+    { color = "#0022CC", likeliness = 0.01, variability = 50 }] },
+  { color = "#87CEEB", weight = 50, salt = [
+    { color = "#CCCCCC", likeliness = 0.08, variability = 20 }] },
+  { color = "#FFD700", weight = 30, variability = 50, salt = [
+    { color = "#990000", likeliness = 0.02, variability = 20 }] }
 ]
 rust = [
   { color = "#FF7F50", weight = 40, distance = 20 },
