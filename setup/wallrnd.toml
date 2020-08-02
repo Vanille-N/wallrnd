@@ -186,14 +186,21 @@ night = [
   { color = "#708090", weight = 10, distance = 10, variability = 5 }
 ]
 dawn = [
-  { color = "#FF00FF", weight = 40, variability = 50 },
+  { color = "#FF00FF", weight = 40, variability = 50, salt = [
+    { color = "#DAA520", likeliness = 0.03, variability = 10 }] },
   { color = "#00FFFF", weight = 30 },
-  { color = "#DAA520", weight = 20, distance = 10 }
+  { color = "#DAA520", weight = 20, distance = 10, salt = [
+    { color = "#FF00FF", likeliness = 0.03, variability = 10 }] }
 ]
 spring = [
-  { color = "#7CFC00", weight = 30, variability = 60 },
-  { color = "#FFD700", weight = 10 },
-  { color = "#00FFFF", weight = 10 },
+  { color = "#7CFC00", weight = 30, variability = 60, salt = [
+    { color = "#108000", likeliness = 0.03, variability = 20 },
+    { color = "#CCFF00", likeliness = 0.04, variability = 20 }] },
+  { color = "#FFD700", weight = 10, salt = [
+    { color = "#108000", likeliness = 0.03, variability = 20 },
+    { color = "#CCFF00", likeliness = 0.04, variability = 20 }] },
+  { color = "#00FFFF", weight = 10 , salt = [
+    { color = "#0022CC", likeliness = 0.007, variability = 50 }] },
   { color = "#FF00FF", weight = 10, distance = 10, variability = 40 }
 ]
 sky = [
