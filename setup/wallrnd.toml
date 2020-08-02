@@ -183,7 +183,8 @@ night = [
   { color = "#191970", weight = 40, distance = 20 },
   { color = "#000000", weight = 30, distance = 5,  variability = 10, salt = [
     { color = "#CCCCCC", likeliness = 0.03, variability = 20 }] },
-  { color = "#708090", weight = 10, distance = 10, variability = 5 }
+  { color = "#708090", weight = 10, distance = 10, variability = 5, salt = [
+    { color = "#445566", likeliness = 0.02, variability = 30 }] }
 ]
 dawn = [
   { color = "#FF00FF", weight = 40, variability = 50, salt = [
