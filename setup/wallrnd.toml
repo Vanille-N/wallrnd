@@ -213,14 +213,19 @@ sky = [
     { color = "#990000", likeliness = 0.02, variability = 20 }] }
 ]
 rust = [
-  { color = "#FF7F50", weight = 40, distance = 20 },
+  { color = "#FF7F50", weight = 40, distance = 20, salt = [
+    { color = "#BBBBBB", likeliness = 0.02, variability = 30 }] },
   { color = "#FFA500", weight = 30, distance = 20 },
-  { color = "#C0C0C0", weight = 20, distance = 10, variability = 10 },
+  { color = "#C0C0C0", weight = 20, distance = 10, variability = 10, salt = [
+    { color = "#00DD88", likeliness = 0.01, variability = 20 },
+    { color = "#FFA500", likeliness = 0.02, variability = 10 }] },
   { color = "#00FF7F", weight = 10, distance = 0, variability = 50 }
 ]
 fire = [
-  { color = "#FF4500", weight = 30, variability = 30 },
-  { color = "#FFFF00", weight = 20, distance = 10 },
+  { color = "#FF4500", weight = 30, variability = 30 , salt = [
+    { color = "#990000", likeliness = 0.02, variability = 30 }] },
+  { color = "#FFFF00", weight = 20, distance = 10, salt = [
+    { color = "#AAAA00", likeliness = 0.01, variability = 20 }] },
   { color = "#FF0000", weight = 20, variability = 30 },
   { color = "#8B0000", weight = 10 }
 ]
