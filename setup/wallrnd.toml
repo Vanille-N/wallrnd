@@ -12,7 +12,7 @@ height = 1536 # Screen dimension
 
 [lines]
 # Set line appearance
-width = 1.0
+width = 0.0
 color = "#000000" # Supports named colors as well
 # Tiling-specific overrides
 # Available:
@@ -181,7 +181,8 @@ white = "#FFFFFF"
 # A color can also be described by a table: { color, weight, distance, variability }
 night = [
   { color = "#191970", weight = 40, distance = 20 },
-  { color = "#000000", weight = 30, distance = 5,  variability = 10 },
+  { color = "#000000", weight = 30, distance = 5,  variability = 10, salt = [
+    { color = "#CCCCCC", likeliness = 0.03, variability = 20 }] },
   { color = "#708090", weight = 10, distance = 10, variability = 5 }
 ]
 dawn = [
