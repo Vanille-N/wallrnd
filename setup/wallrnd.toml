@@ -260,8 +260,10 @@ dusk = [
 ]
 shadow = [
   { color = "#4B0082", weight = 30 },
-  { color = "#800080", weight = 20, variability = 30, distance = 5 },
-  { color = "#000000", weight = 10, variability = 5, distance = 5 }
+  { color = "#800080", weight = 20, variability = 30, distance = 5, salt = [
+    { color = "#200030", likeliness = 0.02, variability = 5 }] },
+  { color = "#000000", weight = 10, variability = 5, distance = 5, salt = [
+    { color = "#500050", likeliness = 0.02, variability = 10 }] }
 ]
 
 [shapes]
