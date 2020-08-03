@@ -245,14 +245,18 @@ ocean = [
   { color = "#66CDAA", weight = 30 }
 ]
 blood = [
-  { color = "#800000", weight = 30 },
+  { color = "#800000", weight = 30, salt = [
+    { color = "#220000", likeliness = 0.03, variability = 20 },
+    { color = "#CC0011", likeliness = 0.02, variability = 10 }]},
   { color = "#FA8072", weight = 20 },
   { color = "#DC143C", weight = 10 }
 ]
 dusk = [
-  { color = "#7B68EE", weight = 30 },
+  { color = "#7B68EE", weight = 30, salt = [
+    { color = "#CC00CC", likeliness = 0.02, variability = 10 }] },
   { color = "#FF69B4", weight = 20, variability = 30 },
-  { color = "#FF8C00", weight = 20, variability = 30 }
+  { color = "#FF8C00", weight = 20, variability = 30, salt = [
+    { color = "#BB5500", likeliness = 0.01, variability = 20 }] }
 ]
 shadow = [
   { color = "#4B0082", weight = 30 },
