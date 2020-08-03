@@ -309,3 +309,27 @@ fn make_config_file(fname: &str) {
             exit(1);
         });
 }
+
+#[cfg(feature = "nice")]
+fn reduce_priority(verbose: Verbosity) {
+    use scrummage::*;
+    let base = Process::current().priority().unwrap();
+    if verbose.info {
+        println!("Current priority: {:?}", base);
+    }
+    let background_priority = base.lower().next().unwrap_or_else(|| {
+        if verbose.warn {
+            println!("No lower priority available");
+        }
+        exit(1);
+    });
+    Process::current().set_priority(background_priority).unwrap_or_else(|_| {
+        if verbose.warn {
+            println!("Failed to lower priority");
+        }
+        exit(1);
+    });
+    if verbose.info {
+        println!("Changed priority of current process: {:?}", Process::current().priority().unwrap());
+    }
+}
