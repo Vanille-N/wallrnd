@@ -16,8 +16,9 @@ fn main() {
 
     if args.help {
         print_help();
-        std::process::exit(0);
+        exit(0);
     }
+
     let verbose = args.verbose;
 
     if args.nice {
@@ -37,7 +38,7 @@ fn main() {
             println!("Initializing configuration file");
         }
         make_config_file(&args.init[..]);
-        std::process::exit(0);
+        exit(0);
     }
 
     // Get local time and convert to app-specific format: HHMM
@@ -127,7 +128,7 @@ fn main() {
         if verbose.prog {
             println!("No destination specified");
         }
-        std::process::exit(1);
+        exit(1);
     }
 
     if verbose.prog {
@@ -137,7 +138,7 @@ fn main() {
         if verbose.warn {
             println!("An error occured: {:?}", e);
         }
-        std::process::exit(1);
+        exit(1);
     });
     #[allow(clippy::redundant_clone)]
     // Reason: clone is NOT redundant when certain feature flags are used...
@@ -149,7 +150,7 @@ fn main() {
             if verbose.warn {
                 println!("An error occured: {}", e);
             }
-            std::process::exit(1);
+            exit(1);
         });
     if args.set {
         #[cfg(feature = "set-wallpaper")]
@@ -164,7 +165,7 @@ fn main() {
                 if verbose.warn {
                     println!("Unable to detect desktop environment");
                 }
-                std::process::exit(1);
+                exit(1);
             });
             let imgdir = std::path::PathBuf::from(&dest);
             let canon = std::fs::canonicalize(&imgdir)
@@ -172,7 +173,7 @@ fn main() {
                     if verbose.warn {
                         println!("Could not resolve path");
                     }
-                    std::process::exit(1);
+                    exit(1);
                 })
                 .into_os_string()
                 .into_string()
@@ -180,7 +181,7 @@ fn main() {
                     if verbose.warn {
                         println!("Invalid file name");
                     }
-                    std::process::exit(1);
+                    exit(1);
                 });
             if verbose.info {
                 println!("File path resolved to '{}'", &canon);
@@ -199,7 +200,7 @@ fn main() {
                 println!("Make sure to include the feature 'set-wallpaper' to access this option");
                 println!("See 'https://doc.rust-lang.org/cargo/reference/features.html' to learn how to do it");
             }
-            std::process::exit(1);
+            exit(1);
         }
     }
     if verbose.prog {
@@ -296,13 +297,13 @@ fn print_help() {
 fn make_config_file(fname: &str) {
     let mut buffer = std::fs::File::create(fname).unwrap_or_else(|e| {
         println!("Error creating configuration: {}", e);
-        std::process::exit(2);
+        exit(1);
     });
     let sample_cfg = include_str!("../assets/default.toml");
     buffer
         .write_all(&sample_cfg.to_string().into_bytes())
         .unwrap_or_else(|e| {
             println!("Error writing configuration: {}", e);
-            std::process::exit(3);
+            exit(1);
         });
 }
