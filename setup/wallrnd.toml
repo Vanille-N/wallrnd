@@ -179,6 +179,21 @@ white = "#FFFFFF"
 # A theme is a list of weighted colors (named or not); e.g. theme1 = ["white x20 ~10", "black x10"]
 # You may include a previously created theme inside another; e.g. theme2 = ["theme2", "grey x20"]
 # A color can also be described by a table: { color, weight, distance, variability }
+# One can add a 'salt' field, described by an array of tables { color, likeliness, variability }
+#   'color' is any named color or [R, G, B] or #RRGGBB
+#   'likeliness' is the probability to choose a certain salt (recommended ~1%)
+#   'variability' is how much deviation there is in the salt
+# In summary, here is the recomended format:
+# <THEME> = [
+#   { color = <C-1>, weight = <W-1>, distance = <D-1>, variability = <V-1>, salt = [
+#     { color = <C-1a>, likeliness = <L-1a>, variability = <V-1a> },
+#     ...
+#     { color = <C-1z>, likeliness = <L-1z>, variability = <V-1z> }] },
+#   ...
+#   { color = <C-N>, weight = <W-N>, distance = <D-N>, variability = <V-N>, salt = [
+#     { color = <C-Na>, likeliness = <L-Na>, variability = <V-Na> },
+#     ...
+#     { color = <C-Nz>, likeliness = <L-Nz>, variability = <V-Nz> }] },
 night = [
   { color = "#191970", weight = 40, distance = 20 },
   { color = "#000000", weight = 30, distance = 5,  variability = 10, salt = [
