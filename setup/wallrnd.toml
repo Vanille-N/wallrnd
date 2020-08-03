@@ -230,13 +230,18 @@ fire = [
   { color = "#8B0000", weight = 10 }
 ]
 forest = [
-  { color = "#228B22", weight = 40, variability = 30},
+  { color = "#228B22", weight = 40, variability = 30, salt = [
+    { color = "#FFD700", likeliness = 0.005, variability = 10 },
+    { color = "#FF00AA", likeliness = 0.005, variability = 10 }] },
   { color = "#9ACD32", weight = 20, variability = 30, distance = 10 },
-  { color = "#8B4513", weight = 20, distance = 10 }
+  { color = "#8B4513", weight = 20, distance = 10, salt = [
+    { color = "#BE7846", likeliness = 0.02, variability = 10 }] }
 ]
 ocean = [
-  { color = "#000080", weight = 60 },
-  { color = "#4B0082", weight = 30 },
+  { color = "#000080", weight = 60, salt = [
+    { color = "#111111", likeliness = 0.02, variability = 20 }] },
+  { color = "#4B0082", weight = 30, salt = [
+    { color = "#8F44C6", likeliness = 0.01, variability = 10 }] },
   { color = "#66CDAA", weight = 30 }
 ]
 blood = [
