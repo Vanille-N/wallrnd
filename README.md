@@ -21,6 +21,7 @@ Direct dependencies
 | `resvg`           | [![][resvg_cb]][resvg_c]           | [![API][resvg_db]][resvg_d]           |
 | `usvg`            | [![][usvg_cb]][usvg_c]             | [![API][usvg_db]][usvg_d]             |
 | `wallpaper_rs`    | [![][wallpaper_cb]][wallpaper_c]   | [![API][wallpaper_db]][wallpaper_d]   |
+| `scrummage`       | [![][scrummage_cb]][scrummage_c]   | [![API][scrummage_db]][scrummage_d]   |
 
 ---
 
@@ -219,3 +220,8 @@ As a random generator of wallpaper ought to provide images of consistent quality
 [wallpaper_cb]: https://meritbadge.herokuapp.com/wallpaper_rs
 [wallpaper_d]: https://docs.rs/wallpaper_rs
 [wallpaper_db]: https://docs.rs/wallpaper_rs/badge.svg
+
+[scrummage_c]: https://crates.io/crates/scrummage
+[scrummage_cb]: https://meritbadge.herokuapp.com/scrummage
+[scrummage_d]: https://docs.rs/scrummage
+[scrummage_db]: https://docs.rs/scrummage/badge.svg
