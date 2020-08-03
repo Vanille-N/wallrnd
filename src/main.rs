@@ -20,6 +20,18 @@ fn main() {
     }
     let verbose = args.verbose;
 
+    if args.nice {
+        #[cfg(feature = "nice")]
+        reduce_priority(verbose);
+        #[cfg(not(feature = "nice"))]
+        {
+            if verbose.warn {
+                println!("Feature 'nice' is not enabled, you cannot control process priority");
+            }
+            exit(1);
+        }
+    }
+
     if args.init != "" {
         if verbose.prog {
             println!("Initializing configuration file");
