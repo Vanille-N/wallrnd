@@ -107,19 +107,20 @@ You may be interested in these other setup methods if
 - your OS is not included in [this list of supported environments](https://github.com/vineetred/flowy#supported-environments)
 - you want custom functionality such as aborting the script when running on battery
 - you want to build from source
+- `scrummage` (the crate that `wallrnd` depends on to provide the `nice` feature) is not yet compatible with your OS
 
 ### Installation:
-* If you do not need `wallrnd` to set wallpapers, then do not use the feature `set-wallaper`: `cargo install wallrnd`
+* If you do not need `wallrnd` to set wallpapers, then do not use the feature `set-wallaper`: `cargo install wallrnd`. The same is true if you don't want to use the `nice` feature.
 
 * If you want to be able to create png images, then you should add the `make-png` feature: `cargo install wallrnd --features make-png`
 
-* To have both features, you can use `cargo install wallrnd --features all`
+* To have all features, you can use `cargo install wallrnd --features all`
 
 * You can also build from source:
   ```
   git clone https://github.com/Vanille-N/wallrnd
   cd wallrnd
-  cargo build --release
+  cargo build --release --features nice,set-wallpaper
   cp target/release/wallrnd ~/bin/wallrnd
   ```
 
@@ -133,7 +134,7 @@ You may be interested in these other setup methods if
 
 * The appropriate version should be put in your path and executed whenever necessary by adding an entry to your Crontab. `* * * * * set-wallpaper`
 
-* Note that the file path does not have to be absolute. `wallrnd` resolves paths before writing the wallpaper configuration.
+* Note that the file path does not have to be absolute. `wallrnd` resolves paths before writing the wallpaper to a file.
 
 ---
 
