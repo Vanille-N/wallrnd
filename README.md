@@ -78,15 +78,13 @@ It is not recommended for any crates dependent on this one to use the feature fl
 
 ## Recommended setup (executable `wallrnd`)
 
-* `cargo install wallrnd --features set-wallpaper`
+* `cargo install wallrnd --features set-wallpaper,nice`
 
 * Make a copy of `setup/wallrnd.toml` and adjust the settings to your liking
 
-* Make a new Crontab entry: `* * * * * nice -n 20 -- wallrnd --config /path/to/wallrnd.toml --image /tmp/wallpaper.svg --set`
+* Make a new Crontab entry: `* * * * * wallrnd --config /path/to/wallrnd.toml --image /tmp/wallpaper.svg --set --nice`
 
-Thanks to [`nice`](https://en.wikipedia.org/wiki/Nice_(Unix)) giving the program a very low priority, it can run in the background without issue.
-
-It will soon be possible to achieve the same without `nice`.
+The `--nice` option causes `wallrnd` to lower its priority as soon as launched, which prevents the user from experiencing a short delay each time a new wallpaper is generated.
 
 ## Recommended setup (executable `prototype/prototype.py`)
 
