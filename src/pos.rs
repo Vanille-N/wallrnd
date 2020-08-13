@@ -72,6 +72,8 @@ impl Pos {
         let inter1 = pos1 + d1 * t1;
         let inter2 = pos2 + d2 * t2;
         (inter1 + inter2) / 2;
+    pub fn zero() -> Self {
+        Self(0., 0.)
     }
 }
 
