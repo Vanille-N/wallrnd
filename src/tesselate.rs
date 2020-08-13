@@ -172,3 +172,20 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: usize) -> Vec<(Pos, Pa
         })
         .collect::<Vec<_>>()
 }
+struct Pentagon {
+    rot: isize,
+    sizes: [f64; 3],
+    angles: [usize; 5],
+}
+
+impl Pentagon {
+    fn to_movable(&self) -> Movable {
+        let a = Pos::zero();
+        let b = a + Pos::polar(rot, sizes.1);
+        let c = b + Pos::polar(rot + angles.1, sizes.2);
+        let e = a + Pos::polar(rot - angles.0, sizes.0);
+        let d = Pos::intersect((e, rot - angles.0 - angles.4), (c, rot + angles.1 + angles.2));
+        let mid = (a + b + c + d + e) / 5.0;
+        vec![a - mid, b - mid, c - mid, d - mid, e - mid]
+    }
+}
