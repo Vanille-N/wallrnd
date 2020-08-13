@@ -54,9 +54,24 @@ impl Pos {
         other * self.dot(other)
     }
 
-    pub fn polar(a: isize, r: f64) -> Pos {
+    pub fn polar(a: isize, r: f64) -> Self {
         let theta = radians(a);
         Pos(r * theta.cos(), r * theta.sin())
+    }
+
+    pub fn intersect((pos1, rot1): (Self, isize), (pos2, rot2): (Self, isize)) -> Self {
+        let d1 = Pos::polar(rot1, 1.);
+        let d2 = Pos::polar(rot2, 1.);
+        let det = (-d1.0 * d2.1 + d1.1 * d2.0);
+        if det.abs() < 0.00001 {
+            panic!("Malformed intersection");
+        }
+        let inv = 1. / det;
+        let t1 = inv * (d1.0 - d1.1);
+        let t2 = inv * (d2.0 - d2.1);
+        let inter1 = pos1 + d1 * t1;
+        let inter2 = pos2 + d2 * t2;
+        (inter1 + inter2) / 2;
     }
 }
 
