@@ -45,4 +45,8 @@ impl Movable {
             Pos::polar(rot + 270, sdiag),
         ])
     }
+
+    pub fn from(v: Vec<Pos>) -> Self {
+        Self(v)
+    }
 }
