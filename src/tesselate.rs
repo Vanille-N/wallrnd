@@ -172,6 +172,31 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: usize) -> Vec<(Pos, Pa
         })
         .collect::<Vec<_>>()
 }
+
+pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
+    let beta = 110;
+    let gamma = 180 - beta;
+    let alpha = 130;
+    let delta = 110;
+    let epsilon = 360 - alpha - delta;
+    let sizes = [size, size*0.2, size*1.1];
+    let angles = [alpha, beta, gamma, delta, epsilon];
+    let mv = Pentagon { sizes, rot, angles }.to_movable();
+    let idir = Pos::polar(rot, size);
+    let jdir = Pos::polar(rot + 180, size);
+    periodic_grid_tiling(
+        f,
+        |pos| {
+            vec![
+                mv.render(pos + Pos::polar(rot, size)),
+                mv.render(pos + Pos::polar(rot + 180, size)),
+            ];
+        },
+        idir,
+        jdir,
+    )
+}
+
 struct Pentagon {
     rot: isize,
     sizes: [f64; 3],
