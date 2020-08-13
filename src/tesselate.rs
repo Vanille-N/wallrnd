@@ -204,6 +204,7 @@ struct Pentagon {
 }
 
 impl Pentagon {
+    #[allow(clippy::many_single_char_names)]
     fn to_movable(&self) -> Movable {
         let a = Pos::zero();
         let b = a + Pos::polar(self.rot, self.sizes[1]);
