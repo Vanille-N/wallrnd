@@ -190,7 +190,7 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
             vec![
                 mv.render(pos + Pos::polar(rot, size)),
                 mv.render(pos + Pos::polar(rot + 180, size)),
-            ];
+            ]
         },
         idir,
         jdir,
@@ -206,11 +206,11 @@ struct Pentagon {
 impl Pentagon {
     fn to_movable(&self) -> Movable {
         let a = Pos::zero();
-        let b = a + Pos::polar(rot, sizes.1);
-        let c = b + Pos::polar(rot + angles.1, sizes.2);
-        let e = a + Pos::polar(rot - angles.0, sizes.0);
-        let d = Pos::intersect((e, rot - angles.0 - angles.4), (c, rot + angles.1 + angles.2));
-        let mid = (a + b + c + d + e) / 5.0;
-        vec![a - mid, b - mid, c - mid, d - mid, e - mid]
+        let b = a + Pos::polar(self.rot, self.sizes[1]);
+        let c = b + Pos::polar(self.rot + self.angles[1] as isize, self.sizes[2]);
+        let e = a + Pos::polar(self.rot - self.angles[0] as isize, self.sizes[0]);
+        let d = Pos::intersect((e, self.rot - self.angles[0] as isize - self.angles[4] as isize), (c, self.rot + self.angles[1] as isize + self.angles[2] as isize));
+        let mid = (a + b + c + d + e) * 0.2;
+        Movable::from(vec![a - mid, b - mid, c - mid, d - mid, e - mid])
     }
 }
