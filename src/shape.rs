@@ -49,4 +49,12 @@ impl Movable {
     pub fn from(v: Vec<Pos>) -> Self {
         Self(v)
     }
+
+    pub fn vertex(&self, idx: usize) -> Pos {
+        self.0[idx % self.0.len()]
+    }
+
+    pub fn side(&self, idx: usize) -> Pos {
+        self.0[(idx + 1) % self.0.len()] - self.0[idx % self.0.len()]
+    }
 }
