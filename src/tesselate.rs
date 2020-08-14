@@ -174,12 +174,12 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: usize) -> Vec<(Pos, Pa
 }
 
 pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
-    let beta = 110;
+    let beta = 90;
     let gamma = 180 - beta;
-    let alpha = 130;
-    let delta = 110;
+    let alpha = 120;
+    let delta = 120;
     let epsilon = 360 - alpha - delta;
-    let sizes = [size, size*0.2, size*1.1];
+    let sizes = [size, size, size];
     let angles = [alpha, beta, gamma, delta, epsilon];
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
@@ -213,7 +213,7 @@ impl Pentagon {
         let b = a + Pos::polar(self.rot, self.sizes[1]);
         let c = b + Pos::polar(self.rot + (180 - self.angles[1] as isize), self.sizes[2]);
         let e = a + Pos::polar(self.rot + self.angles[0] as isize, self.sizes[0]);
-        let d = Pos::intersect((e, self.rot + self.angles[0] as isize + self.angles[4] as isize), (c, self.rot - self.angles[1] as isize - self.angles[2] as isize));
+        let d = Pos::intersect((e, self.rot + self.angles[0] as isize + (self.angles[4] as isize - 180)), (c, self.rot - self.angles[1] as isize - self.angles[2] as isize));
         let mid = (a + b + c + d + e) * 0.2;
         Movable::from(vec![a - mid, b - mid, c - mid, d - mid, e - mid])
     }
