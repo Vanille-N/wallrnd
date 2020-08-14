@@ -60,18 +60,26 @@ impl Pos {
     }
 
     pub fn intersect((pos1, rot1): (Self, isize), (pos2, rot2): (Self, isize)) -> Self {
-        let d1 = Pos::polar(rot1, 1.);
-        let d2 = Pos::polar(rot2, 1.);
-        let det = -d1.0 * d2.1 + d1.1 * d2.0;
-        if det.abs() < 0.00001 {
-            panic!("Malformed intersection");
-        }
-        let inv = 1. / det;
-        let t1 = inv * (d1.0 - d1.1);
-        let t2 = inv * (d2.0 - d2.1);
-        let inter1 = pos1 + d1 * t1;
-        let inter2 = pos2 + d2 * t2;
-        (inter1 + inter2) * 0.5
+        let pos1b = pos1 + Pos::polar(rot1, 1.);
+        let pos2b = pos2 + Pos::polar(rot2, 1.);
+
+        let dx = Pos(pos1.0 - pos1b.0, pos2.0 - pos2b.0);
+        let dy = Pos(pos1.1 - pos1b.1, pos2.1 - pos2b.1);
+
+        let det = |a: Pos, b: Pos| a.0 * b.1 - a.1 * b.0;
+
+        let inv = {
+            let div = det(dx, dy);
+            if div.abs() < 0.01 {
+                panic!("Malformed intersection");
+            }
+            1. / div
+        };
+
+        let d = Pos(det(pos1, pos1b), det(pos2, pos2b));
+        let x = det(d, dx) * inv;
+        let y = det(d, dy) * inv;
+        Pos(x, y)
     }
 
     pub fn zero() -> Self {
