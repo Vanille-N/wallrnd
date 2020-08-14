@@ -3,7 +3,7 @@ use rand::{rngs::ThreadRng, Rng};
 use std::cmp::{Eq, PartialEq};
 use std::f64::consts::PI;
 use std::hash::{Hash, Hasher};
-use std::ops::{Add, Mul, Sub};
+use std::ops::{Add, Mul, Sub, Neg};
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(pub f64, pub f64);
@@ -119,6 +119,13 @@ impl Mul<f64> for Pos {
     type Output = Self;
     fn mul(self, x: f64) -> Self::Output {
         Pos(self.0 * x as f64, self.1 * x as f64)
+    }
+}
+
+impl Neg for Pos {
+    type Output = Self;
+    fn neg(self) -> Self {
+        Self(-self.0, -self.1)
     }
 }
 
