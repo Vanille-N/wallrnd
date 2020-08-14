@@ -431,6 +431,7 @@ Width of pattern: {}",
                     Tiling::HexagonsAndTriangles => (t.size_hex_and_tri.unwrap_or(size), 0),
                     Tiling::SquaresAndTriangles => (t.size_squ_and_tri.unwrap_or(size), 0),
                     Tiling::Rhombus => (t.size_rho.unwrap_or(size), 0),
+                    Tiling::Pentagons => (t.size_pen.unwrap_or(size), 0),
                     Tiling::Delaunay => (0.0, t.nb_delaunay.unwrap_or(NB_DELAUNAY)),
                 }
             } else {
@@ -440,6 +441,7 @@ Width of pattern: {}",
                     Tiling::HexagonsAndTriangles => (size, 0),
                     Tiling::SquaresAndTriangles => (size, 0),
                     Tiling::Rhombus => (size, 0),
+                    Tiling::Pentagons => (size, 0),
                     Tiling::Delaunay => (0.0, NB_DELAUNAY),
                 }
             }
@@ -905,6 +907,7 @@ impl ConfigLines {
             Tiling::HexagonsAndTriangles => (self.hex_and_tri_width, &self.hex_and_tri_color),
             Tiling::SquaresAndTriangles => (self.squ_and_tri_width, &self.squ_and_tri_color),
             Tiling::Rhombus => (self.rho_width, &self.rho_color),
+            Tiling::Pentagons => (self.pen_width, &self.pen_color),
             Tiling::Delaunay => (self.del_width, &self.del_color),
         };
         (
