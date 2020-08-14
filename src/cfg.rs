@@ -96,6 +96,7 @@ impl SceneCfg {
                 rng.gen_range(0, 360),
             ),
             Tiling::Delaunay => random_delaunay(&self.frame, rng, self.nb_delaunay),
+            Tiling::Pentagons => pentagons_type1(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
         }
     }
 }
@@ -143,6 +144,7 @@ pub enum Tiling {
     SquaresAndTriangles,
     Rhombus,
     Delaunay,
+    Pentagons,
 }
 
 impl Tiling {
@@ -156,6 +158,7 @@ impl Tiling {
             SquaresAndTriangles,
             Rhombus,
             Delaunay,
+            Pentagons,
         ]
         .choose(rng)
         .unwrap()
