@@ -207,14 +207,18 @@ struct Pentagon {
 }
 
 impl Pentagon {
-    #[allow(clippy::many_single_char_names)]
     fn to_movable(&self) -> Movable {
-        let a = Pos::zero();
-        let b = a + Pos::polar(self.rot, self.sizes[1]);
-        let c = b + Pos::polar(self.rot + (180 - self.angles[1] as isize), self.sizes[2]);
-        let e = a + Pos::polar(self.rot + self.angles[0] as isize, self.sizes[0]);
-        let d = Pos::intersect((e, self.rot + self.angles[0] as isize + (self.angles[4] as isize - 180)), (c, self.rot - self.angles[1] as isize - self.angles[2] as isize));
-        let mid = (a + b + c + d + e) * 0.2;
-        Movable::from(vec![a - mid, b - mid, c - mid, d - mid, e - mid])
+        let mut pts = Vec::new();
+        pts.push(Pos::zero());
+        let mut running_angle = 0;
+        for i in 0..=2 {
+            let latest = pts[i];
+            pts.push(latest + Pos::polar(running_angle, self.sizes[i]));
+            running_angle += 180 - self.angles[i+1] as isize;
+        }
+        let latest = pts[3];
+        pts.push(Pos::intersect((Pos::zero(), self.rot + self.angles[0] as isize), (latest, running_angle)));
+        let mid = pts.iter().fold(Pos::zero(), |acc, item| acc + *item) * 0.2;
+        Movable::from(pts.into_iter().map(|p| p - mid).collect::<Vec<_>>())
     }
 }
