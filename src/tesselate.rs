@@ -174,9 +174,9 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: usize) -> Vec<(Pos, Pa
 }
 
 pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
-    let beta = 90;
+    let beta = 60;
     let gamma = 180 - beta;
-    let alpha = 120;
+    let alpha = 50;
     let delta = 120;
     let epsilon = 360 - alpha - delta;
     let sizes = [size, size, size];
@@ -186,13 +186,13 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
     ];
     let idir = Pos::polar(rot, size) * 50;
-    let jdir = mv[0].vertex(1) * 2. - mv[0].side(0);
+    let jdir = mv[0].vertex(1) * 20. - mv[0].side(0);
     periodic_grid_tiling(
         f,
         |pos| {
             vec![
-                mv[0].render(pos - mv[0].vertex(1) + mv[0].side(0) * 0.5),
-                mv[1].render(pos - mv[1].vertex(1) + mv[1].side(0) * 0.5),
+                mv[0].render(pos - mv[0].vertex(1)*5 + mv[0].side(0) * 0.5),
+                mv[1].render(pos - mv[1].vertex(1)*5 + mv[1].side(0) * 0.5),
             ]
         },
         idir,
@@ -210,14 +210,14 @@ impl Pentagon {
     fn to_movable(&self) -> Movable {
         let mut pts = Vec::new();
         pts.push(Pos::zero());
-        let mut running_angle = 0;
+        let mut running_angle = self.rot;
         for i in 0..=2 {
             let latest = pts[i];
             pts.push(latest + Pos::polar(running_angle, self.sizes[i]));
             running_angle += 180 - self.angles[i+1] as isize;
         }
         let latest = pts[3];
-        pts.push(Pos::intersect((Pos::zero(), self.rot + self.angles[0] as isize), (latest, running_angle)));
+        pts.push(Pos::intersect((Pos::zero(), self.rot - self.angles[0] as isize), (latest, running_angle)));
         let mid = pts.iter().fold(Pos::zero(), |acc, item| acc + *item) * 0.2;
         Movable::from(pts.into_iter().map(|p| p - mid).collect::<Vec<_>>())
     }
