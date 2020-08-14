@@ -181,15 +181,18 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let epsilon = 360 - alpha - delta;
     let sizes = [size, size*0.2, size*1.1];
     let angles = [alpha, beta, gamma, delta, epsilon];
-    let mv = Pentagon { sizes, rot, angles }.to_movable();
+    let mv = [
+        Pentagon { sizes, rot, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
+    ];
     let idir = Pos::polar(rot, size);
-    let jdir = Pos::polar(rot + 180, size);
+    let jdir = Pos::polar(rot + 90, size);
     periodic_grid_tiling(
         f,
         |pos| {
             vec![
-                mv.render(pos + Pos::polar(rot, size)),
-                mv.render(pos + Pos::polar(rot + 180, size)),
+                mv[0].render(pos + Pos::polar(rot, size)),
+                mv[1].render(pos + Pos::polar(rot + 180, size)),
             ]
         },
         idir,
@@ -208,9 +211,9 @@ impl Pentagon {
     fn to_movable(&self) -> Movable {
         let a = Pos::zero();
         let b = a + Pos::polar(self.rot, self.sizes[1]);
-        let c = b + Pos::polar(self.rot + self.angles[1] as isize, self.sizes[2]);
-        let e = a + Pos::polar(self.rot - self.angles[0] as isize, self.sizes[0]);
-        let d = Pos::intersect((e, self.rot - self.angles[0] as isize - self.angles[4] as isize), (c, self.rot + self.angles[1] as isize + self.angles[2] as isize));
+        let c = b + Pos::polar(self.rot + (180 - self.angles[1] as isize), self.sizes[2]);
+        let e = a + Pos::polar(self.rot + self.angles[0] as isize, self.sizes[0]);
+        let d = Pos::intersect((e, self.rot + self.angles[0] as isize + self.angles[4] as isize), (c, self.rot - self.angles[1] as isize - self.angles[2] as isize));
         let mid = (a + b + c + d + e) * 0.2;
         Movable::from(vec![a - mid, b - mid, c - mid, d - mid, e - mid])
     }
