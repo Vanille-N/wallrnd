@@ -47,6 +47,8 @@ pub struct ConfigLines {
     pub hex_and_tri_color: Option<String>,
     pub squ_and_tri_width: Option<f64>,
     pub squ_and_tri_color: Option<String>,
+    pub pen_width: Option<f64>,
+    pub pen_color: Option<String>,
 }
 
 /// Color list
@@ -85,6 +87,7 @@ pub struct ConfigTilings {
     pub size_hex_and_tri: Option<f64>,
     pub size_squ_and_tri: Option<f64>,
     pub size_rho: Option<f64>,
+    pub size_pen: Option<f64>,
     pub nb_delaunay: Option<usize>,
 }
 
@@ -824,6 +827,7 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
         "S&T" | "squ.&tri." | "squares&triangles" => tilings.push(Tiling::SquaresAndTriangles, w),
         "R" | "rho." | "rhombus" => tilings.push(Tiling::Rhombus, w),
         "D" | "del." | "delaunay" => tilings.push(Tiling::Delaunay, w),
+        "P" | "pen." | "pentagons" => tilings.push(Tiling::Pentagons, w),
         "FC" | "f-cir." | "free-circles" => patterns.push(Pattern::FreeCircles, w),
         "FT" | "f-tri." | "free-triangles" => patterns.push(Pattern::FreeTriangles, w),
         "FR" | "f-str." | "free-stripes" => patterns.push(Pattern::FreeStripes, w),
