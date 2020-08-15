@@ -239,6 +239,13 @@ struct Pentagon {
 
 impl Pentagon {
     fn to_movable(&self) -> Movable {
+        assert_eq!(0, {
+            let mut s = 0;
+            for i in 0..5 {
+                s += 180 - self.angles[i];
+            }
+            s.rem_euclid(360)
+        });
         let mut pts = Vec::new();
         pts.push(Pos::zero());
         let mut running_angle = self.rot;
