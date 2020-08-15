@@ -212,8 +212,8 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
         Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
-        Pentagon { sizes, rot: rot + alpha, rangles }.to_movable(),
-        Pentagon { sizes, rot: rot + alpha + 180, rangles }.to_movable(),
+        Pentagon { sizes, rot: rot + alpha as isize, angles: rangles }.to_movable(),
+        Pentagon { sizes, rot: rot + alpha as isize , angles: rangles }.to_movable(),
     ];
     let idir = Pos::polar(0, size*100.);
     let jdir = Pos::polar(90, size*100.);
