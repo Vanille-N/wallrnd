@@ -191,8 +191,8 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         f,
         |pos| {
             vec![
-                mv[0].render(pos - mv[0].vertex(1)*5 + mv[0].side(0) * 0.5),
-                mv[1].render(pos - mv[1].vertex(1)*5 + mv[1].side(0) * 0.5),
+                mv[0].render(pos - mv[0].vertex(0) + mv[0].side(4) * 0.5),
+                mv[1].render(pos - mv[1].vertex(0) + mv[1].side(4) * 0.5),
             ]
         },
         idir,
