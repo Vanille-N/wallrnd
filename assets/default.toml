@@ -20,8 +20,7 @@ color = "#000000" # Supports named colors as well
 #   hex_width, hex_color, tri_width, tri_color,
 #   hex_and_tri_width, hex_and_tri_color,
 #   squ_and_tri_width, squ_and_tri_color,
-del_width = 0.0
-del_color = "#000000"
+#   pen_width, pen_color,
 
 [colors]
 # List of named colors
@@ -262,7 +261,7 @@ ocean = [
 blood = [
   { color = "#800000", weight = 30, salt = [
     { color = "#220000", likeliness = 0.03, variability = 20 },
-    { color = "#CC0011", likeliness = 0.02, variability = 10 }]},
+    { color = "#CC0011", likeliness = 0.02, variability = 10 }] },
   { color = "#FA8072", weight = 20 },
   { color = "#DC143C", weight = 10 }
 ]
@@ -297,6 +296,7 @@ shadow = [
 #   "S&T" / "squ.&tri." / "squares&triangles"
 #   "R" / "rho." / "rhombus"
 #   "D" / "del." / "delaunay"
+#   "P" / "pen." / "pentagons"
 # Patterns
 #   "FC" / "f-cir." / "free-circles"
 #   "FT" / "f-tri." / "free-triangles"
@@ -333,6 +333,7 @@ size_tri = 10.0
 size_hex_and_tri = 10.0
 size_squ_and_tri = 10.0
 size_rho = 14.0
+size_pen = 14.0
 nb_delaunay = 20000
 
 [[entry]]
