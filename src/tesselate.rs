@@ -201,13 +201,13 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
 }
 
 pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
-    let alpha = 140;
-    let beta = 70;
-    let gamma = 110;
+    let alpha = 110;
+    let beta = 110;
+    let gamma = 100;
     let delta = 180 - beta;
-    let epsilon = 110;
-    let sizes = [size, size*1.2, size];
-    let angles = [alpha, beta, gamma, delta, epsilon];
+    let epsilon = 150;
+    let sizes = [size, size*5.0, size];
+    let angles = [gamma, delta, epsilon, alpha, beta];
     let rangles = [delta, gamma, beta, alpha, epsilon];
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
