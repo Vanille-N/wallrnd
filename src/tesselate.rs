@@ -259,7 +259,7 @@ impl Pentagon {
         }
         println!("Terminate");
         let latest = pts[3];
-        pts.push(Pos::intersect((Pos::zero(), self.rot - self.angles[0] as isize), (latest, running_angle)));
+        pts.push(Pos::intersect((Pos::zero(), self.rot + self.angles[0] as isize), (latest, running_angle)));
         let mid = pts.iter().fold(Pos::zero(), |acc, item| acc + *item) * 0.2;
         Movable::from(pts.into_iter().map(|p| p - mid).collect::<Vec<_>>())
     }
