@@ -35,28 +35,6 @@ Portability of this script is outside of the scope of this project (the image ge
 
 ---
 
-```diff
-! Warning: Breaking change
-! Since the addition of command line options, your launch script may be broken for the latest version
-! You can either download a version of wallrnd earlier than Jul 15, 2020, or see the new format
-! in setup/set-wallpaper (previous script moved to setup/set-wallpaper-obsolete)
-! To update your script, all you need is to replace
-- wallrnd /path/to/image.svg /path/to/config.toml
-! with
-+ wallrnd --image /path/to/image.svg --config /path/to/config.toml
-```
-
-```diff
-! Warning: Breaking change
-! Format for themes weight has changed to be more versatile
-! Old format:
--     theme = [["<C1>", <W1>], ["<C2>", <W2>], ...]
-! New format:
-+     theme = ["<C1> x<W1>", "<C2> x<W2>", ...]
-! To update your configuration file, run
-@@     perl -pi -e 's/\[\"([a-zA-Z0-9_]*)\", *([0-9]+)\]/\"$1 x$2\"/g' setup/wallrnd.toml    @@
-```
-
 ## Features and licensing
 
 While the code in this crate is licensed under the [MIT license](https://opensource.org/licenses/MIT), the binary target includes (purely for user convenience) dependencies that have more restrictive licenses.
