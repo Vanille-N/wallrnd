@@ -1,8 +1,10 @@
 use chrono::{Local, Timelike};
-use std::env;
-use std::fs::File;
-use std::io::prelude::*;
-use std::process::exit;
+use std::{
+    env,
+    fs::File,
+    io::prelude::*,
+    process::exit,
+};
 use wallrnd::{
     prelude::*,
     deserializer::MetaConfig,
