@@ -57,9 +57,28 @@
 
 # How to install
 
+## From source
+
 Clone the repository and `cd` inside.
 
-Use `cargo build --release` (1.44 stable) to create the `wallrnd` executable
+Use `cargo build --release --features nice,set-wallpaper`
+<a name="ref-1">[⁽¹⁾](#text-1)</a>
+<a name="ref-2">[⁽²⁾](#text-2)</a>
+<a name="ref-3">[⁽³⁾](#text-3)</a>
+<a name="ref-star">[⁽*⁾](#text-star)</a>
+to create the `wallrnd` executable.
+
+Make sure to put `wallrnd` in your `$PATH`.
+
+## From `crates.io`
+
+run `cargo install wallrnd --features nice,set-wallpaper`
+[⁽¹⁾](#text-1)
+[⁽²⁾](#text-2)
+[⁽³⁾](#text-3)
+[⁽*⁾](#text-star)
+
+Make sure your `$PATH` contains `~/.cargo/bin`.
 
 Run `wallrnd --image path/to/image.svg --config path/to/configuration.toml` to create a new wallpaper.
 
