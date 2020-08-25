@@ -81,7 +81,6 @@ run `cargo install wallrnd --features nice,set-wallpaper`
 Make sure your `$PATH` contains `~/.cargo/bin`.
 
 
-
 ## And then ?
 
 Run `wallrnd --image path/to/image.svg --config path/to/configuration.toml --set --nice`
@@ -111,3 +110,11 @@ To generate wallpapers at regular intervals, you can create a new cronjob that c
 * [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
 
 Do you know of another similar tool ? You can suggest it [here](https://github.com/Vanille-N/wallrnd/issues)
+
+* <a name="text-1">[(1)](#ref-1)</a> `nice` enables lowering the process priority. It is optionnal.
+* <a name="text-2">[(2)](#ref-2)</a> `set-wallpaper` enables writing a configuration variable to change the current wallpaper. It is optionnal.
+* <a name="text-3">[(3)](#ref-3)</a> `make-png` is also available although not recommended if your system supports svg.
+* <a name="text-4">[(4)](#ref-4)</a> `--set` only available if `set-wallpaper` selected
+* <a name="text-5">[(5)](#ref-5)</a> `--nice` only available if `nice` selected
+* <a name="text-3">[(6)](#ref-3)</a> image extension can be `png` if `make-png` selected
+* <a name="text-star">[(*)](#ref-star)</a> your compiler should be the latest stable release
