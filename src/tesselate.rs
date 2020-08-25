@@ -254,10 +254,7 @@ impl Pentagon {
             let latest = pts[i];
             pts.push(latest + Pos::polar(running_angle, self.sizes[i]));
             running_angle += 180 - self.angles[i+1] as isize;
-            println!("Turned {}", 180 - self.angles[i+1] as isize);
-            println!("-> Orientation is now {}", running_angle);
         }
-        println!("Terminate");
         let latest = pts[3];
         pts.push(Pos::intersect((Pos::zero(), self.rot + self.angles[0] as isize), (latest, running_angle)));
         let mid = pts.iter().fold(Pos::zero(), |acc, item| acc + *item) * 0.2;
