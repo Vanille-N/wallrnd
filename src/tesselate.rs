@@ -176,7 +176,7 @@ pub fn random_delaunay(f: &Frame, rng: &mut ThreadRng, n: usize) -> Vec<(Pos, Pa
 pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let beta = 80;
     let gamma = 180 - beta;
-    let alpha = 60;
+    let alpha = 110;
     let delta = 110;
     let epsilon = 360 - alpha - delta;
     let sizes = [size * 1.2, size, size * 0.9];
