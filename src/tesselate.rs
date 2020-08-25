@@ -223,7 +223,7 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
             vec![
                 mv[0].render(pos),
                 mv[1].render(pos + mv[0].vertex(2) + mv[3].side(4) - mv[1].vertex(1)),
-                mv[3].render(pos + mv[0].vertex(2) - mv[3].side(4)),
+                mv[3].render(pos + mv[0].vertex(2) - mv[3].vertex(4)),
             ]
         }
         ,
