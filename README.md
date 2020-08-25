@@ -112,10 +112,12 @@ Direct dependencies
 | `chrono`          | [![][chrono_cb]][chrono_c]         | [![API][chrono_db]][chrono_d]         |
 | `delaunator`      | [![][delaunator_cb]][delaunator_c] | [![API][delaunator_db]][delaunator_d] |
 | `toml`            | [![][toml_cb]][toml_c]             | [![API][toml_db]][toml_d]             |
-| `resvg`           | [![][resvg_cb]][resvg_c]           | [![API][resvg_db]][resvg_d]           |
-| `usvg`            | [![][usvg_cb]][usvg_c]             | [![API][usvg_db]][usvg_d]             |
-| `wallpaper_rs`    | [![][wallpaper_cb]][wallpaper_c]   | [![API][wallpaper_db]][wallpaper_d]   |
-| `scrummage`       | [![][scrummage_cb]][scrummage_c]   | [![API][scrummage_db]][scrummage_d]   |
+| `resvg` *         | [![][resvg_cb]][resvg_c]           | [![API][resvg_db]][resvg_d]           |
+| `usvg` *          | [![][usvg_cb]][usvg_c]             | [![API][usvg_db]][usvg_d]             |
+| `wallpaper_rs` *  | [![][wallpaper_cb]][wallpaper_c]   | [![API][wallpaper_db]][wallpaper_d]   |
+| `scrummage` *     | [![][scrummage_cb]][scrummage_c]   | [![API][scrummage_db]][scrummage_d]   |
+
+\* Optional dependencies
 
 <!-- Links section -->
 [serde_c]: https://crates.io/crates/serde
