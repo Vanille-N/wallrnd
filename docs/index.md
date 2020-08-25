@@ -80,7 +80,14 @@ run `cargo install wallrnd --features nice,set-wallpaper`
 
 Make sure your `$PATH` contains `~/.cargo/bin`.
 
-Run `wallrnd --image path/to/image.svg --config path/to/configuration.toml` to create a new wallpaper.
+
+
+## And then ?
+
+Run `wallrnd --image path/to/image.svg --config path/to/configuration.toml --set --nice`
+<a name="ref-4">[⁽⁴⁾](#text-4)</a>
+<a name="ref-5">[⁽⁵⁾](#text-5)</a>
+<a name="ref-6">[⁽⁶⁾](#text-6)</a> to create a new wallpaper.
 
 A configuration file is provided under `/setup/wallrnd.toml`.
 
