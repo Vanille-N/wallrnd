@@ -8,22 +8,6 @@
 [![API](https://docs.rs/wallrnd/badge.svg)](https://docs.rs/wallrnd)
 
 ---
-Direct dependencies
-
-| dependency        | crate                              | docs                                  |
-|-------------------|------------------------------------|---------------------------------------|
-| `serde`           | [![][serde_cb]][serde_c]           | [![API][serde_db]][serde_d]           |
-| `serde_derive`    | [![][derive_cb]][derive_c]         | [![API][derive_db]][derive_d]         |
-| `rand`            | [![][rand_cb]][rand_c]             | [![API][rand_db]][rand_d]             |
-| `chrono`          | [![][chrono_cb]][chrono_c]         | [![API][chrono_db]][chrono_d]         |
-| `delaunator`      | [![][delaunator_cb]][delaunator_c] | [![API][delaunator_db]][delaunator_d] |
-| `toml`            | [![][toml_cb]][toml_c]             | [![API][toml_db]][toml_d]             |
-| `resvg`           | [![][resvg_cb]][resvg_c]           | [![API][resvg_db]][resvg_d]           |
-| `usvg`            | [![][usvg_cb]][usvg_c]             | [![API][usvg_db]][usvg_d]             |
-| `wallpaper_rs`    | [![][wallpaper_cb]][wallpaper_c]   | [![API][wallpaper_db]][wallpaper_d]   |
-| `scrummage`       | [![][scrummage_cb]][scrummage_c]   | [![API][scrummage_db]][scrummage_d]   |
-
----
 
 This project aims to provide a utility for generating random abstract wallpapers.
 
@@ -152,6 +136,20 @@ As a random generator of wallpaper ought to provide images of consistent quality
 
 
 <a name="methodology">[\*](#return-methodology)</a> To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.
+Direct dependencies
+
+| dependency        | crate                              | docs                                  |
+|-------------------|------------------------------------|---------------------------------------|
+| `serde`           | [![][serde_cb]][serde_c]           | [![API][serde_db]][serde_d]           |
+| `serde_derive`    | [![][derive_cb]][derive_c]         | [![API][derive_db]][derive_d]         |
+| `rand`            | [![][rand_cb]][rand_c]             | [![API][rand_db]][rand_d]             |
+| `chrono`          | [![][chrono_cb]][chrono_c]         | [![API][chrono_db]][chrono_d]         |
+| `delaunator`      | [![][delaunator_cb]][delaunator_c] | [![API][delaunator_db]][delaunator_d] |
+| `toml`            | [![][toml_cb]][toml_c]             | [![API][toml_db]][toml_d]             |
+| `resvg`           | [![][resvg_cb]][resvg_c]           | [![API][resvg_db]][resvg_d]           |
+| `usvg`            | [![][usvg_cb]][usvg_c]             | [![API][usvg_db]][usvg_d]             |
+| `wallpaper_rs`    | [![][wallpaper_cb]][wallpaper_c]   | [![API][wallpaper_db]][wallpaper_d]   |
+| `scrummage`       | [![][scrummage_cb]][scrummage_c]   | [![API][scrummage_db]][scrummage_d]   |
 
 <!-- Links section -->
 [serde_c]: https://crates.io/crates/serde
