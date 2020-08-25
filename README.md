@@ -16,28 +16,7 @@ Until recently it could only generate the images, not actually set them as wallp
 A bash script to automatically change wallpaper is provided, and has been tested on Ubuntu 20.04 (Focal Fossa).
 Portability of this script is outside of the scope of this project (the image generator however should be portable to any OS), but scripts that work for other shells/distros are welcome.
 
-
 ---
-
-## Features and licensing
-
-While the code in this crate is licensed under the [MIT license](https://opensource.org/licenses/MIT), the binary target includes (purely for user convenience) dependencies that have more restrictive licenses.
-
-[resvg](https://crates.io/crates/resvg) and [usvg](https://crates.io/usvg) require the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0) and pull in some other dependencies under the [BSD 3-clause](https://opensource.org/licenses/BSD-3-Clause).
-
-[wallpaper_rs](https://crates.io/crates/wallpaper_rs) is licensed under [GPL 3.0](https://opensource.org/licenses/GPL-3.0)
-
-The features provided by these crates are purely optional. The different features available are explained in more detail in the [Advanced setup](#advanced-setup) section.
-
-Using the `make-png` feature requires MPL 2.0 or a compatible license.
-
-Using the `set-wallpaper` feature requires GPL 3.0 or a compatible license.
-
-Using both requires GPL 3.0 at least.
-
-The inclusion of MPL- and GPL-licensed crates as dependencies of this crate licensed under MIT does not grant to anyone the right to distribute executables that were compiled using the corresponding feature flags under non-GPL-compatible licenses. Any derivative work that does not include these flags can safely be provided under the MIT license.
-
-It is not recommended for any crates dependent on this one to use the feature flags, as the functionality obtained from the GPL dependencies is not reexported by wallrnd and thus adds needless dependencies.
 
 ## Recommended setup (executable `wallrnd`)
 
@@ -101,41 +80,28 @@ You may be interested in these other setup methods if
 
 ---
 
-## Alternative tools
+## Features and licensing
 
-### Online
+While the code in this crate is licensed under the [MIT license](https://opensource.org/licenses/MIT), the binary target includes (purely for user convenience) dependencies that have more restrictive licenses.
 
-* [Random Wallpaper Generator!](http://bjmiller.net/canvas/wallpaper/)
+[resvg](https://crates.io/crates/resvg) and [usvg](https://crates.io/usvg) require the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0) and pull in some other dependencies under the [BSD 3-clause](https://opensource.org/licenses/BSD-3-Clause).
 
-* [Background Generator](https://bggenerator.com/)
+[wallpaper_rs](https://crates.io/crates/wallpaper_rs) is licensed under [GPL 3.0](https://opensource.org/licenses/GPL-3.0)
 
-### Scripts
+The features provided by these crates are purely optional. The different features available are explained in more detail in the [Advanced setup](#advanced-setup) section.
 
-* [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
+Using the `make-png` feature requires MPL 2.0 or a compatible license.
 
-* [qryxip/sky-color-wallpaper](https://crates.io/crates/sky-color-wallpaper)
+Using the `set-wallpaper` feature requires GPL 3.0 or a compatible license.
 
-### Apps
-* [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
+Using both requires GPL 3.0 at least.
 
-## Examples
+The inclusion of MPL- and GPL-licensed crates as dependencies of this crate licensed under MIT does not grant to anyone the right to distribute executables that were compiled using the corresponding feature flags under non-GPL-compatible licenses. Any derivative work that does not include these flags can safely be provided under the MIT license.
 
-As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**<a name="return-methodology">[\*](#methodology)</a>. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
+It is not recommended for any crates dependent on this one to use the feature flags, as the functionality obtained from the GPL dependencies is not reexported by wallrnd and thus adds needless dependencies.
 
-![](docs/samples/image-1.svg)
+---
 
-![](docs/samples/image-2.svg)
-
-![](docs/samples/image-3.svg)
-
-![](docs/samples/image-4.svg)
-
-![](docs/samples/image-5.svg)
-
-![](docs/samples/image-6.svg)
-
-
-<a name="methodology">[\*](#return-methodology)</a> To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.
 Direct dependencies
 
 | dependency        | crate                              | docs                                  |
@@ -201,3 +167,41 @@ Direct dependencies
 [scrummage_cb]: https://meritbadge.herokuapp.com/scrummage
 [scrummage_d]: https://docs.rs/scrummage
 [scrummage_db]: https://docs.rs/scrummage/badge.svg
+
+---
+
+## Alternative tools
+
+### Online
+
+* [Random Wallpaper Generator!](http://bjmiller.net/canvas/wallpaper/)
+
+* [Background Generator](https://bggenerator.com/)
+
+### Scripts
+
+* [flopp/RandomWallpapers](https://github.com/flopp/RandomWallpapers)
+
+* [qryxip/sky-color-wallpaper](https://crates.io/crates/sky-color-wallpaper)
+
+### Apps
+* [Tapet](https://play.google.com/store/apps/details?id=com.sharpregion.tapet&hl=en_US)
+
+## Examples
+
+As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**<a name="return-methodology">[\*](#methodology)</a>. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
+
+![](docs/samples/image-1.svg)
+
+![](docs/samples/image-2.svg)
+
+![](docs/samples/image-3.svg)
+
+![](docs/samples/image-4.svg)
+
+![](docs/samples/image-5.svg)
+
+![](docs/samples/image-6.svg)
+
+
+<a name="methodology">[\*](#return-methodology)</a> To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.
