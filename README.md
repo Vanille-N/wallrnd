@@ -193,17 +193,12 @@ Direct dependencies
 
 As a random generator of wallpaper ought to provide images of consistent quality, the following sample of images is **unfiltered**<a name="return-methodology">[\*](#methodology)</a>. All were created with a configuration file similar to the one provided under `setup/wallrnd.toml`.
 
-![](docs/samples/image-1.svg)
-
-![](docs/samples/image-2.svg)
-
-![](docs/samples/image-3.svg)
-
-![](docs/samples/image-4.svg)
-
-![](docs/samples/image-5.svg)
-
-![](docs/samples/image-6.svg)
+<img src="docs/samples/image-1.svg" width=400>
+<img src="docs/samples/image-2.svg" width=400>
+<img src="docs/samples/image-3.svg" width=400>
+<img src="docs/samples/image-4.svg" width=400>
+<img src="docs/samples/image-5.svg" width=400>
+<img src="docs/samples/image-6.svg" width=400>
 
 
 <a name="methodology">[\*](#return-methodology)</a> To provide a variety of patterns, tilings, and themes, the six were created in succession by altering the configuration file slightly so that only one pattern, tiling, and theme was available. This method guarantees variability without biasing quality. Hence the above sample can be considered representative of the general quality of generated wallpapers.
