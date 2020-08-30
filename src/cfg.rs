@@ -96,7 +96,13 @@ impl SceneCfg {
                 rng.gen_range(0, 360),
             ),
             Tiling::Delaunay => random_delaunay(&self.frame, rng, self.nb_delaunay),
-            Tiling::Pentagons => pentagons_type2(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
+            Tiling::Pentagons => {
+                match rng.gen_range(1, 3) {
+                    1 => pentagons_type1(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
+                    2 => pentagons_type2(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
+                    _ => unreachable!(),
+                }
+            }
         }
     }
 }
