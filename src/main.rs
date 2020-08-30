@@ -1,17 +1,13 @@
 use chrono::{Local, Timelike};
-use std::{
-    env,
-    fs::File,
-    io::prelude::*,
-    process::exit,
-};
-use wallrnd::{
-    prelude::*,
-    deserializer::MetaConfig,
-    log::Logger,
-    scene::Scene,
-    svg::*,
-};
+use std::env;
+use std::fs::File;
+use std::io::prelude::*;
+use std::process::exit;
+use wallrnd::deserializer::MetaConfig;
+use wallrnd::log::Logger;
+use wallrnd::prelude::*;
+use wallrnd::scene::Scene;
+use wallrnd::svg::*;
 
 fn main() {
     let args = read_command_line_arguments();
@@ -325,13 +321,18 @@ fn reduce_priority(verbose: Verbosity) {
         }
         exit(1);
     });
-    Process::current().set_priority(background_priority).unwrap_or_else(|_| {
-        if verbose.warn {
-            println!("Failed to lower priority");
-        }
-        exit(1);
-    });
+    Process::current()
+        .set_priority(background_priority)
+        .unwrap_or_else(|_| {
+            if verbose.warn {
+                println!("Failed to lower priority");
+            }
+            exit(1);
+        });
     if verbose.info {
-        println!("Changed priority of current process: {:?}", Process::current().priority().unwrap());
+        println!(
+            "Changed priority of current process: {:?}",
+            Process::current().priority().unwrap()
+        );
     }
 }

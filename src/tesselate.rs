@@ -183,10 +183,15 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let angles = [alpha, beta, gamma, delta, epsilon];
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
-        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
+        Pentagon {
+            sizes,
+            rot: rot + 180,
+            angles,
+        }
+        .to_movable(),
     ];
     let idir = mv[0].vertex(3) - mv[0].vertex(0);
-    let jdir = mv[0].vertex(0) - mv[1].vertex(4) + mv[1].vertex(2) - mv[0].vertex(1) ;
+    let jdir = mv[0].vertex(0) - mv[1].vertex(4) + mv[1].vertex(2) - mv[0].vertex(1);
     periodic_grid_tiling(
         f,
         |pos| {
@@ -206,14 +211,29 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let gamma = 100;
     let delta = 180 - beta;
     let epsilon = 150;
-    let sizes = [size, size*1.2, size];
+    let sizes = [size, size * 1.2, size];
     let angles = [epsilon, delta, gamma, beta, alpha];
     let rangles = [beta, gamma, delta, epsilon, alpha];
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
-        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
-        Pentagon { sizes, rot: rot + 180, angles: rangles }.to_movable(),
-        Pentagon { sizes, rot, angles: rangles }.to_movable(),
+        Pentagon {
+            sizes,
+            rot: rot + 180,
+            angles,
+        }
+        .to_movable(),
+        Pentagon {
+            sizes,
+            rot: rot + 180,
+            angles: rangles,
+        }
+        .to_movable(),
+        Pentagon {
+            sizes,
+            rot,
+            angles: rangles,
+        }
+        .to_movable(),
     ];
     let idir = mv[0].vertex(0) - mv[2].vertex(1) + mv[2].vertex(2) - mv[0].vertex(3);
     let jdir = mv[0].vertex(4) - mv[3].vertex(1) + mv[3].vertex(4) - mv[0].vertex(2);
@@ -226,8 +246,7 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
                 mv[2].render(pos + mv[0].vertex(0) - mv[2].vertex(1)),
                 mv[3].render(pos + mv[0].vertex(2) - mv[3].vertex(4)),
             ]
-        }
-        ,
+        },
         idir,
         jdir,
     )
@@ -254,10 +273,13 @@ impl Pentagon {
         for i in 0..=2 {
             let latest = pts[i];
             pts.push(latest + Pos::polar(running_angle, self.sizes[i]));
-            running_angle += 180 - self.angles[i+1] as isize;
+            running_angle += 180 - self.angles[i + 1] as isize;
         }
         let latest = pts[3];
-        pts.push(Pos::intersect((Pos::zero(), self.rot + self.angles[0] as isize), (latest, running_angle)));
+        pts.push(Pos::intersect(
+            (Pos::zero(), self.rot + self.angles[0] as isize),
+            (latest, running_angle),
+        ));
         let mid = pts.iter().fold(Pos::zero(), |acc, item| acc + *item) * 0.2;
         Movable::from(pts.into_iter().map(|p| p - mid).collect::<Vec<_>>())
     }

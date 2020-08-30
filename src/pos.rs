@@ -3,7 +3,7 @@ use rand::{rngs::ThreadRng, Rng};
 use std::cmp::{Eq, PartialEq};
 use std::f64::consts::PI;
 use std::hash::{Hash, Hasher};
-use std::ops::{Add, Mul, Sub, Neg};
+use std::ops::{Add, Mul, Neg, Sub};
 
 #[derive(Clone, Copy, Debug)]
 pub struct Pos(pub f64, pub f64);
