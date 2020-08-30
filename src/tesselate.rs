@@ -201,7 +201,6 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
 }
 
 pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
-    let rot = 90;
     let alpha = 110;
     let beta = 110;
     let gamma = 100;
