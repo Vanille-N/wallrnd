@@ -216,7 +216,7 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         Pentagon { sizes, rot: rot + 180, angles: rangles }.to_movable(),
         Pentagon { sizes, rot: rot, angles: rangles }.to_movable(),
     ];
-    let idir = mv[0].vertex(0) - mv[2].vertex(1) + mv[2].vertex(3) - mv[0].vertex(3);
+    let idir = mv[0].vertex(0) - mv[2].vertex(1) + mv[2].vertex(2) - mv[0].vertex(3);
     let jdir = Pos::polar(90, size*100.);
     periodic_grid_tiling(
         f,
