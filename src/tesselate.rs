@@ -252,6 +252,14 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     )
 }
 
+pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
+    let alpha = 150;
+    let beta = 60;
+    let gamma = 120;
+    let epsilon = 90;
+    let delta = 120;
+}
+
 struct Pentagon {
     rot: isize,
     sizes: [f64; 3],
