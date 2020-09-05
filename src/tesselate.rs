@@ -271,6 +271,9 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         Pentagon { sizes, rot: rot + 120, angles }.to_movable(),
         Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
         Pentagon { sizes, rot: rot - 120, angles }.to_movable(),
+        Pentagon { sizes, rot: rot - 60, angles } .to_movable(),
+        Pentagon { sizes, rot: rot, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 60, angles }.to_movable(),
 
     ];
     let idir = Pos::polar(0, size*10.);
@@ -288,6 +291,9 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
                 mv[6].render(pos - mv[0].vertex(2) + mv[0].vertex(4) - mv[6].vertex(4)),
                 mv[7].render(pos - mv[1].vertex(2) + mv[1].vertex(4) - mv[7].vertex(4)),
                 mv[8].render(pos - mv[2].vertex(2) + mv[2].vertex(4) - mv[8].vertex(4)),
+                mv[9].render(pos - mv[3].vertex(2) + mv[3].vertex(4) - mv[9].vertex(4)),
+                mv[10].render(pos - mv[4].vertex(2) + mv[4].vertex(4) - mv[10].vertex(4)),
+                mv[11].render(pos - mv[5].vertex(2) + mv[5].vertex(4) - mv[11].vertex(4)),
             ]
         },
         idir,
