@@ -260,15 +260,14 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let delta = 90;
     let epsilon = 120;
     let sizes = [size, size, size];
-    let angles = [alpha, beta, gamma, delta, epsilon];
-    let rangles = [delta, gamma, beta, alpha, epsilon];
+    let angles = [delta, gamma, beta, alpha, epsilon];
     let mv = [
-        Pentagon { sizes, rot, angles: rangles }.to_movable(),
-        Pentagon { sizes, rot: rot + 60, angles: rangles }.to_movable(),
-        Pentagon { sizes, rot: rot + 120, angles: rangles }.to_movable(),
-        Pentagon { sizes, rot: rot + 180, angles: rangles }.to_movable(),
-        Pentagon { sizes, rot: rot - 120, angles: rangles }.to_movable(),
-        Pentagon { sizes, rot: rot - 60, angles: rangles }.to_movable(),
+        Pentagon { sizes, rot, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 60, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 120, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
+        Pentagon { sizes, rot: rot - 120, angles }.to_movable(),
+        Pentagon { sizes, rot: rot - 60, angles }.to_movable(),
 
     ];
     let idir = Pos::polar(0, size*10.);
