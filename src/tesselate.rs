@@ -264,6 +264,7 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let rangles = [delta, gamma, beta, alpha, epsilon];
     let mv = [
         Pentagon { sizes, rot, angles: rangles }.to_movable(),
+        Pentagon { sizes, rot: rot + 60, angles: rangles }.to_movable(),
     ];
     let idir = Pos::polar(0, size*10.);
     let jdir = Pos::polar(90, size*10.);
@@ -271,7 +272,8 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         f,
         |pos| {
             vec![
-                mv[0].render(pos - mv[0].vertex(1)),
+                mv[0].render(pos - mv[0].vertex(2)),
+                mv[1].render(pos - mv[1].vertex(2)),
             ]
         },
         idir,
