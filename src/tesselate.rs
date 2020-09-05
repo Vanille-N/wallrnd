@@ -269,30 +269,30 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         Pentagon { sizes, rot: rot - 120, angles }.to_movable(),
         Pentagon { sizes, rot: rot - 60, angles }.to_movable(),
     ];
-    let idir = Pos::polar(0, size*10.);
-    let jdir = Pos::polar(90, size*10.);
+    let idir = -mv[1].vertex(2) + mv[1].vertex(4) - mv[5].vertex(4) + mv[5].vertex(1) - mv[1].vertex(1) + mv[1].vertex(4) - mv[3].vertex(4) + mv[3].vertex(2);
+    let jdir = Pos::polar(90, size*100.);
     periodic_grid_tiling(
         f,
         |pos| {
             vec![
-                mv[0].render(pos - mv[0].vertex(2)),
+                // mv[0].render(pos - mv[0].vertex(2)),
                 mv[1].render(pos - mv[1].vertex(2)),
-                mv[2].render(pos - mv[2].vertex(2)),
+                // mv[2].render(pos - mv[2].vertex(2)),
                 mv[3].render(pos - mv[3].vertex(2)),
-                mv[4].render(pos - mv[4].vertex(2)),
-                mv[5].render(pos - mv[5].vertex(2)),
-                mv[2].render(pos - mv[0].vertex(2) + mv[0].vertex(4) - mv[2].vertex(4)),
-                mv[3].render(pos - mv[1].vertex(2) + mv[1].vertex(4) - mv[3].vertex(4)),
-                mv[4].render(pos - mv[2].vertex(2) + mv[2].vertex(4) - mv[4].vertex(4)),
-                mv[5].render(pos - mv[3].vertex(2) + mv[3].vertex(4) - mv[5].vertex(4)),
-                mv[0].render(pos - mv[4].vertex(2) + mv[4].vertex(4) - mv[0].vertex(4)),
-                mv[1].render(pos - mv[5].vertex(2) + mv[5].vertex(4) - mv[1].vertex(4)),
-                mv[4].render(pos - mv[0].vertex(2) + mv[0].vertex(4) - mv[4].vertex(4)),
+                // mv[4].render(pos - mv[4].vertex(2)),
+                // mv[5].render(pos - mv[5].vertex(2)),
+                // mv[2].render(pos - mv[0].vertex(2) + mv[0].vertex(4) - mv[2].vertex(4)),
+                // mv[3].render(pos - mv[1].vertex(2) + mv[1].vertex(4) - mv[3].vertex(4)),
+                // mv[4].render(pos - mv[2].vertex(2) + mv[2].vertex(4) - mv[4].vertex(4)),
+                // mv[5].render(pos - mv[3].vertex(2) + mv[3].vertex(4) - mv[5].vertex(4)),
+                // mv[0].render(pos - mv[4].vertex(2) + mv[4].vertex(4) - mv[0].vertex(4)),
+                // mv[1].render(pos - mv[5].vertex(2) + mv[5].vertex(4) - mv[1].vertex(4)),
+                // mv[4].render(pos - mv[0].vertex(2) + mv[0].vertex(4) - mv[4].vertex(4)),
                 mv[5].render(pos - mv[1].vertex(2) + mv[1].vertex(4) - mv[5].vertex(4)),
-                mv[0].render(pos - mv[2].vertex(2) + mv[2].vertex(4) - mv[0].vertex(4)),
+                // mv[0].render(pos - mv[2].vertex(2) + mv[2].vertex(4) - mv[0].vertex(4)),
                 mv[1].render(pos - mv[3].vertex(2) + mv[3].vertex(4) - mv[1].vertex(4)),
-                mv[2].render(pos - mv[4].vertex(2) + mv[4].vertex(4) - mv[2].vertex(4)),
-                mv[3].render(pos - mv[5].vertex(2) + mv[5].vertex(4) - mv[3].vertex(4)),
+                // mv[2].render(pos - mv[4].vertex(2) + mv[4].vertex(4) - mv[2].vertex(4)),
+                // mv[3].render(pos - mv[5].vertex(2) + mv[5].vertex(4) - mv[3].vertex(4)),
             ]
         },
         idir,
