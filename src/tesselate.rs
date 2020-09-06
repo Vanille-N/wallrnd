@@ -181,14 +181,10 @@ pub fn pentagons_type1(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let epsilon = 360 - alpha - delta;
     let sizes = [size * 1.2, size, size * 0.9];
     let angles = [alpha, beta, gamma, delta, epsilon];
+    #[rustfmt::skip]
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
-        Pentagon {
-            sizes,
-            rot: rot + 180,
-            angles,
-        }
-        .to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
     ];
     let idir = mv[0].vertex(3) - mv[0].vertex(0);
     let jdir = mv[0].vertex(0) - mv[1].vertex(4) + mv[1].vertex(2) - mv[0].vertex(1);
@@ -214,26 +210,12 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let sizes = [size, size * 1.2, size];
     let angles = [epsilon, delta, gamma, beta, alpha];
     let rangles = [beta, gamma, delta, epsilon, alpha];
+    #[rustfmt::skip]
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
-        Pentagon {
-            sizes,
-            rot: rot + 180,
-            angles,
-        }
-        .to_movable(),
-        Pentagon {
-            sizes,
-            rot: rot + 180,
-            angles: rangles,
-        }
-        .to_movable(),
-        Pentagon {
-            sizes,
-            rot,
-            angles: rangles,
-        }
-        .to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles: rangles }.to_movable(),
+        Pentagon { sizes, rot, angles: rangles }.to_movable(),
     ];
     let idir = mv[0].vertex(0) - mv[2].vertex(1) + mv[2].vertex(2) - mv[0].vertex(3);
     let jdir = mv[0].vertex(4) - mv[3].vertex(1) + mv[3].vertex(4) - mv[0].vertex(2);
@@ -252,7 +234,7 @@ pub fn pentagons_type2(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     )
 }
 
-pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
+pub fn pentagons_type5(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let alpha = 150;
     let beta = 60;
     let gamma = 120;
@@ -260,6 +242,7 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let epsilon = 120;
     let sizes = [size, size, size];
     let angles = [delta, gamma, beta, alpha, epsilon];
+    #[rustfmt::skip]
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
         Pentagon { sizes, rot: rot + 60, angles }.to_movable(),
