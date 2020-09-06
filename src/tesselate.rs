@@ -256,6 +256,7 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         |pos| { vec![
             mv[0].render(pos - mv[0].vertex(4)),
             mv[1].render(pos - mv[1].vertex(4)),
+            mv[2].render(pos - mv[2].vertex(4)),
             ]
         },
         idir,
