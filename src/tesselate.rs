@@ -238,9 +238,9 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let alpha = 120;
     let gamma = alpha;
     let delta = alpha;
-    let beta = 90;
+    let beta = 77;
     let epsilon = 180 - beta;
-    let p = 0.5;
+    let p = 0.3;
     let sizes = [size * p, size, size * (1. - p)];
     let angles = [epsilon, delta, gamma, beta, alpha];
     #[rustfmt::skip]
