@@ -163,7 +163,7 @@ impl Tiling {
             SquaresAndTriangles,
             Rhombus,
             Delaunay,
-            Pentagons,
+            Pentagons(0),
         ]
         .choose(rng)
         .unwrap()
