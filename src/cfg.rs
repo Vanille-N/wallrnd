@@ -149,7 +149,7 @@ pub enum Tiling {
     SquaresAndTriangles,
     Rhombus,
     Delaunay,
-    Pentagons,
+    Pentagons(u8),
 }
 
 impl Tiling {
