@@ -109,7 +109,7 @@ impl SceneCfg {
                     5 => pentagons_type5(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
                     _ => unreachable!(),
                 }
-            },
+            }
         }
     }
 }
