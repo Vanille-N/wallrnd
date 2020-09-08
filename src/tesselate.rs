@@ -273,9 +273,12 @@ pub fn pentagons_type4(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let epsilon = 130;
     let sizes = [size, size, size * 0.9];
     let angles = [alpha, beta, gamma, delta, epsilon];
+    #[rustfmt::skip]
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
         Pentagon { sizes, rot: rot + 90, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
+        Pentagon { sizes, rot: rot - 90, angles }.to_movable(),
     ];
     let idir = Pos::polar(0, size*100.);
     let jdir = Pos::polar(90, size * 100.);
@@ -285,6 +288,8 @@ pub fn pentagons_type4(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
             vec![
                 mv[0].render(pos - mv[0].vertex(1)),
                 mv[1].render(pos - mv[1].vertex(1)),
+                mv[2].render(pos - mv[2].vertex(1)),
+                mv[3].render(pos - mv[3].vertex(1)),
             ]
         },
         idir,
