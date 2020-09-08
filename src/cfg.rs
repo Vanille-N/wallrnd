@@ -101,14 +101,15 @@ impl SceneCfg {
                     0 => rng.gen_range(1, 4),
                     n => n,
                 };
-                match n {
-                    1 => pentagons_type1(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
-                    2 => pentagons_type2(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
-                    3 => pentagons_type3(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
-                    4 => unimplemented!(),
-                    5 => pentagons_type5(&self.frame, self.size_tiling, rng.gen_range(0, 360)),
+                let ptiler = match n {
+                    1 => pentagons_type1,
+                    2 => pentagons_type2,
+                    3 => pentagons_type3,
+                    4 => pentagons_type4,
+                    5 => pentagons_type5,
                     _ => unreachable!(),
-                }
+                };
+                ptiler(&self.frame, self.size_tiling, rng.gen_range(0, 360))
             }
         }
     }
