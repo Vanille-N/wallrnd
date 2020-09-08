@@ -268,9 +268,9 @@ pub fn pentagons_type3(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
 pub fn pentagons_type4(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let alpha = 100;
     let beta = 90;
-    let gamma = 150;
+    let gamma = 130;
     let delta = 90;
-    let epsilon = 160;
+    let epsilon = 130;
     let sizes = [size, size, size * 0.9];
     let angles = [alpha, beta, gamma, delta, epsilon];
     let mv = [
