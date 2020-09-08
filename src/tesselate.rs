@@ -271,7 +271,7 @@ pub fn pentagons_type4(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let gamma = 130;
     let delta = 90;
     let epsilon = 130;
-    let sizes = [size, size, size * 0.9];
+    let sizes = [size, size, size * 0.825];
     let angles = [alpha, beta, gamma, delta, epsilon];
     #[rustfmt::skip]
     let mv = [
