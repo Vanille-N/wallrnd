@@ -364,6 +364,7 @@ pub fn pentagons_type6(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     #[rustfmt::skip]
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
+        Pentagon { sizes, rot: rot + 180, angles }.to_movable(),
     ];
     let idir = Pos::polar(0, size * 100.);
     let jdir = Pos::polar(90, size * 100.);
@@ -372,6 +373,7 @@ pub fn pentagons_type6(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
         |pos| {
             vec![
                 mv[0].render(pos - mv[0].vertex(0)),
+                mv[1].render(pos - mv[1].vertex(1)),
             ]
         },
         idir,
