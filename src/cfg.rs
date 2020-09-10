@@ -98,7 +98,7 @@ impl SceneCfg {
             Tiling::Delaunay => random_delaunay(&self.frame, rng, self.nb_delaunay),
             Tiling::Pentagons(n) => {
                 let n = match n {
-                    0 => rng.gen_range(1, 6),
+                    0 => rng.gen_range(1, 7),
                     n => n,
                 };
                 let ptiler = match n {
@@ -107,6 +107,7 @@ impl SceneCfg {
                     3 => pentagons_type3,
                     4 => pentagons_type4,
                     5 => pentagons_type5,
+                    6 => pentagons_type6,
                     _ => unreachable!(),
                 };
                 ptiler(&self.frame, self.size_tiling, rng.gen_range(0, 360))
