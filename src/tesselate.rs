@@ -355,8 +355,8 @@ pub fn pentagons_type5(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
 
 pub fn pentagons_type6(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let alpha = 150;
-    let beta = 50;
-    let gamma = 110;
+    let beta = 55;
+    let gamma = 100;
     let delta = 180 - beta;
     let epsilon = 2 * beta;
     let sizes = [size, size, size];
