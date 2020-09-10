@@ -833,6 +833,7 @@ fn add_shape(s: &str, w: usize, tilings: &mut Chooser<Tiling>, patterns: &mut Ch
         "P3" | "pen.3" | "pentagons-3" => tilings.push(Tiling::Pentagons(3), w),
         "P4" | "pen.4" | "pentagons-4" => tilings.push(Tiling::Pentagons(4), w),
         "P5" | "pen.5" | "pentagons-5" => tilings.push(Tiling::Pentagons(5), w),
+        "P6" | "pen.6" | "pentagons-6" => tilings.push(Tiling::Pentagons(6), w),
         "FC" | "f-cir." | "free-circles" => patterns.push(Pattern::FreeCircles, w),
         "FT" | "f-tri." | "free-triangles" => patterns.push(Pattern::FreeTriangles, w),
         "FR" | "f-str." | "free-stripes" => patterns.push(Pattern::FreeStripes, w),
