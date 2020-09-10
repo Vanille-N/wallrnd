@@ -359,8 +359,8 @@ pub fn pentagons_type6(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     let gamma = 110;
     let delta = 180 - beta;
     let epsilon = 2 * beta;
-    let sizes = [size, size, size * 0.4];
-    let angles = [alpha, beta, gamma, delta, epsilon];
+    let sizes = [size, size, size];
+    let angles = [gamma, delta, epsilon, alpha, beta];
     #[rustfmt::skip]
     let mv = [
         Pentagon { sizes, rot, angles }.to_movable(),
