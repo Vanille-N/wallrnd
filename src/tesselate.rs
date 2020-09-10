@@ -353,6 +353,30 @@ pub fn pentagons_type5(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
     )
 }
 
+pub fn pentagons_type6(f: &Frame, size: f64, rot: isize) -> Vec<(Pos, Path)> {
+    let alpha = 150;
+    let beta = 50;
+    let gamma = 110;
+    let delta = 180 - beta;
+    let epsilon = 2 * beta;
+    let sizes = [size, size, size * 0.4];
+    let angles = [alpha, beta, gamma, delta, epsilon];
+    #[rustfmt::skip]
+    let mv = [
+    ];
+    let idir = Pos::polar(0, size * 100.);
+    let jdir = Pos::polar(90, size * 100.);
+    periodic_grid_tiling(
+        f,
+        |pos| {
+            vec![
+            ]
+        },
+        idir,
+        jdir,
+    )
+}
+
 struct Pentagon {
     rot: isize,
     sizes: [f64; 3],
