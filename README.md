@@ -7,6 +7,8 @@
 [![crates.io](http://meritbadge.herokuapp.com/wallrnd)](https://crates.io/crates/wallrnd)
 [![API](https://docs.rs/wallrnd/badge.svg)](https://docs.rs/wallrnd)
 
+Note: `wallrnd` is stalled as I have stopped using it personally, but I still accept feature requests.
+
 ---
 
 This project aims to provide a utility for generating random abstract wallpapers.
